@@ -1,0 +1,445 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Contact by metadave</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Contact</h1>
+        <p>Contact is a language and interactive shell for Riak.</p>
+        <p class="view"><a href="https://github.com/metadave/contact">View the Project on GitHub <small>metadave/contact</small></a></p>
+        <ul>
+          <li><a href="https://github.com/metadave/contact/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/metadave/contact/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/metadave/contact">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Contact</h1>
+
+<h2>What is it?</h2>
+
+<p>Contact is a language and interactive shell for <a href="http://basho.com/riak/">Riak</a>.</p>
+
+<h2>Status</h2>
+
+<p>This is a prototype and <strong><em>SHOULD NOT BE USED IN PRODUCTION. I'm actively working on this project, and the language is very likely to change. Many things probably don't work right now.</em></strong></p>
+
+<p>If you are a Riak + Java fan, I'm looking for devs to help out.</p>
+
+<p>See the TODO section below.</p>
+
+<h2>Goals</h2>
+
+<ol>
+<li>An easy syntax for all Riak operations</li>
+<li>An easy way to incorporate text, JSON, XML, Javascript into a Contact script file without escape-character madness.</li>
+<li>A console that supports simple command completion and history.</li>
+<li>Extensible object output, conflict resolution and retrier with Javascript (via Mozilla Rhino)</li>
+</ol><h2>Language Grammer</h2>
+
+<p>See: <a href="https://github.com/metadave/contact/blob/master/src/com/basho/contact/Contact.g4">Contact.g4</a></p>
+
+<p>Contact uses an Antlr 4 grammar under the hood for all lexical + semantic goodness.</p>
+
+<h2>Building</h2>
+
+<p>Be sure you <code>JAVA_HOME</code> is set. You'll need at least JDK 1.6 and Apache Ant to build Contact.</p>
+
+<p>At the console, type:</p>
+
+<pre><code>ant
+</code></pre>
+
+<p>This will create <code>contact.jar</code> in ./dist/lib, which is then referenced from <code>contact.sh</code>.</p>
+
+<h2>Hello world</h2>
+
+<p>After you've built Contact, just type:</p>
+
+<pre><code>./contact.sh
+</code></pre>
+
+<h2>Connecting</h2>
+
+<p>To connect to a Riak instance, use the <code>connect</code> command:</p>
+
+<pre><code>connect "127.0.0.1" pb 10017;
+</code></pre>
+
+<p><code>pb</code> refers to the procol buffers port that Riak is configured to use. Check the <code>pb_port</code> 
+setting in <strong>app.config</strong> for the exact port to use.</p>
+
+<p>ATM, the only way to exit is by <code>Ctrl-C</code>.</p>
+
+<h2>Use</h2>
+
+<p>To fetch many objects from a single bucket, you can select a bucket with the <code>use</code> command:</p>
+
+<pre><code>use bucket "Foo";
+</code></pre>
+
+<p>Otherwise, all commands that require a bucket will need to be prefixed with:</p>
+
+<pre><code>using bucket "Foo" … 
+</code></pre>
+
+<h2>Fetching Data</h2>
+
+<p>To fetch a key named "MyKey" from bucket "Foo", use the following:</p>
+
+<pre><code>using bucket "Foo" fetch "MyKey";
+</code></pre>
+
+<p>Key and Bucket names are always in double quotes (for now).</p>
+
+<p>To fetch many objects from a single bucket, you can select a bucket with the <code>use</code> command:</p>
+
+<pre><code>use bucket "Foo";
+fetch "MyKey";
+fetch "MyOtherKey";
+</code></pre>
+
+<p>To bind a Riak object to a Contact variable:</p>
+
+<pre><code>let myKey = fetch "MyKey";
+</code></pre>
+
+<p>Once you have a binding ("myKey" in the example above), you can refer to it from other Contact operations. 
+(TODO: not much of a use right now)</p>
+
+<h3>Fetching with options</h3>
+
+<pre><code>fetch "MyKey" 
+    with options 
+        "r" = 1, 
+        "pr" = 1;
+</code></pre>
+
+<p>All options need to appear between double quotes (for now).</p>
+
+<h3>Available fetch options:</h3>
+
+<ul>
+<li>r (Integer)<br>
+</li>
+<li>pr (Integer)</li>
+<li>basic_quorum (Boolean)</li>
+<li>notfound_ok (Boolean)</li>
+<li>deletedvclock (Boolean)</li>
+</ul><h2>Storing Data</h2>
+
+<p>To store plain text, json, or xml, you can use the following commands:</p>
+
+<pre><code>using bucket "Foo" 
+    store "MyKey" 
+    with text "This is text";
+
+using bucket "Foo" 
+    store "MyKey" 
+    with json "{foo:bar}";
+
+using bucket "Foo" 
+    store "MyKey" 
+    with xml "This is text";
+</code></pre>
+
+<p>Note, any double quotes appearing in the content string will need to be escaped. To store larger 
+chunks of text, use a here doc:</p>
+
+<pre><code>// no escaping required!
+using bucket "Foo" store "MyKey" with text 
+~%~
+This is "Free form text" and doesn't need any escaping!
+~%~;
+</code></pre>
+
+<pre><code>// no escaping required!
+using bucket "Foo" store "MyKey" with json
+~%~
+{
+    "person": {
+        "name": "Dave Parfitt",
+        "city": "Buffalo",
+        "state": "NY"
+        }
+}
+~%~;
+</code></pre>
+
+<pre><code>// no escaping required!
+using bucket "Foo" store "MyKey" with xml
+~%~
+&lt;email&gt;
+    &lt;to&gt;foo@example.com&lt;/to&gt;
+    &lt;from&gt;bar@example.com&lt;/from&gt;
+    &lt;subject&gt;This is a reminder&lt;/subject&gt;
+    &lt;body&gt;Go to the dentist!&lt;/body&gt;
+&lt;/email&gt;
+~%~;    
+</code></pre>
+
+<h3>Storing with options</h3>
+
+<pre><code>using bucket "Foo" 
+    store "MyKey" 
+        with text "This is text" 
+        with options "w" = 1, "pw" = 2;
+</code></pre>
+
+<h3>Available store options:</h3>
+
+<ul>
+<li>w (Integer)</li>
+<li>pw (Integer)</li>
+<li>dw (Integer)</li>
+<li>return_body (Boolean)</li>
+<li>if_not_modified (Boolean)</li>
+<li>if_none_match (Boolean)</li>
+</ul><h2>Storing data with secondary indexes</h2>
+
+<pre><code>using bucket "Foo" 
+    store "MyKey" 
+        with index "twitter_bin" = "test" 
+        and index "github_bin" = "test2" 
+        and text "This is text";
+
+store "MyKey" 
+        with index "twitter_bin" = "test" 
+        and index "github_bin" = "test2" 
+        and text "This is text";
+</code></pre>
+
+<h2>Deleting objects</h2>
+
+<p><strong>NOT IMPLEMENTED</strong> at the moment</p>
+
+<pre><code>using bucket "Foo" delete "MyKey";
+
+delete "MyKey";
+</code></pre>
+
+<h3>Options</h3>
+
+<p><strong>Not implemented</strong></p>
+
+<h2>Secondary Index Query</h2>
+
+<p><strong>Query names and parameters must always appear in double quotes.</strong></p>
+
+<p>Setup sample data with these:</p>
+
+<pre><code>using bucket "Foo" 
+store "First" 
+with index "range_int" = "1" 
+and text "This is text 1";
+
+using bucket "Foo" 
+store "Last" 
+with index "range_int" = "2" 
+and text "This is text 2";
+</code></pre>
+
+<p>Execute queries like this:</p>
+
+<pre><code>using bucket "Foo" query2i with index "twitter_bin" and value "test";
+using bucket "Foo" query2i with index "range_int" and value "1";
+</code></pre>
+
+<p>or with <code>use bucket</code>:</p>
+
+<pre><code>use bucket "Foo";
+query2i with index "range_int" and value "2";
+query2i with index "range_int" from "1" to "2";
+</code></pre>
+
+<h2>Map/Reduce</h2>
+
+<p><strong>NOT IMPLEMENTED</strong> at the moment</p>
+
+<p>work in progress, but here's what a M/R query would look like:</p>
+
+<pre><code>mapred 
+  with inputs
+    "alice" = "p1", 
+    "alice" = "p2", 
+    "alice" = "p3"
+  and phase 
+    with filters 
+    between(10,10,"Foo") and greater_than(11, false), 
+    less_than(100)
+  with javascript map  
+~%~
+        function(v) {
+          var m = v.values[0].data.toLowerCase().match(/\w*/g);
+          var r = [];
+          for(var i in m) {
+            if(m[i] != '') {
+              var o = {};
+              o[m[i]] = 1;
+              r.push(o);
+            }
+          }
+          return r;
+        }
+~%~
+and phase with javascript reduce keep
+~%~
+        function(v) {
+          var r = {};
+          for(var i in v) {
+            for(var w in v[i]) {
+              if(w in r) r[w] += v[i][w];
+              else r[w] = v[i][w];
+            }
+          }
+          return [r];
+        }
+~%~
+;   
+</code></pre>
+
+<h2>Customizable Output</h2>
+
+<p>There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. </p>
+
+<p>Here's an example of the default action for rendering the results of a fetch:</p>
+
+<pre><code>set action postfetch with javascript 
+~%~
+  if(obj != undefined) { out.println(obj.getValueAsString()); }
+~%~;
+</code></pre>
+
+<p>To see the code for an action:</p>
+
+<pre><code>get action postfetch;
+</code></pre>
+
+<h4>Available actions:</h4>
+
+<ul>
+<li>prefetch</li>
+<li>postfetch</li>
+<li>prestore</li>
+<li>poststore</li>
+<li>predelete</li>
+<li>postdelete</li>
+<li>prequery2i</li>
+<li>postquery2i</li>
+<li>premapred</li>
+<li>postmapred</li>
+<li>prelistbuckets</li>
+<li>postlistbuckets</li>
+<li>prelistkeys</li>
+<li>postlistkeys</li>
+<li>pregetbucketprops</li>
+<li>postgetbucketprops</li>
+</ul><h2>Customizable Conflict Resolvers and Retriers</h2>
+
+<p><strong>TODO</strong></p>
+
+<p>These will also be customizable with Javascript.</p>
+
+<h2>Listing Bucket</h2>
+
+<p><em>Listing buckets should NOT be used on any production system</em></p>
+
+<pre><code>list buckets;
+</code></pre>
+
+<h2>Listing Keys</h2>
+
+<p><em>Listing keys should NOT be used on any production system</em></p>
+
+<pre><code>using bucket "Foo" list keys;
+</code></pre>
+
+<p>or</p>
+
+<pre><code>use bucket "Foo";
+list keys;
+</code></pre>
+
+<h2>Configuration</h2>
+
+<p>If you want to run some code upon startup, you can create a file called <code>~/.contact.config</code> with 
+any Contact code you want.</p>
+
+<p>For example, if you always connect to the same host, you can add this to the .contact.config file:</p>
+
+<pre><code>connect "127.0.0.1" pb 10017;
+</code></pre>
+
+<h2>Basic Types</h2>
+
+<ul>
+<li>Strings: "This is a string"<br>
+</li>
+<li>Integers: 1000</li>
+<li>Floats: Not implemented</li>
+<li>Boolean: false, true</li>
+<li>Here documents</li>
+</ul><pre><code>~%~
+Any text between the "scissor operators" doesn't need to be escaped. 
+This means you can paste a full XML or JSON document here, and you don't 
+have to worry about escaping quotes! Of course, you'll need to escape the scissor operator with: \~%~
+~%~
+</code></pre>
+
+<h1>TODO</h1>
+
+<ul>
+<li>implement Javascript resolvers + retiers</li>
+<li>bucket properties via pb (the HTTP interface code is currently commented out)</li>
+<li>clean up mr syntax + implementation</li>
+<li>link walking</li>
+<li>listing and using shell variables (ie from a 2i query)</li>
+<li>setup connections to multiple clusters, refer to a connection during a fetch, store, etc.</li>
+<li>load balancing</li>
+<li>do I need client ids?</li>
+<li>simple interactive web ui ala "Try Riak"</li>
+<li>a way to exit the shell :-)</li>
+<li>Pasting text into the shell erroneously kicks off tab completion</li>
+<li>User content-types</li>
+</ul><h1>Contributing</h1>
+
+<p>Fork this repo, create a feature branch using something like this:</p>
+
+<pre><code>git checkout -b branch_name
+</code></pre>
+
+<p>and submit a pull request. </p>
+
+<p>Please send me an email (dparfitt at basho dot com) and let me know if you want to work on any features.</p>
+
+<p>Only friendly pull requests accepted:
+<a href="http://www.youtube.com/watch?v=-ZSli7QW4rg">Assholes are Ruining Your Project by Donnie Berkholz</a></p>
+
+<h1>License</h1>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0.html">http://www.apache.org/licenses/LICENSE-2.0.html</a></p>
+
+<hr><p>© 2013 Dave Parfitt</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/metadave">metadave</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
