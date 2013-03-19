@@ -7,9 +7,7 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -19,7 +17,10 @@
       <header>
         <h1>Contact</h1>
         <p>Contact is a language and interactive shell for Riak.</p>
+
         <p class="view"><a href="https://github.com/metadave/contact">View the Project on GitHub <small>metadave/contact</small></a></p>
+
+
         <ul>
           <li><a href="https://github.com/metadave/contact/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/metadave/contact/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -54,14 +55,12 @@
 
 <h2>Building</h2>
 
-<p>Be sure you <code>JAVA_HOME</code> is set. You'll need at least JDK 1.6 and Apache Ant to build Contact.</p>
+<p>Be sure you <code>JAVA_HOME</code> is set. You'll need at least JDK 1.6 and Apache Maven to build Contact.</p>
 
 <p>At the console, type:</p>
 
-<pre><code>ant
+<pre><code>mvn package
 </code></pre>
-
-<p>This will create <code>contact.jar</code> in ./dist/lib, which is then referenced from <code>contact.sh</code>.</p>
 
 <h2>Hello world</h2>
 
@@ -433,12 +432,12 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 <hr><p>© 2013 Dave Parfitt</p>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/metadave">metadave</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/metadave">metadave</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    <script src="javascripts/scale.fix.js"></script>
     
   </body>
 </html>
