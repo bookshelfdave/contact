@@ -130,18 +130,25 @@ public class ContactConsole {
 			return null;
 		}
 	}
-	
-	
-	public static CommandLine processArgs(String[] args) {
+
+    @SuppressWarnings("static-access")
+    public static CommandLine processArgs(String[] args) {
 		Options options = new Options();
 		
-		Option help = new Option("help", "Print this list of commands");
-		Option nocolor = new Option("nocolor", "Don't use color output");
-		Option noconfig = new Option("noconfig", "Don't read ~/.contact.config");
-		
-		@SuppressWarnings("static-access")
+		Option help = OptionBuilder
+                            .withLongOpt("help")
+                            .withDescription("Print this list of commands").create();
+
+        Option nocolor = OptionBuilder
+                            .withLongOpt("nocolor")
+                            .withDescription("Don't use color output").create();
+
+		Option noconfig = OptionBuilder
+                             .withLongOpt("noconfig")
+                             .withDescription("Don't read ~/.contact.config").create();
+
 		Option infile = OptionBuilder.withLongOpt( "infile" )
-							.withDescription( "Read input from file" )
+							.withDescription( "Read input from file and exit" )
 				        	.hasArg()
 				        	.withArgName("filename")
 				        	.create();
