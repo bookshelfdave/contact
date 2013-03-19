@@ -419,6 +419,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 #TODO
 * TESTING TESTING TESTING
+* implement delete
 * implement Javascript resolvers + retiers
 * bucket properties via pb (the HTTP interface code is currently commented out)
 * script mode (read from stdin etc)
@@ -431,7 +432,6 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * simple interactive web ui ala "Try Riak"
 * Pasting text into the shell erroneously kicks off tab completion
 * User content-types
-* move to JLine2
 
 #Contributing
 
