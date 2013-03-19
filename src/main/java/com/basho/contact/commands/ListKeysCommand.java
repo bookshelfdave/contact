@@ -18,7 +18,7 @@ public class ListKeysCommand extends RiakCommand<ResultSymbol> {
 			if(this.bucket != null) {
 				try {
 					// TODO: optimize this to skip fetch/create bucket every time
-					runtimeCtx.getNotifier().preListKeysAction(this.bucket);
+					runtimeCtx.getActionListener().preListKeysAction(this.bucket);
 
 					Bucket b = client.fetchBucket(this.bucket).execute();
 					List<String> keys = new ArrayList<String>();
@@ -26,7 +26,7 @@ public class ListKeysCommand extends RiakCommand<ResultSymbol> {
 					for(String k : b.keys()) {
 						keys.add(k);
 					}
-					runtimeCtx.getNotifier().postListKeysAction(keys);
+					runtimeCtx.getActionListener().postListKeysAction(keys);
 					return null;
 				} catch (RiakException e) {
 					runtimeCtx.appendError("Can't list keys in bucket", e);

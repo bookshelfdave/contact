@@ -14,9 +14,6 @@ public interface ContactActionListener{
 	public void init();
 	public void term();
 
-	// TODO: Allow return types so users can modify builders etc. 
-	// This may be difficult because of the notifier modifier model that I use
-	// Do I even need the notifier?
 	public void preFetchAction(FetchObject<IRiakObject> fetchObj);
 	public void postFetchAction(IRiakObject obj);
 	

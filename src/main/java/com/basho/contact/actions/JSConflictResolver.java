@@ -47,8 +47,6 @@ public class JSConflictResolver implements ConflictResolver<Object> {
 		return result;
 	}
 
-	
-	@Override
 	public Object resolve(Collection<Object> objects) {
 		wrapObject(objects, "objects");
 		return eval();

@@ -145,9 +145,9 @@ public class StoreCommand extends RiakCommand<ResultSymbol> {
 					Bucket b = client.fetchBucket(this.bucket).execute();
 					StoreObject<IRiakObject> so = processOptions(runtimeCtx,
 							b.store(obj));
-					runtimeCtx.getNotifier().preStoreAction(so);
+					runtimeCtx.getActionListener().preStoreAction(so);
 					ResultSymbol result = new ResultSymbol(so.execute());
-					runtimeCtx.getNotifier().postStoreAction(result.value);
+					runtimeCtx.getActionListener().postStoreAction(result.value);
 					// TODO: return_body should check for true
 					if (this.options != null && this.options.containsKey("return_body")) {
 						// TODO: move to JS

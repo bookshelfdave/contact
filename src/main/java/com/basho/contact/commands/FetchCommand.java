@@ -120,10 +120,10 @@ public class FetchCommand extends RiakCommand<ResultSymbol> {
 					Bucket b = client.fetchBucket(this.bucket).execute();
 					FetchObject<IRiakObject> fo = processOptions(runtimeCtx, b.fetch(key));
 
-					runtimeCtx.getNotifier().preFetchAction(fo);
+					runtimeCtx.getActionListener().preFetchAction(fo);
 					ResultSymbol sym = new ResultSymbol(fo.execute());
 					if(sym.value != null) {
-						runtimeCtx.getNotifier().postFetchAction(sym.value);
+						runtimeCtx.getActionListener().postFetchAction(sym.value);
 						// basic output						
 						runtimeCtx.appendOutput(sym.toString());
 						return sym;

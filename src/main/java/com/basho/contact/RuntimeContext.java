@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.basho.contact.actions.ContactActionListener;
 import com.basho.contact.actions.JSActionListener;
-import com.basho.contact.actions.ListenerNotifier;
 import com.basho.contact.symbols.ContactSymbol;
 
 public class RuntimeContext {
@@ -27,9 +27,10 @@ public class RuntimeContext {
 
 	private StringBuilder output = new StringBuilder();
 	private String currentBucket = null;
-	private ListenerNotifier notifier = new ListenerNotifier();
-	
-	public boolean trace = false;
+    private ContactActionListener listener = null;
+
+    public boolean trace = false;
+
 
 	// this always needs to be instantiated
 	JSActionListener jsActionListener;
@@ -37,20 +38,21 @@ public class RuntimeContext {
 	public RuntimeContext(ContactConnectionProvider connections, PrintStream out, PrintStream err) {
 		this.connections = connections;
 		jsActionListener = new JSActionListener(this, out, err);
-		this.getNotifier().addListener(jsActionListener);
+		this.listener = jsActionListener;
 	}
 
 	public ContactConnectionProvider getConnectionProvider() {
 		return connections;
 	}
-	
+
+    // the jsActionListener should always be instantiated
 	public JSActionListener getJSActionListener() {
 		return jsActionListener;
 	}
 
-	public ListenerNotifier getNotifier() {
-		return notifier;
-	}
+    public ContactActionListener getActionListener() {
+        return listener;
+    }
 
 	public void reset() {
 		output = new StringBuilder();
@@ -109,19 +111,5 @@ public class RuntimeContext {
 
 	public void setCurrentBucket(String currentBucket) {
 		this.currentBucket = currentBucket;
-	}
-
-//	public IRiakClient getNextPBClient() {
-//		if (pbclients.size() == 0) {
-//			this.appendError("Not connected to Riak (via protobuffs)");
-//			return null;
-//		}
-//		// placeholder for something better
-//		IRiakClient pb = pbclients.values().iterator().next();
-//		return pb;
-//	}
-
-
-	public void shutdown() {
 	}
 }

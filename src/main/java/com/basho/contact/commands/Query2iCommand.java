@@ -74,9 +74,9 @@ public class Query2iCommand extends RiakCommand<Query2IResultsSymbol> {
 						throw new RuntimeException(
 								"Invalid 2i query parameters");
 					}
-					runtimeCtx.getNotifier().preQuery2iAction(index);
+					runtimeCtx.getActionListener().preQuery2iAction(index);
 					Query2IResultsSymbol results = new Query2IResultsSymbol(index.execute());
-					runtimeCtx.getNotifier().postQuery2iAction(results.value);
+					runtimeCtx.getActionListener().postQuery2iAction(results.value);
 					return results;
 				} catch (RiakException e) {
 					runtimeCtx.appendError("Error executing 2i query", e);

@@ -11,10 +11,10 @@ public class ListBucketsCommand extends RiakCommand<ResultSymbol>{
 	@Override
 	public ResultSymbol exec(RuntimeContext runtimeCtx) {
 		try {
-			runtimeCtx.getNotifier().preListBucketsAction();
+			runtimeCtx.getActionListener().preListBucketsAction();
 			Set<String> buckets = (Set<String>)runtimeCtx.getConnectionProvider().
 					getDefaultClient(runtimeCtx).listBuckets();
-			runtimeCtx.getNotifier().postListBucketsAction(buckets);
+			runtimeCtx.getActionListener().postListBucketsAction(buckets);
 		} catch (RiakException e) {
 			e.printStackTrace();
 		}

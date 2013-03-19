@@ -109,8 +109,7 @@ public class ContactConsole {
 					sb.append("\n");
 					line = br.readLine();
 				}
-				String everything = sb.toString();
-				return everything;
+                return sb.toString();
 			} finally {
 				br.close();
 			}
@@ -213,7 +212,7 @@ public class ContactConsole {
         if(commandLine.hasOption("infile")) {
 	        String filename = commandLine.getOptionValue("infile");
         	readInputFile(filename, walker, ctx);
-            ctx.getNotifier().term();
+            ctx.getActionListener().term();
             System.exit(0);
         }
 
@@ -255,7 +254,7 @@ public class ContactConsole {
             }
             
         }
-        ctx.getNotifier().term();
-	}
+        ctx.getActionListener().term();
+    }
 
 }
