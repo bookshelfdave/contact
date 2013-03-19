@@ -1,30 +1,17 @@
 package com.basho.contact;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
+// NOTE: source for the JLine v1 ANSIBuffer is in this project
 import jline.ANSIBuffer;
-import jline.ArgumentCompletor;
-import jline.ConsoleReader;
-import jline.SimpleCompletor;
-
+import jline.console.ConsoleReader;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ContactConsole {
 
@@ -95,6 +82,7 @@ public class ContactConsole {
 	private static void processOutput(RuntimeContext runtimeCtx, PrintWriter out, boolean ansi) {
 		List<Throwable> errors = runtimeCtx.getErrors();
 		for(Throwable t: errors) {
+
 			ANSIBuffer buf = new ANSIBuffer();
 	        buf.setAnsiEnabled(ansi);
 	        buf.red(t.getMessage());
@@ -194,9 +182,8 @@ public class ContactConsole {
 		ConsoleReader reader = new ConsoleReader();
         reader.setBellEnabled(false);
 
-        List<jline.Completor> completors = new LinkedList<jline.Completor>();
-        completors.add(new SimpleCompletor(keywords));
-        reader.addCompletor(new ArgumentCompletor(completors));
+        reader.addCompleter(new jline.console.completer.StringsCompleter(keywords));
+
         String line;
         PrintWriter out = new PrintWriter(System.out);
         DefaultConnectionProvider connections = new DefaultConnectionProvider();
@@ -204,7 +191,7 @@ public class ContactConsole {
         ContactWalker walker = new ContactWalker(ctx);
        
 		boolean nextLinePrompt = false;
-        
+
         ANSIBuffer buf = new ANSIBuffer();
         buf.setAnsiEnabled(!commandLine.hasOption("nocolor"));
         buf.blue("Welcome to Riak Contact\n");
