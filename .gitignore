@@ -1,0 +1,6 @@
+*.class
+bin
+dist
+writer.debug
+.DS_Store
+

@@ -1,0 +1,44 @@
+connect "127.0.0.1" pb 10017;
+using bucket "bar" store "Key1" with value "Bar";
+using bucket "bar" store "Key2" with value "Bar2";
+using bucket "bar" store "Key2" with value << "myfile.txt";
+
+using bucket "bar" store "Key2" with value
+$
+{"key"="value"}
+$
+
+// I suppose you could end a fetch with a here doc if you
+// really want to, but it won't do much
+using bucket "bar" fetch "Keyx" >> "myfile.txt";
+using bucket "bar" fetch "Keyx";
+
+
+/*
+ use the bucket named foo for all ops that can use it until
+ further notice
+*/
+use bucket "Foo";
+fetch "Key1" >> "myfile.txt";
+fetch "Key2" >> "myfile.txt";
+fetch "Key3" >> "myfile.txt";
+
+let opts = vclock="foobar123", w="1";
+
+fetch "Key1" with options = vclock="foobar123", r="1";
+fetch "Key1" with options = opts;
+
+let x = fetch "Key1" with options = opts;
+let y = using bucket "Bar" fetch "Keyx";
+
+using bucket "bar" query2i with index "baz" and value = "bar";
+using bucket "bar" query2i with index "baz" from "1" to "2";
+
+
+using bucket "bar" query2i with index "baz" and value = "bar" and options = opts;
+using bucket "bar" query2i with index "baz" and value = "bar" and options = foo="1", otheropt="2";
+
+
+using bucket "bar" query2i with index "baz" from "1" to "2" with options = opts;
+using bucket "bar" query2i with index "baz" from "1" to "2" with options = foo="1", bar="2";
+

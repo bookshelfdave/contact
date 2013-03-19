@@ -1,0 +1,38 @@
+mapred 
+	with inputs
+		"alice" = "p1", 
+		"alice" = "p2", 
+	    "alice" = "p3"
+  and phase 
+    with filters 
+		between(10,10,"Foo") and greater_than(11, false), 
+		less_than(100)
+	with javascript map  
+~%~
+		function(v) {
+		  var m = v.values[0].data.toLowerCase().match(/\w*/g);
+		  var r = [];
+		  for(var i in m) {
+		    if(m[i] != '') {
+		      var o = {};
+		      o[m[i]] = 1;
+		      r.push(o);
+		    }
+		  }
+		  return r;
+		}
+~%~
+and phase with javascript reduce keep
+~%~
+		function(v) {
+		  var r = {};
+		  for(var i in v) {
+		    for(var w in v[i]) {
+		      if(w in r) r[w] += v[i][w];
+		      else r[w] = v[i][w];
+		    }
+		  }
+		  return [r];
+		}
+~%~
+;
