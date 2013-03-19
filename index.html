@@ -319,6 +319,62 @@ query2i with index "range_int" from "1" to "2";
 ~%~;
 </code></pre>
 
+<p>And here's a more in depth example that renderes sections of a JSON doc:</p>
+
+<pre><code>use bucket "Foo";
+
+store "JsonTest" with json
+~%~
+  {
+    "firstName": "John",
+    "lastName": "Smith",
+    "age": 25,
+    "address": {
+        "streetAddress": "21 2nd Street",
+        "city": "New York",
+        "state": "NY",
+        "postalCode": 10021
+    },
+    "phoneNumber": [
+        {
+            "type": "home",
+            "number": "212 555-1234"
+        },
+        {
+            "type": "fax",
+            "number": "646 555-4567"
+        }
+    ]
+}
+~%~;
+
+set action postfetch with javascript 
+~%~
+  if(obj != undefined) { 
+    var v = obj.getValueAsString(); 
+    var j = JSON.parse(v);
+    out.println(j.firstName + " " + j.lastName);
+    out.println("Address:");
+    out.println("   " + j.address.streetAddress);
+    out.println("   " + j.address.city + 
+                    ", " + j.address.state +
+                    " " + j.address.postalCode);
+    }
+~%~;
+
+fetch "JsonTest";
+</code></pre>
+
+<p>displays:</p>
+
+<pre><code>John Smith
+Address:
+   21 2nd Street
+   New York, NY 10021
+</code></pre>
+
+<p>The key function in the postfetch action above is <code>JSON.parse(v)</code>, which turns evaluates a string and returns a Javascript object.</p>
+
 <p>I hope to have a "Cookbook" section on the Contact wiki eventually, but in the meantime, you can check out the <a href="http://basho.github.com/riak-java-client/1.1.0/index.html">Javadocs for the Riak Java Client</a> for available methods.</p>
 
 <h4>Available actions:</h4>
@@ -410,6 +466,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 <li>simple interactive web ui ala "Try Riak"</li>
 <li>Pasting text into the shell erroneously kicks off tab completion</li>
 <li>User content-types</li>
+<li>move to JLine2</li>
 </ul><h1>Contributing</h1>
 
 <p>If you are a Riak + Java fan, I'm looking for devs to help out.</p>
