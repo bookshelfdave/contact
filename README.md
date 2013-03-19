@@ -373,7 +373,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * simple interactive web ui ala "Try Riak"
 * Pasting text into the shell erroneously kicks off tab completion
 * User content-types
-
+* move to JLine2
 
 #Contributing
 

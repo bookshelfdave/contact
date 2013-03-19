@@ -193,7 +193,6 @@ public class ContactConsole {
         CommandLine commandLine = processArgs(args);
 		ConsoleReader reader = new ConsoleReader();
         reader.setBellEnabled(false);
-        reader.setDebug(new PrintWriter(new FileWriter("writer.debug", true)));
 
         List<jline.Completor> completors = new LinkedList<jline.Completor>();
         completors.add(new SimpleCompletor(keywords));
