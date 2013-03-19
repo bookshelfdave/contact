@@ -409,8 +409,12 @@ public class ContactWalker extends ContactBaseListener {
 	}
 
 	public String getDataContent(String content) {
-		// TODO: replace escaped content, etc
-		return content.substring(3, content.length() - 3);
+		if(content.startsWith("\n")) {
+            // TODO: determine if ~%~ is on a new line by itself
+            content = content.substring(1, content.length()-1);
+        }
+        // TODO: replace escaped content, etc
+        return content.substring(3, content.length() - 3);
 	}
 	
 	private void trace(String msg) {

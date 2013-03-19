@@ -282,6 +282,64 @@ set action postfetch with javascript
 ~%~;
 ```
 
+And here's a more in depth example that renderes sections of a JSON doc:
+
+```
+use bucket "Foo";
+
+store "JsonTest" with json
+~%~
+  {
+    "firstName": "John",
+    "lastName": "Smith",
+    "age": 25,
+    "address": {
+        "streetAddress": "21 2nd Street",
+        "city": "New York",
+        "state": "NY",
+        "postalCode": 10021
+    },
+    "phoneNumber": [
+        {
+            "type": "home",
+            "number": "212 555-1234"
+        },
+        {
+            "type": "fax",
+            "number": "646 555-4567"
+        }
+    ]
+}
+~%~;
+
+set action postfetch with javascript 
+~%~
+  if(obj != undefined) { 
+    var v = obj.getValueAsString(); 
+    var j = JSON.parse(v);
+    out.println(j.firstName + " " + j.lastName);
+    out.println("Address:");
+    out.println("   " + j.address.streetAddress);
+    out.println("   " + j.address.city + 
+                    ", " + j.address.state +
+                    " " + j.address.postalCode);
+    }
+~%~;
+
+fetch "JsonTest";
+```
+
+displays:
+
+```
+John Smith
+Address:
+   21 2nd Street
+   New York, NY 10021
+```
+
+The key function in the postfetch action above is `JSON.parse(v)`, which turns evaluates a string and returns a Javascript object.
+
 I hope to have a "Cookbook" section on the Contact wiki eventually, but in the meantime, you can check out the [Javadocs for the Riak Java Client](http://basho.github.com/riak-java-client/1.1.0/index.html) for available methods.
 
 

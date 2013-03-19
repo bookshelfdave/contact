@@ -36,34 +36,6 @@ public class JSActionListener implements ContactActionListener {
 	//				  "} out.println(methods.join(','));";
 	    
 	
-	// skip getters and setters, they are just taking up space
-	private String postFetchBody = "if(obj != undefined) { out.println(obj.getValueAsString()); }";
-	private String preFetchBody = "";
-
-	private String preStoreBody = "";
-	private String postStoreBody = "if(obj != undefined) { out.println(obj.getValueAsString()); }";
-
-	private String preDeleteBody = "";
-	private String postDeleteBody = "";
-
-	private String preQuery2iBody = "";
-	private String postQuery2iBody = "if(results != undefined) { out.println(results); }";
-
-	private String preMapredBody = "";
-	private String postMapredBody = "";
-
-	private String preListBucketsBody = "";
-	private String postListBucketsBody = "out.println(buckets);";
-	
-	private String preListKeysBody = "";
-	private String postListKeysBody = "for(var i = 0; i < keys.size(); i++) { out.println(keys.get(i)); }";
-
-	private String preGetBucketProps = "";
-	private String postGetBucketProps = "out.println(props);";
-
-	private String preConnectBody = "";
-	private String postConnectBody = "out.println('Connected to Riak @ ' + riak_host + ':' + riak_port);";
-	
 	public static String PREFETCH = "prefetch";
 	public static String POSTFETCH = "postfetch";
 	public static String PRESTORE = "prestore";
@@ -82,11 +54,28 @@ public class JSActionListener implements ContactActionListener {
 	public static String POSTGETBUCKETPROPS = "postgetbucketprops";
 	public static String PRECONNECT = "preconnect";
 	public static String POSTCONNECT = "postconnect";
-	
 	Context jsctx = null;
 	Scriptable jsscope = null;
+	// skip getters and setters, they are just taking up space
+	private String postFetchBody = "if(obj != undefined) { out.print(obj.getValueAsString()); }";
+	private String preFetchBody = "";
+	private String preStoreBody = "";
+	private String postStoreBody = "if(obj != undefined) { out.print(obj.getValueAsString()); }";
+	private String preDeleteBody = "";
+	private String postDeleteBody = "";
+	private String preQuery2iBody = "";
+	private String postQuery2iBody = "if(results != undefined) { out.println(results); }";
+	private String preMapredBody = "";
+	private String postMapredBody = "";
+	private String preListBucketsBody = "";
+	private String postListBucketsBody = "out.println(buckets);";
+	private String preListKeysBody = "";
+	private String postListKeysBody = "for(var i = 0; i < keys.size(); i++) { out.println(keys.get(i)); }";
+	private String preGetBucketProps = "";
+	private String postGetBucketProps = "out.println(props);";
+	private String preConnectBody = "";
+	private String postConnectBody = "out.println('Connected to Riak @ ' + riak_host + ':' + riak_port);";
 	private RuntimeContext runtimeCtx = null;
-	
 	private Map<String, String> js = new HashMap<String,String>();
 	
 	
@@ -145,12 +134,10 @@ public class JSActionListener implements ContactActionListener {
 		return js.keySet();
 	}
 	
-	@Override
 	public void init() {
 		
 	}
 		
-	@Override
 	public void term() {
 		Context.exit();
 	}
@@ -167,116 +154,96 @@ public class JSActionListener implements ContactActionListener {
 			String body = js.get(commandName);
 			if(body != null && !body.isEmpty()) {
 				jsctx.evaluateString(jsscope, body, commandName, 1, null);
-				//System.out.print(jsctx.toString(result));
 			}
 		} catch (Exception e) {
 			runtimeCtx.appendError("Error processing Javascript:" + e.getMessage());
 		}
 	}
 
-
-	@Override
 	public void postFetchAction(IRiakObject obj) {
-		wrapObject(obj, "obj");
+        wrapObject(obj, "obj");
 		eval(POSTFETCH);
 	}
 
-	@Override
 	public void preFetchAction(FetchObject<IRiakObject> fetchObj) {
 		wrapObject(fetchObj, "fetchObj");
 		eval(PREFETCH);
 	}
 
-	@Override
 	public void preStoreAction(StoreObject<IRiakObject> storeObj) {
 		wrapObject(storeObj, "storeObj");
 		eval(PRESTORE);
 
 	}
 
-	@Override
 	public void postStoreAction(IRiakObject obj) {
 		wrapObject(obj, "obj");
 		eval(POSTSTORE);
 	}
 
-	@Override
 	public void preDeleteAction() {
 		//wrapObject(obj, "obj");
 		eval(PREDELETE);
 	}
 
-	@Override
 	public void postDeleteAction(IRiakObject obj) {
 		//wrapObject(obj, "obj");
 		eval(POSTDELETE);
 	}
 
-	@Override
 	public void preQuery2iAction(FetchIndex<?> index) {
 		//wrapObject(obj, "obj");
 		eval(PREQUERY2I);
 	}
 
-	@Override
 	public void postQuery2iAction(List<?> data) {
 		wrapObject(data, "results");
 		eval(POSTQUERY2I);
 	}
 
-	@Override
 	public void preMapredAction() {
 
 	}
 
-	@Override
 	public void postMapredAction() {
 	}
 
-	@Override
 	public void preListBucketsAction() {
 		//wrapObject(data, "objects");
 		eval(PRELISTBUCKETS);
 	}
 
-	@Override
 	public void postListBucketsAction(Set<String> buckets) {
 		wrapObject(buckets, "buckets");
 		eval(POSTLISTBUCKETS);
 	}
 
-	@Override
 	public void preListKeysAction(String bucket) {
 		wrapObject(bucket, "bucket");
 		eval(PRELISTKEYS);
 	}
 
-	@Override
 	public void postListKeysAction(List<String> keys) {
 		wrapObject(keys, "keys");
 		eval(POSTLISTKEYS);
 	}
 
-	@Override
 	public void preGetBucketPropsAction(String bucket) {
 		wrapObject(bucket, "bucket");
 		eval(PREGETBUCKETPROPS);
 	}
 
-	@Override
 	public void postGetBucketPropsAction(Map<String, Object> props) {
 		wrapObject(props, "props");
 		eval(POSTGETBUCKETPROPS);		
 	}
 
-	@Override
 	public void preConnectAction(String host, String port) {
 		wrapObject(host, "riak_host");
 		wrapObject(port, "riak_port");		
 		eval(PRECONNECT);
 	}
 
-	@Override
 	public void postConnectAction(String host, String port, IRiakClient client) {
 		wrapObject(host, "riak_host");
 		wrapObject(port, "riak_port");
