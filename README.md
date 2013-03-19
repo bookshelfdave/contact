@@ -287,7 +287,7 @@ And here's a more in depth example that renderes sections of a JSON doc:
 ```
 use bucket "Foo";
 
-store "JsonTest" with json
+store "JsonTest1" with json
 ~%~
   {
     "firstName": "John",
@@ -298,23 +298,29 @@ store "JsonTest" with json
         "city": "New York",
         "state": "NY",
         "postalCode": 10021
-    },
-    "phoneNumber": [
-        {
-            "type": "home",
-            "number": "212 555-1234"
-        },
-        {
-            "type": "fax",
-            "number": "646 555-4567"
-        }
-    ]
-}
+    }
+  }
 ~%~;
+
+store "JsonTest2" with json
+~%~
+  {
+    "firstName": "Dave",
+    "lastName": "Parfitt",
+    "age": 99,
+    "address": {
+        "streetAddress": "1000 Big Nosk drive",
+        "city": "Buffalo",
+        "state": "NY",
+        "postalCode": 14222
+    }
+  }
+~%~;
+
 
 set action postfetch with javascript 
 ~%~
-  if(obj != undefined) { 
+if(obj != undefined) { 
     var v = obj.getValueAsString(); 
     var j = JSON.parse(v);
     out.println(j.firstName + " " + j.lastName);
@@ -323,20 +329,26 @@ set action postfetch with javascript
     out.println("   " + j.address.city + 
                     ", " + j.address.state +
                     " " + j.address.postalCode);
-    }
+}
 ~%~;
 
-fetch "JsonTest";
+fetch "JsonTest1";
+fetch "JsonTest2";
 ```
 
-displays:
+displays output that looks like this:
 
 ```
 John Smith
 Address:
    21 2nd Street
    New York, NY 10021
-```
+
+Dave Parfitt
+Address:
+   1000 Big Nosk drive
+   Buffalo, NY 14222
+>```
 
 The key function in the postfetch action above is `JSON.parse(v)`, which turns evaluates a string and returns a Javascript object.
 

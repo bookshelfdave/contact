@@ -181,7 +181,7 @@ public class ContactConsole {
         CommandLine commandLine = processArgs(args);
 		ConsoleReader reader = new ConsoleReader();
         reader.setBellEnabled(false);
-
+        reader.setExpandEvents(false); // TODO: look into this
         reader.addCompleter(new jline.console.completer.StringsCompleter(keywords));
 
         String line;
