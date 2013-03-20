@@ -1,6 +1,8 @@
 package com.basho.contact.actions;
 
 import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +59,10 @@ public class JSActionListener implements ContactActionListener {
 	Context jsctx = null;
 	Scriptable jsscope = null;
 	// skip getters and setters, they are just taking up space
-	private String postFetchBody = "if(obj != undefined) { out.print(obj.getValueAsString()); }";
+	private String postFetchBody = "if(obj != undefined) { out.println(bucket + ':' + key + '=' + obj.getValueAsString()); }";
 	private String preFetchBody = "";
 	private String preStoreBody = "";
-	private String postStoreBody = "if(obj != undefined) { out.print(obj.getValueAsString()); }";
+	private String postStoreBody = "if(obj != undefined) { out.println(obj.getValueAsString()); }";
 	private String preDeleteBody = "";
 	private String postDeleteBody = "";
 	private String preQuery2iBody = "";
@@ -147,7 +149,8 @@ public class JSActionListener implements ContactActionListener {
 		ScriptableObject.putProperty(jsscope, name, wrappedObj);
 	}
 
-	private void eval(String commandName) {
+	private void evalWithParams(Object params, String commandName) {
+        wrapObjectWithAnnotations(params);
 		// TODO: introduce a scope (via a function?) to contain objects
 		// so we don't leak!
 		try {
@@ -160,20 +163,49 @@ public class JSActionListener implements ContactActionListener {
 		}
 	}
 
-	public void postFetchAction(IRiakObject obj) {
-        wrapObject(obj, "obj");
-		eval(POSTFETCH);
-	}
+    private void eval(String commandName) {
+        // TODO: introduce a scope (via a function?) to contain objects
+        // so we don't leak!
+        try {
+            String body = js.get(commandName);
+            if(body != null && !body.isEmpty()) {
+                jsctx.evaluateString(jsscope, body, commandName, 1, null);
+            }
+        } catch (Exception e) {
+            runtimeCtx.appendError("Error processing Javascript:" + e.getMessage());
+        }
+    }
 
-	public void preFetchAction(FetchObject<IRiakObject> fetchObj) {
-		wrapObject(fetchObj, "fetchObj");
-		eval(PREFETCH);
-	}
+    private void wrapObjectWithAnnotations(Object o) {
+        Field[] fields = o.getClass().getFields();
+        for(Field f: fields) {
+            if(f.isAnnotationPresent(Binding.class)) {
+                //System.out.println("Found " + f.getName());
+                Binding b = f.getAnnotation(Binding.class);
+                String boundName = b.name();
+                try {
+                    Object fieldValue = f.get(o);
+                    Object wrappedObj = Context.javaToJS(fieldValue, jsscope);
+                    ScriptableObject.putProperty(jsscope, boundName, wrappedObj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public FetchActionParams.Pre preFetchAction(FetchActionParams.Pre params) {
+		evalWithParams(params, POSTFETCH);
+        return null;
+    }
 
-	public void preStoreAction(StoreObject<IRiakObject> storeObj) {
+    public FetchActionParams.Post postFetchAction(FetchActionParams.Post params) {
+        evalWithParams(params, POSTFETCH);
+        return null;
+    }
+
+    public void preStoreAction(StoreObject<IRiakObject> storeObj) {
 		wrapObject(storeObj, "storeObj");
 		eval(PRESTORE);
-
 	}
 
 	public void postStoreAction(IRiakObject obj) {

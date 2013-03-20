@@ -14,9 +14,12 @@ public interface ContactActionListener{
 	public void init();
 	public void term();
 
-	public void preFetchAction(FetchObject<IRiakObject> fetchObj);
-	public void postFetchAction(IRiakObject obj);
-	
+//	public void preFetchAction(FetchObject<IRiakObject> fetchObj);
+//	public void postFetchAction(IRiakObject obj);
+
+    public FetchActionParams.Pre preFetchAction(FetchActionParams.Pre params);
+    public FetchActionParams.Post postFetchAction(FetchActionParams.Post params);
+
 	public void preStoreAction(StoreObject<IRiakObject> storeObj);
 	public void postStoreAction(IRiakObject obj);
 	

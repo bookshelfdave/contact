@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.basho.contact.RuntimeContext;
+import com.basho.contact.actions.FetchActionParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
@@ -108,7 +109,6 @@ public class FetchCommand extends RiakCommand<ResultSymbol> {
 		}
 	}
 
-	
 	@Override
 	public ResultSymbol exec(RuntimeContext runtimeCtx) {
 		IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
@@ -120,11 +120,16 @@ public class FetchCommand extends RiakCommand<ResultSymbol> {
 					Bucket b = client.fetchBucket(this.bucket).execute();
 					FetchObject<IRiakObject> fo = processOptions(runtimeCtx, b.fetch(key));
 
-					runtimeCtx.getActionListener().preFetchAction(fo);
+					//runtimeCtx.getActionListener().preFetchAction(fo);
 					ResultSymbol sym = new ResultSymbol(fo.execute());
 					if(sym.value != null) {
-						runtimeCtx.getActionListener().postFetchAction(sym.value);
-						// basic output						
+                        FetchActionParams.Post postParams = new FetchActionParams.Post();
+                        postParams.bucket = this.bucket;
+                        postParams.key = this.key;
+                        postParams.options = this.options;
+                        postParams.object = sym.value;
+						runtimeCtx.getActionListener().postFetchAction(postParams);
+						// basic output
 						runtimeCtx.appendOutput(sym.toString());
 						return sym;
 					}

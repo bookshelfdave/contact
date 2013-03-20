@@ -4,36 +4,44 @@ package com.basho.contact.actions;
 import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.operations.FetchObject;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 public class FetchActionParams {
     public static class Pre {
-        // hmm, maybe pojos would be better here
-
-        @JSObject(jsName = "bucket", returnValue = true)
+        @Binding(name = "bucket")
         public String bucket;
 
-        @JSObject(jsName = "key", returnValue = true)
+        @Binding(name = "key")
         public String key;
 
-        @JSObject(jsName = "options", returnValue = true)
+        @Binding(name = "options")
         public Map<String, Object> options;
 
-        @JSObject(jsName = "fetchObj", returnValue = true)
+        @Binding(name = "fetchObj")
         public FetchObject<IRiakObject> fetchObj;
     }
 
     public static class Post {
-        @JSObject(jsName = "bucket", returnValue = false)
+        @Binding(name = "bucket")
         public String bucket;
 
-        @JSObject(jsName = "key", returnValue = false)
+        @Binding(name = "key")
         public String key;
 
-        @JSObject(jsName = "options", returnValue = false)
+        @Binding(name = "options")
         public Map<String, Object> options;
 
-        @JSObject(jsName = "options", returnValue = false)
-        IRiakObject object;
+        @Binding(name = "obj")
+        public IRiakObject object;
     }
+
+
+
+//    public static void main(String args[]) {
+//        FetchActionParams.Pre p = new FetchActionParams.Pre();
+//        p.bucket = "foo";
+//        p.key = "bar";
+//        wrapObjectWithAnnotations(p);
+//    }
 }
