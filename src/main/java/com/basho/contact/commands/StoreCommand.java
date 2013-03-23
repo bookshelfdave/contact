@@ -1,10 +1,10 @@
 package com.basho.contact.commands;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.basho.contact.Pair;
+import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakClient;
@@ -14,19 +14,59 @@ import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.builders.RiakObjectBuilder;
 import com.basho.riak.client.operations.StoreObject;
 
-public class StoreCommand extends RiakCommand<ResultSymbol> {
+public class StoreCommand extends RiakCommand<ResultSymbol, StoreParams.Pre> {
 
-	static abstract class StoreOpt {
+    public StoreCommand() {
+        super(StoreParams.Pre.class);
+    }
+
+    static abstract class StoreOpt {
 		public abstract StoreObject<IRiakObject> setOption(
 				StoreObject<IRiakObject> o, Object value);
 	}
 
-	public String key;
-	public List<Pair> indexes = null;
-	
 	private static Map<String, StoreOpt> optionsMap = new HashMap<String, StoreOpt>();
 
-	private static int objectToInt(Object o) {
+    static {
+        optionsMap.put("w", new StoreOpt() {
+            public StoreObject<IRiakObject> setOption(
+                    StoreObject<IRiakObject> o, Object value) {
+                return o.w(objectToInt(value));
+            }
+        });
+        optionsMap.put("dw", new StoreOpt() {
+            public StoreObject<IRiakObject> setOption(
+                    StoreObject<IRiakObject> o, Object value) {
+                return o.dw(objectToInt(value));
+            }
+        });
+        optionsMap.put("pw", new StoreOpt() {
+            public StoreObject<IRiakObject> setOption(
+                    StoreObject<IRiakObject> o, Object value) {
+                return o.pw(objectToInt(value));
+            }
+        });
+        optionsMap.put("return_body", new StoreOpt() {
+            public StoreObject<IRiakObject> setOption(
+                    StoreObject<IRiakObject> o, Object value) {
+                return o.returnBody(objectToBoolean(value));
+            }
+        });
+        optionsMap.put("if_not_modified", new StoreOpt() {
+            public StoreObject<IRiakObject> setOption(
+                    StoreObject<IRiakObject> o, Object value) {
+                return o.ifNotModified(objectToBoolean(value));
+            }
+        });
+        optionsMap.put("if_none_match", new StoreOpt() {
+            public StoreObject<IRiakObject> setOption(
+                    StoreObject<IRiakObject> o, Object value) {
+                return o.ifNoneMatch(objectToBoolean(value));
+            }
+        });
+    }
+
+    private static int objectToInt(Object o) {
 		if (o instanceof String) {
 			return Integer.parseInt((String) o);
 		} else if (o instanceof Integer) {
@@ -48,51 +88,12 @@ public class StoreCommand extends RiakCommand<ResultSymbol> {
 		}
 	}
 
-	static {
-		optionsMap.put("w", new StoreOpt() {
-			public StoreObject<IRiakObject> setOption(
-					StoreObject<IRiakObject> o, Object value) {
-				return o.w(objectToInt(value));
-			}
-		});
-		optionsMap.put("dw", new StoreOpt() {
-			public StoreObject<IRiakObject> setOption(
-					StoreObject<IRiakObject> o, Object value) {
-				return o.dw(objectToInt(value));
-			}
-		});
-		optionsMap.put("pw", new StoreOpt() {
-			public StoreObject<IRiakObject> setOption(
-					StoreObject<IRiakObject> o, Object value) {
-				return o.pw(objectToInt(value));
-			}
-		});
-
-		optionsMap.put("return_body", new StoreOpt() {
-			public StoreObject<IRiakObject> setOption(
-					StoreObject<IRiakObject> o, Object value) {
-				return o.returnBody(objectToBoolean(value));
-			}
-		});
-		optionsMap.put("if_not_modified", new StoreOpt() {
-			public StoreObject<IRiakObject> setOption(
-					StoreObject<IRiakObject> o, Object value) {
-				return o.ifNotModified(objectToBoolean(value));
-			}
-		});
-		optionsMap.put("if_none_match", new StoreOpt() {
-			public StoreObject<IRiakObject> setOption(
-					StoreObject<IRiakObject> o, Object value) {
-				return o.ifNoneMatch(objectToBoolean(value));
-			}
-		});
-	}
 
 	private StoreObject<IRiakObject> processOptions(RuntimeContext runtimeCtx,
 			StoreObject<IRiakObject> o) {
-		if (options != null) {
-			for (String key : options.keySet()) {
-				Object val = options.get(key);
+		if (params.options != null) {
+			for (String key : params.options.keySet()) {
+				Object val = params.options.get(key);
 				if (!optionsMap.containsKey(key)) {
 					runtimeCtx.appendError("Unknown store option:" + key);
 				} else {
@@ -114,8 +115,8 @@ public class StoreCommand extends RiakCommand<ResultSymbol> {
 
 	// TODO: watch for errors here
 	private RiakObjectBuilder addIndexes(RiakObjectBuilder builder) {
-		if(indexes != null) {
-			for(Pair p : indexes) {
+		if(params.indexes != null) {
+			for(Pair p : params.indexes) {
 				if(p.getKey().endsWith("_bin")) {
 					builder = builder.addIndex(p.getKey(), p.getValue().toString());
 				} else if(p.getKey().endsWith("_int")) {
@@ -132,24 +133,28 @@ public class StoreCommand extends RiakCommand<ResultSymbol> {
 	public ResultSymbol exec(RuntimeContext runtimeCtx) {
 		IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
 		if (client != null) {
-			if (this.bucket != null) {
+			if (params.bucket != null) {
 				try {
 					RiakObjectBuilder builder = 
 							RiakObjectBuilder
-								.newBuilder(this.bucket, key)
-								.withContentType(content.getContentType().toString())
-								.withValue(this.content.getValue());
+								.newBuilder(params.bucket, params.key)
+								.withContentType(params.content.getContentType().toString())
+								.withValue(params.content.getValue());
 					builder = addIndexes(builder);
 					IRiakObject obj = builder.build(); 
 					// TODO: cache this
-					Bucket b = client.fetchBucket(this.bucket).execute();
+					Bucket b = client.fetchBucket(params.bucket).execute();
 					StoreObject<IRiakObject> so = processOptions(runtimeCtx,
 							b.store(obj));
-					runtimeCtx.getActionListener().preStoreAction(so);
+                    params.ctx = runtimeCtx;
+					runtimeCtx.getActionListener().preStoreAction(params);
 					ResultSymbol result = new ResultSymbol(so.execute());
-					runtimeCtx.getActionListener().postStoreAction(result.value);
+                    StoreParams.Post postParams = new StoreParams.Post();
+                    postParams.ctx = runtimeCtx;
+                    postParams.object = result.value;
+					runtimeCtx.getActionListener().postStoreAction(postParams);
 					// TODO: return_body should check for true
-					if (this.options != null && this.options.containsKey("return_body")) {
+					if (params.options != null && params.options.containsKey("return_body")) {
 						// TODO: move to JS
 						runtimeCtx.appendOutput(result.toString());
 					}

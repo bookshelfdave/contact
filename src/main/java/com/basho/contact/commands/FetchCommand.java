@@ -3,8 +3,8 @@ package com.basho.contact.commands;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
-import com.basho.contact.actions.FetchActionParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
@@ -12,9 +12,12 @@ import com.basho.riak.client.RiakRetryFailedException;
 import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.operations.FetchObject;
 
-public class FetchCommand extends RiakCommand<ResultSymbol> {
-	public String key;
-	
+public class FetchCommand extends RiakCommand<ResultSymbol, FetchParams.Pre> {
+
+    public FetchCommand() {
+        super(FetchParams.Pre.class);
+    }
+
 	static abstract class FetchOpt {
 		public abstract FetchObject<IRiakObject> setOption(
 				FetchObject<IRiakObject> o, Object value);
@@ -56,28 +59,25 @@ public class FetchCommand extends RiakCommand<ResultSymbol> {
 				return o.r(objectToInt(value));
 			}
 		});
-
 		optionsMap.put("pr", new FetchOpt() {
 			public FetchObject<IRiakObject> setOption(
 					FetchObject<IRiakObject> o, Object value) {
 				return o.pr(objectToInt(value));
 			}
 		});
-
 		optionsMap.put("basic_quorum", new FetchOpt() {
 			public FetchObject<IRiakObject> setOption(
 					FetchObject<IRiakObject> o, Object value) {
 				return o.basicQuorum(objectToBoolean(value));
 			}
 		});
-
 		optionsMap.put("notfound_ok", new FetchOpt() {
 			public FetchObject<IRiakObject> setOption(
 					FetchObject<IRiakObject> o, Object value) {
 				return o.notFoundOK(objectToBoolean(value));
 			}
 		});
-		
+
 //		optionsMap.put("head", new FetchOpt() {
 //			public FetchObject<IRiakObject> setOption(
 //					FetchObject<IRiakObject> o, Object value) {
@@ -94,9 +94,9 @@ public class FetchCommand extends RiakCommand<ResultSymbol> {
 	}
 
 	private FetchObject<IRiakObject> processOptions(RuntimeContext runtimeCtx, FetchObject<IRiakObject> o) {
-		if (options != null) {
-			for (String key : options.keySet()) {
-				Object val = options.get(key);
+		if (params.options != null) {
+			for (String key : params.options.keySet()) {
+				Object val = params.options.get(key);
 				if (!optionsMap.containsKey(key)) {
 					runtimeCtx.appendError("Unknown store option:" + key);
 				} else {
@@ -113,24 +113,26 @@ public class FetchCommand extends RiakCommand<ResultSymbol> {
 	public ResultSymbol exec(RuntimeContext runtimeCtx) {
 		IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
 		if(client != null) {
-			if(this.bucket != null) {
+			if(this.params.bucket != null) {
 				try {
 					// TODO: optimize this to skip fetch/create bucket every time
-					
-					Bucket b = client.fetchBucket(this.bucket).execute();
-					FetchObject<IRiakObject> fo = processOptions(runtimeCtx, b.fetch(key));
+					Bucket b = client.fetchBucket(this.params.bucket).execute();
+					FetchObject<IRiakObject> fo = processOptions(runtimeCtx, b.fetch(params.key));
+                    params.fetchObj = fo;
+                    params.ctx = runtimeCtx;
+                    runtimeCtx.getActionListener().preFetchAction(params);
 
-					//runtimeCtx.getActionListener().preFetchAction(fo);
 					ResultSymbol sym = new ResultSymbol(fo.execute());
 					if(sym.value != null) {
-                        FetchActionParams.Post postParams = new FetchActionParams.Post();
-                        postParams.bucket = this.bucket;
-                        postParams.key = this.key;
-                        postParams.options = this.options;
+                        FetchParams.Post postParams = new FetchParams.Post();
+                        postParams.bucket = this.params.bucket;
+                        postParams.key = params.key;
+                        postParams.options = this.params.options;
                         postParams.object = sym.value;
+                        postParams.ctx = runtimeCtx;
 						runtimeCtx.getActionListener().postFetchAction(postParams);
 						// basic output
-						runtimeCtx.appendOutput(sym.toString());
+						//runtimeCtx.appendOutput(sym.toString());
 						return sym;
 					}
 				} catch (RiakRetryFailedException e) {

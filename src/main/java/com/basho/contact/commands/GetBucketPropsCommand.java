@@ -1,9 +1,14 @@
 package com.basho.contact.commands;
 
+import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.symbols.ResultSymbol;
 
-public class GetBucketPropsCommand extends RiakCommand<ResultSymbol>{
+public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPropsParams.Pre> {
+
+    public GetBucketPropsCommand() {
+        super(GetBucketPropsParams.Pre.class);
+    }
 
 	@Override
 	public ResultSymbol exec(RuntimeContext runtimeCtx) {

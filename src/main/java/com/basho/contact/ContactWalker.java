@@ -41,7 +41,6 @@ import com.basho.contact.commands.GetBucketPropsCommand;
 import com.basho.contact.commands.ListBucketsCommand;
 import com.basho.contact.commands.ListKeysCommand;
 import com.basho.contact.commands.Query2iCommand;
-import com.basho.contact.commands.RiakCommand;
 import com.basho.contact.commands.StoreCommand;
 import com.basho.contact.symbols.ContactSymbol;
 import com.basho.contact.symbols.ContactSymbol.SymbolType;
@@ -79,8 +78,8 @@ public class ContactWalker extends ContactBaseListener {
 		String bucket = stripQuotes(ctx.bucket.getText());
 		Object o = getValue(ctx.op_with_options());
 		if(o instanceof RiakCommand) {
-			RiakCommand<?> c = (RiakCommand<?>)o;
-			c.bucket = bucket;
+			RiakCommand<?,?> c = (RiakCommand<?,?>)o;
+			c.params.bucket = bucket;
 		}
 		trace("Using bucket " + bucket);
 		setValue(ctx, o);
@@ -105,11 +104,13 @@ public class ContactWalker extends ContactBaseListener {
 		if(o != null) {
 			//System.out.println("Executing " + o.getClass().getName());
 			if( o != null && o instanceof RiakCommand) {
-				RiakCommand<?> cmd = (RiakCommand<?>)o;
-				if(cmd.bucket == null) {
-					cmd.bucket = runtimeCtx.getCurrentBucket();
+                RiakCommand<?,?> cmd = (RiakCommand<?,?>)o;
+
+                if(cmd.params.bucket == null) {
+                    cmd.params.bucket = runtimeCtx.getCurrentBucket();
 				}
-				ContactSymbol<?> sym = cmd.exec(runtimeCtx);
+                cmd.params.ctx = runtimeCtx;
+                ContactSymbol<?> sym = cmd.exec(runtimeCtx);
 				runtimeCtx.lastResult = sym;
 				if(ctx.assignment() != null) {
 					String name = (String)getValue(ctx.assignment());
@@ -237,8 +238,8 @@ public class ContactWalker extends ContactBaseListener {
 			o = getValue(ctx.listkeys());
 		}
 		if(o instanceof RiakCommand) {
-			RiakCommand<?> c = (RiakCommand<?>)o;
-			c.options = (Map<String, Object>)options;
+			RiakCommand<?,?> c = (RiakCommand<?,?>)o;
+			c.params.options = (Map<String, Object>)options;
 			setValue(ctx, c);
 		} 
 		super.exitOp_with_options(ctx);
@@ -249,7 +250,7 @@ public class ContactWalker extends ContactBaseListener {
 	@Override
 	public void exitFetch(FetchContext ctx) {
 		FetchCommand fetch = new FetchCommand();
-		fetch.key = stripQuotes(ctx.key.getText());	
+		fetch.params.key = stripQuotes(ctx.key.getText());
 		//System.out.println("Fetching key " + fetch.key);
 		setValue(ctx, fetch);
 		super.exitFetch(ctx);
@@ -260,15 +261,15 @@ public class ContactWalker extends ContactBaseListener {
 	@Override
 	public void exitStore(StoreContext ctx) {
 		StoreCommand store = new StoreCommand();
-		store.key = stripQuotes(ctx.key.getText());
-		store.content = (Content)getValue(ctx.content_string());
+		store.params.key = stripQuotes(ctx.key.getText());
+		store.params.content = (Content)getValue(ctx.content_string());
 		if(ctx.store_indexes() != null) {
 			List<PairContext> pctxs = (List<PairContext>)getValue(ctx.store_indexes());
 			List<Pair> indexes = new ArrayList<Pair>();
 			for(PairContext pc : pctxs) {
 				indexes.add((Pair)getValue(pc));
 			}
-			store.indexes = indexes;
+			store.params.indexes = indexes;
 		}
 		setValue(ctx, store);
 		super.exitStore(ctx);
@@ -305,12 +306,12 @@ public class ContactWalker extends ContactBaseListener {
 	@Override
 	public void exitQuery2i(Query2iContext ctx) {
 		Query2iCommand query = new Query2iCommand();
-		query.indexName = stripQuotes(ctx.index.getText());
+		query.params.indexName = stripQuotes(ctx.index.getText());
 		if(ctx.exact != null) {
-			query.indexVal = stripQuotes(ctx.exact.getText());
+			query.params.indexVal = stripQuotes(ctx.exact.getText());
 		} else {
-			query.min = stripQuotes(ctx.vmin.getText());
-			query.max = stripQuotes(ctx.vmax.getText());
+			query.params.min = stripQuotes(ctx.vmin.getText());
+			query.params.max = stripQuotes(ctx.vmax.getText());
 		}
 		
 		setValue(ctx, query);
@@ -380,8 +381,8 @@ public class ContactWalker extends ContactBaseListener {
 		int pbPort = Integer.parseInt(ctx.pbport.getText());        
 
 		ConnectCommand command = new ConnectCommand();
-        command.host = host;
-        command.pbPort = pbPort;
+        command.params.host = host;
+        command.params.pbPort = pbPort;
         
         setValue(ctx, command);
 		super.exitConnect(ctx);

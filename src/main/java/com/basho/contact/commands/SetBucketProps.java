@@ -2,6 +2,10 @@ package com.basho.contact.commands;
 
 public class SetBucketProps {
 
+    public SetBucketProps() {
+        super();
+    }
+
 	/**
 	 * @param args
 	 */

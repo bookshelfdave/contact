@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.basho.contact.commands.*;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
-import com.basho.riak.client.operations.FetchObject;
 import com.basho.riak.client.operations.StoreObject;
 import com.basho.riak.client.query.indexes.FetchIndex;
 
@@ -14,33 +14,31 @@ public interface ContactActionListener{
 	public void init();
 	public void term();
 
-//	public void preFetchAction(FetchObject<IRiakObject> fetchObj);
-//	public void postFetchAction(IRiakObject obj);
+    public void preConnectAction(ConnectParams.Pre params);
+    public void postConnectAction(ConnectParams.Post params);
 
-    public FetchActionParams.Pre preFetchAction(FetchActionParams.Pre params);
-    public FetchActionParams.Post postFetchAction(FetchActionParams.Post params);
+    public void preFetchAction(FetchParams.Pre params);
+    public void postFetchAction(FetchParams.Post params);
 
-	public void preStoreAction(StoreObject<IRiakObject> storeObj);
-	public void postStoreAction(IRiakObject obj);
+	public void preStoreAction(StoreParams.Pre params);
+	public void postStoreAction(StoreParams.Post params);
 	
-	public void preDeleteAction();
-	public void postDeleteAction(IRiakObject obj);
+	public void preDeleteAction(DeleteParams.Pre params);
+	public void postDeleteAction(DeleteParams.Post params);
 
-	public void preQuery2iAction(FetchIndex<?> idx);
-	public void postQuery2iAction(List<?> data);
+	public void preQuery2iAction(Query2iParams.Pre params);
+	public void postQuery2iAction(Query2iParams.Post params);
 
-	public void preMapredAction();
-	public void postMapredAction();
+	public void preMapredAction(MapRedParams.Pre params);
+	public void postMapredAction(MapRedParams.Post params);
 	
-	public void preListBucketsAction();
-	public void postListBucketsAction(Set<String> buckets);
+	public void preListBucketsAction(ListBucketsParams.Pre params);
+	public void postListBucketsAction(ListBucketsParams.Post params);
 	
-	public void preListKeysAction(String bucket);
-	public void postListKeysAction(List<String> keys);
+	public void preListKeysAction(ListKeysParams.Pre params);
+	public void postListKeysAction(ListKeysParams.Post params);
 	
-	public void preGetBucketPropsAction(String bucket);
-	public void postGetBucketPropsAction(Map<String, Object> props);
+	public void preGetBucketPropsAction(GetBucketPropsParams.Pre params);
+	public void postGetBucketPropsAction(GetBucketPropsParams.Post params);
 	
-	public void preConnectAction(String host, String port);
-	public void postConnectAction(String host, String port, IRiakClient client);
 }
