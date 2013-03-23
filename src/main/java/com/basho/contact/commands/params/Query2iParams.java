@@ -1,4 +1,4 @@
-package com.basho.contact.commands;
+package com.basho.contact.commands.params;
 
 
 import com.basho.contact.actions.ActionParams;

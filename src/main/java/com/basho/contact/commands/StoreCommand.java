@@ -6,6 +6,7 @@ import java.util.Map;
 import com.basho.contact.Pair;
 import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.params.StoreParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;

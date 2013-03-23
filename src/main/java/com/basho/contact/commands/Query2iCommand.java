@@ -2,6 +2,7 @@ package com.basho.contact.commands;
 
 import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.params.Query2iParams;
 import com.basho.contact.symbols.Query2IResultsSymbol;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.RiakException;

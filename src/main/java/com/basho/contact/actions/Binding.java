@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface Binding {
     String name() default "";
     boolean copy() default true;
+    boolean javadoc() default false;
 }

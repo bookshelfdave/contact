@@ -1,4 +1,4 @@
-package com.basho.contact.commands;
+package com.basho.contact.commands.params;
 
 
 import com.basho.contact.actions.ActionParams;
@@ -19,7 +19,7 @@ public class ConnectParams {
         public String host;
         @Binding(name = "riak_pb_port")
         public int pbPort;
-        @Binding(name = "riak_client")
-        IRiakClient client;
+        @Binding(name = "riak_client", javadoc = true)
+        public IRiakClient client;
     }
 }

@@ -1,14 +1,6 @@
 package com.basho.contact.actions;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.basho.contact.commands.*;
-import com.basho.riak.client.IRiakClient;
-import com.basho.riak.client.IRiakObject;
-import com.basho.riak.client.operations.StoreObject;
-import com.basho.riak.client.query.indexes.FetchIndex;
+import com.basho.contact.commands.params.*;
 
 public interface ContactActionListener{
 	public void init();

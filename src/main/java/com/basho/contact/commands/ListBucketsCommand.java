@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.params.ListBucketsParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.RiakException;
 

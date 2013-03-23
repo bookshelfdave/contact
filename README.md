@@ -348,33 +348,138 @@ Dave Parfitt
 Address:
    1000 Big Nosk drive
    Buffalo, NY 14222
->```
+```
 
 The key function in the postfetch action above is `JSON.parse(v)`, which turns evaluates a string and returns a Javascript object.
 
 I hope to have a "Cookbook" section on the Contact wiki eventually, but in the meantime, you can check out the [Javadocs for the Riak Java Client](http://basho.github.com/riak-java-client/1.1.0/index.html) for available methods.
 
 
-####Available actions:
- * preconnect
- * postconnect
- * prefetch
- * postfetch
- * prestore
- * poststore
- * predelete
- * postdelete
- * prequery2i
- * postquery2i
- * premapred
- * postmapred
- * prelistbuckets
- * postlistbuckets
- * prelistkeys
- * postlistkeys
- * pregetbucketprops
- * postgetbucketprops
+####Available actions
 
+* **listkeys**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * keys : *[java.util.List](http://docs.oracle.com/javase/7/docs/api/java/util/List.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)>*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **fetch**
+    * **Pre** parameters
+        * fetchObj : *[com.basho.riak.client.operations.FetchObject](http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/operations/FetchObject.html)<[com.basho.riak.client.IRiakObject](http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakObject.html)>*
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * key : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * key : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * riak_object : *[com.basho.riak.client.IRiakObject](http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakObject.html)*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **mapred**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **connect**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * riak_host : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * riak_pb_port : *[int]()*
+    * **Post** parameters
+        * riak_pb_port : *[int]()*
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * riak_client : *[com.basho.riak.client.IRiakClient](http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakClient.html)*
+        * riak_host : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **store**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * indexes : *[java.util.List](http://docs.oracle.com/javase/7/docs/api/java/util/List.html)<[com.basho.contact.Pair](http://basho.github.com/riak-java-client/1.1.0/com/basho/contact/Pair.html)>*
+        * key : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * content : *[com.basho.contact.Content](http://basho.github.com/riak-java-client/1.1.0/com/basho/contact/Content.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * riak_object : *[com.basho.riak.client.IRiakObject](http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakObject.html)*
+
+* **setbucketprops**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **getbucketprops**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **delete**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+* **query2i**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * index_max : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * index_min : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * index_val : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * index_name : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * index_name : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * index_val : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * index_max : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * index_min : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+        * results : *[java.util.List](http://docs.oracle.com/javase/7/docs/api/java/util/List.html)<?>*
+
+* **listbuckets**
+    * **Pre** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+    * **Post** parameters
+        * options : *[java.util.Map](http://docs.oracle.com/javase/7/docs/api/java/util/Map.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html), [java.lang.Object](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html)>*
+        * buckets : *[java.util.Set](http://docs.oracle.com/javase/7/docs/api/java/util/Set.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)>*
+        * contact : *[com.basho.contact.RuntimeContext]()*
+        * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
 
 
 

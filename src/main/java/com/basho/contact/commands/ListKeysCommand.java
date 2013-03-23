@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.params.ListKeysParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.RiakException;

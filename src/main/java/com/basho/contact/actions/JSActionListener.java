@@ -3,20 +3,15 @@ package com.basho.contact.actions;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.basho.contact.commands.*;
+import com.basho.contact.commands.params.*;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import com.basho.contact.RuntimeContext;
-import com.basho.riak.client.IRiakClient;
-import com.basho.riak.client.IRiakObject;
-import com.basho.riak.client.operations.StoreObject;
-import com.basho.riak.client.query.indexes.FetchIndex;
 
 public class JSActionListener implements ContactActionListener {
 
