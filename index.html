@@ -252,14 +252,24 @@ store "MyKey"
 
 <h2>Deleting objects</h2>
 
-<p><strong>NOT IMPLEMENTED</strong> at the moment</p>
-
 <pre><code>using bucket "Foo" delete "MyKey";
 
 delete "MyKey";
+
+delete "MyKey" and options "w"="1";
 </code></pre>
 
-<h3>Options</h3>
+<h3>Available delete options:</h3>
+
+<ul>
+<li>r</li>
+<li>w</li>
+<li>pr</li>
+<li>pw</li>
+<li>dw</li>
+<li>
+<em>**vclock</em>* not implemented at the moment*</li>
+</ul><h3>Options</h3>
 
 <p><strong>Not implemented</strong></p>
 
@@ -326,7 +336,7 @@ query2i with index "range_int" from "1" to "2";
 
 <pre><code>use bucket "Foo";
 
-store "JsonTest" with json
+store "JsonTest1" with json
 ~%~
   {
     "firstName": "John",
@@ -337,23 +347,29 @@ store "JsonTest" with json
         "city": "New York",
         "state": "NY",
         "postalCode": 10021
-    },
-    "phoneNumber": [
-        {
-            "type": "home",
-            "number": "212 555-1234"
-        },
-        {
-            "type": "fax",
-            "number": "646 555-4567"
-        }
-    ]
-}
+    }
+  }
 ~%~;
+
+store "JsonTest2" with json
+~%~
+  {
+    "firstName": "Dave",
+    "lastName": "Parfitt",
+    "age": 99,
+    "address": {
+        "streetAddress": "1000 Big Nosk drive",
+        "city": "Buffalo",
+        "state": "NY",
+        "postalCode": 14222
+    }
+  }
+~%~;
+
 
 set action postfetch with javascript 
 ~%~
-  if(obj != undefined) { 
+if(obj != undefined) { 
     var v = obj.getValueAsString(); 
     var j = JSON.parse(v);
     out.println(j.firstName + " " + j.lastName);
@@ -362,45 +378,381 @@ set action postfetch with javascript
     out.println("   " + j.address.city + 
                     ", " + j.address.state +
                     " " + j.address.postalCode);
-    }
+}
 ~%~;
 
-fetch "JsonTest";
+fetch "JsonTest1";
+fetch "JsonTest2";
 </code></pre>
 
-<p>displays:</p>
+<p>displays output that looks like this:</p>
 
 <pre><code>John Smith
 Address:
    21 2nd Street
    New York, NY 10021
+
+Dave Parfitt
+Address:
+   1000 Big Nosk drive
+   Buffalo, NY 14222
 </code></pre>
 
 <p>The key function in the postfetch action above is <code>JSON.parse(v)</code>, which turns evaluates a string and returns a Javascript object.</p>
 
 <p>I hope to have a "Cookbook" section on the Contact wiki eventually, but in the meantime, you can check out the <a href="http://basho.github.com/riak-java-client/1.1.0/index.html">Javadocs for the Riak Java Client</a> for available methods.</p>
 
-<h4>Available actions:</h4>
+<h4>Available actions</h4>
 
 <ul>
-<li>preconnect</li>
-<li>postconnect</li>
-<li>prefetch</li>
-<li>postfetch</li>
-<li>prestore</li>
-<li>poststore</li>
-<li>predelete</li>
-<li>postdelete</li>
-<li>prequery2i</li>
-<li>postquery2i</li>
-<li>premapred</li>
-<li>postmapred</li>
-<li>prelistbuckets</li>
-<li>postlistbuckets</li>
-<li>prelistkeys</li>
-<li>postlistkeys</li>
-<li>pregetbucketprops</li>
-<li>postgetbucketprops</li>
+<li>
+<p><strong>listkeys</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>keys : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html">java.util.List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>&gt;</em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>fetch</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>fetchObj : <em><a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/operations/FetchObject.html">com.basho.riak.client.operations.FetchObject</a>&lt;<a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakObject.html">com.basho.riak.client.IRiakObject</a>&gt;</em>
+</li>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>key : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>key : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>riak_object : <em><a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakObject.html">com.basho.riak.client.IRiakObject</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>mapred</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>connect</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>riak_host : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>riak_pb_port : <em><a href="">int</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>riak_pb_port : <em><a href="">int</a></em>
+</li>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>riak_client : <em><a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakClient.html">com.basho.riak.client.IRiakClient</a></em>
+</li>
+<li>riak_host : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>store</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>indexes : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html">java.util.List</a>&lt;<a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/contact/Pair.html">com.basho.contact.Pair</a>&gt;</em>
+</li>
+<li>key : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>content : <em><a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/contact/Content.html">com.basho.contact.Content</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>riak_object : <em><a href="http://basho.github.com/riak-java-client/1.1.0/com/basho/riak/client/IRiakObject.html">com.basho.riak.client.IRiakObject</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>setbucketprops</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>getbucketprops</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>delete</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>query2i</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>index_max : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>index_min : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>index_val : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>index_name : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>index_name : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>index_val : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>index_max : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>index_min : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+<li>results : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html">java.util.List</a>&lt;?&gt;</em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>listbuckets</strong></p>
+
+<ul>
+<li>
+<strong>Pre</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+<li>
+<strong>Post</strong> parameters
+
+<ul>
+<li>options : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">java.util.Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">java.lang.Object</a>&gt;</em>
+</li>
+<li>buckets : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html">java.util.Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a>&gt;</em>
+</li>
+<li>contact : <em><a href="">com.basho.contact.RuntimeContext</a></em>
+</li>
+<li>bucket : <em><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">java.lang.String</a></em>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul><h2>Customizable Conflict Resolvers and Retriers</h2>
 
 <p><strong>TODO</strong></p>
@@ -457,7 +809,6 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 <ul>
 <li>TESTING TESTING TESTING</li>
-<li>implement delete</li>
 <li>implement Javascript resolvers + retiers</li>
 <li>bucket properties via pb (the HTTP interface code is currently commented out)</li>
 <li>script mode (read from stdin etc)</li>
@@ -466,7 +817,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 <li>listing and using shell variables (ie from a 2i query)</li>
 <li>setup connections to multiple clusters, refer to a connection during a fetch, store, etc.</li>
 <li>load balancing</li>
-<li>do I need client ids?</li>
+<li>use meta</li>
 <li>simple interactive web ui ala "Try Riak"</li>
 <li>Pasting text into the shell erroneously kicks off tab completion</li>
 <li>User content-types</li>
