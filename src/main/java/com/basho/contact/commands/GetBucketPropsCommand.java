@@ -11,8 +11,8 @@ public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPr
         super(GetBucketPropsParams.Pre.class);
     }
 
-	@Override
-	public ResultSymbol exec(RuntimeContext runtimeCtx) {
+    @Override
+    public ResultSymbol exec(RuntimeContext runtimeCtx) {
 //		IRiakClient httpClient = runtimeCtx.getNextHTTPClient();
 //		if(httpClient != null) {
 //			if(this.bucket != null) {
@@ -62,6 +62,6 @@ public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPr
 //				}
 //			}
 //		}
-		return null;
-	}
+        return null;
+    }
 }

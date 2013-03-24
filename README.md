@@ -545,7 +545,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * listing and using shell variables (ie from a 2i query)
 * setup connections to multiple clusters, refer to a connection during a fetch, store, etc.
 * load balancing
-* do I need client ids?
+* use meta
 * simple interactive web ui ala "Try Riak"
 * Pasting text into the shell erroneously kicks off tab completion
 * User content-types

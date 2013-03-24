@@ -11,12 +11,12 @@ public class MapredCommand extends RiakCommand<ResultsSymbol, MapRedParams.Pre> 
         super(MapRedParams.Pre.class);
     }
 
-	@Override
-	public ResultsSymbol exec(RuntimeContext ctx) {
-		//ctx.getNextPBClient().mapReduce()
-		
-		return null;
-	}
+    @Override
+    public ResultsSymbol exec(RuntimeContext ctx) {
+        //ctx.getNextPBClient().mapReduce()
+
+        return null;
+    }
 
 
 }

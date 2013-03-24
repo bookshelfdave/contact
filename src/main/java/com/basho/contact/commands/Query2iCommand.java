@@ -17,63 +17,62 @@ public class Query2iCommand extends RiakCommand<Query2IResultsSymbol, Query2iPar
         super(Query2iParams.Pre.class);
     }
 
-	@Override
-	public Query2IResultsSymbol exec(RuntimeContext runtimeCtx) {
-		IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
-		if (client != null) {
-			if (params.bucket != null) {
-				try {
+    @Override
+    public Query2IResultsSymbol exec(RuntimeContext runtimeCtx) {
+        IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
+        if (client != null) {
+            if (params.bucket != null) {
+                try {
+                    // TODO: optimize this to skip fetch/create bucket every time
+                    Bucket b = client.fetchBucket(params.bucket).execute();
 
-					// TODO: optimize this to skip fetch/create bucket every time
-					Bucket b = client.fetchBucket(params.bucket).execute();
-					
-					FetchIndex<?> index = null;
-					if (params.indexVal != null) {
-						// 2i exact query
-						if (params.indexName.endsWith("_bin")) {
-							index = b.fetchIndex(BinIndex.named(params.indexName)).withValue(params.indexVal);
-						} else if (params.indexName.endsWith("_int")) {
-							long val = 0;
-							try {
-								val = Long.parseLong(params.indexVal);
-							} catch (Exception e) {
-								throw new RuntimeException("Invalid 2i query exact value");
-							}
-							index = b.fetchIndex(IntIndex.named(params.indexName)).withValue(val);
-						}
+                    FetchIndex<?> index = null;
+                    if (params.indexVal != null) {
+                        // 2i exact query
+                        if (params.indexName.endsWith("_bin")) {
+                            index = b.fetchIndex(BinIndex.named(params.indexName)).withValue(params.indexVal);
+                        } else if (params.indexName.endsWith("_int")) {
+                            long val = 0;
+                            try {
+                                val = Long.parseLong(params.indexVal);
+                            } catch (Exception e) {
+                                throw new RuntimeException("Invalid 2i query exact value");
+                            }
+                            index = b.fetchIndex(IntIndex.named(params.indexName)).withValue(val);
+                        }
 
-					} else if (params.min != null && params.max != null) {
-						if (params.indexName.endsWith("_bin")) {
-							index = b.fetchIndex(BinIndex.named(params.indexName)).from(params.min).to(params.max);
-						} else if (params.indexName.endsWith("_int")) {
-							long from = 0;
-							long to = 0;
-							try {
-								from = Long.parseLong(params.min);
-							} catch (Exception e) {
-								// shouldn't be a runtime exception
-								throw new RuntimeException(
-										"Invalid 2i query \"from\" parameter");
-							}
-							try {
-								to = Long.parseLong(params.max);
-							} catch (Exception e) {
-								// shouldn't be a runtime exception
-								throw new RuntimeException(
-										"Invalid 2i query \"to\" parameter");
-							}
-							index = b.fetchIndex(IntIndex.named(params.indexName))
-									.from(from)
-									.to(to);
-						}
-					} else {
-						// these shouldn't be runtime exceptions
-						throw new RuntimeException(
-								"Invalid 2i query parameters");
-					}
+                    } else if (params.min != null && params.max != null) {
+                        if (params.indexName.endsWith("_bin")) {
+                            index = b.fetchIndex(BinIndex.named(params.indexName)).from(params.min).to(params.max);
+                        } else if (params.indexName.endsWith("_int")) {
+                            long from = 0;
+                            long to = 0;
+                            try {
+                                from = Long.parseLong(params.min);
+                            } catch (Exception e) {
+                                // shouldn't be a runtime exception
+                                throw new RuntimeException(
+                                        "Invalid 2i query \"from\" parameter");
+                            }
+                            try {
+                                to = Long.parseLong(params.max);
+                            } catch (Exception e) {
+                                // shouldn't be a runtime exception
+                                throw new RuntimeException(
+                                        "Invalid 2i query \"to\" parameter");
+                            }
+                            index = b.fetchIndex(IntIndex.named(params.indexName))
+                                    .from(from)
+                                    .to(to);
+                        }
+                    } else {
+                        // these shouldn't be runtime exceptions
+                        throw new RuntimeException(
+                                "Invalid 2i query parameters");
+                    }
                     params.ctx = runtimeCtx;
-					runtimeCtx.getActionListener().preQuery2iAction(params);
-					Query2IResultsSymbol results = new Query2IResultsSymbol(index.execute());
+                    runtimeCtx.getActionListener().preQuery2iAction(params);
+                    Query2IResultsSymbol results = new Query2IResultsSymbol(index.execute());
 
                     Query2iParams.Post postParams = new Query2iParams.Post();
                     postParams.ctx = runtimeCtx;
@@ -84,17 +83,17 @@ public class Query2iCommand extends RiakCommand<Query2IResultsSymbol, Query2iPar
                     postParams.max = params.max;
                     postParams.min = params.min;
                     runtimeCtx.getActionListener().postQuery2iAction(postParams);
-					return results;
-				} catch (RiakException e) {
-					runtimeCtx.appendError("Error executing 2i query", e);
-				}
-			} else {
-				runtimeCtx
-						.appendError("Can't perfom a 2i query without a bucket");
-				return null;
-			}
-		}
-		return null;
-	}
+                    return results;
+                } catch (RiakException e) {
+                    runtimeCtx.appendError("Error executing 2i query", e);
+                }
+            } else {
+                runtimeCtx
+                        .appendError("Can't perfom a 2i query without a bucket");
+                return null;
+            }
+        }
+        return null;
+    }
 
 }
