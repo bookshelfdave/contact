@@ -211,11 +211,21 @@ using bucket "Foo" store "MyKey" with xml
 
 ## Deleting objects
 
-**NOT IMPLEMENTED** at the moment
-
 	using bucket "Foo" delete "MyKey";
 
 	delete "MyKey";
+	
+	delete "MyKey" and options "w"="1";
+
+	
+###Available delete options:
+	
+* r
+* w
+* pr
+* pw
+* dw
+* ***vclock** not implemented at the moment*
 
 ### Options
 
@@ -536,7 +546,6 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 #TODO
 * TESTING TESTING TESTING
-* implement delete
 * implement Javascript resolvers + retiers
 * bucket properties via pb (the HTTP interface code is currently commented out)
 * script mode (read from stdin etc)

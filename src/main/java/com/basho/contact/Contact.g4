@@ -75,7 +75,8 @@ connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?);
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
 
-get: GET (get_action | get_bucketprops);
+get: GET (get_action | get_bucketprops | BUCKET);
+
 get_action: ACTION actionname=ID;
 get_bucketprops: BUCKET PROPERTIES;
 

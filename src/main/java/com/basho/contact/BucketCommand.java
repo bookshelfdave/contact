@@ -21,10 +21,13 @@ public abstract class BucketCommand<K extends ContactSymbol<?>, O extends Action
         if (client != null) {
             if (this.params.bucket != null) {
                 return bucketExec(runtimeCtx, client, this.params.bucket);
+
+            } else {
+                runtimeCtx.appendError("Bucket not selected for " + name + " op.");
+                return null;
             }
         } else {
-            runtimeCtx.appendError("Bucket not selected for " + name + " op.");
-            return null;
+            runtimeCtx.appendError("Not connected to Riak for " + name + " op.");
         }
         return null;
     }
