@@ -264,6 +264,36 @@ or with `use bucket`:
 
 **NOT IMPLEMENTED** at the moment
 
+```
+query 
+  bucket "user" and index "userid_int" from 100 to 200
+  extract 
+     $count = 1 and
+     $balance = value.balance and
+     $group = value.group_name 
+  aggregate 
+     group = $group
+     count = $count.@sum
+     balance = $balance.@sum;
+
+
+query 
+     bucket "invoices"
+     with key filters (ends_with "0") and (key.as_int < 10000);
+
+
+query with
+  bucket "invoices" 
+  filter object (invoice.lines.@sum > 1000)
+  extract 
+     $sum = invoice.lines.@sum
+  aggregate
+     total = $sum.@sum;
+     
+
+
+```
+
 ## Customizable Output
 
 There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. 
