@@ -264,6 +264,8 @@ or with `use bucket`:
 
 **NOT IMPLEMENTED** at the moment
 
+see [Tease](https://github.com/metadave/tease)
+
 ```
 query 
   bucket "user" and index "userid_int" from 100 to 200
