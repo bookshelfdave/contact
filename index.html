@@ -307,6 +307,37 @@ query2i with index "range_int" from "1" to "2";
 
 <p><strong>NOT IMPLEMENTED</strong> at the moment</p>
 
+<p>see <a href="https://github.com/metadave/tease">Tease</a></p>
+
+<pre><code>query 
+  bucket "user" and index "userid_int" from 100 to 200
+  extract 
+     $count = 1 and
+     $balance = value.balance and
+     $group = value.group_name 
+  aggregate 
+     group = $group
+     count = $count.@sum
+     balance = $balance.@sum;
+
+
+query 
+     bucket "invoices"
+     with key filters (ends_with "0") and (key.as_int &lt; 10000);
+
+
+query with
+  bucket "invoices" 
+  filter object (invoice.lines.@sum &gt; 1000)
+  extract 
+     $sum = invoice.lines.@sum
+  aggregate
+     total = $sum.@sum;
+
+
+
+</code></pre>
+
 <h2>Customizable Output</h2>
 
 <p>There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. </p>
@@ -759,7 +790,7 @@ Address:
 
 <p>These will also be customizable with Javascript.</p>
 
-<h2>Listing Bucket</h2>
+<h2>Listing Buckets</h2>
 
 <p><em>Listing buckets should NOT be used on any production system</em></p>
 
