@@ -500,7 +500,7 @@ I hope to have a "Cookbook" section on the Contact wiki eventually, but in the m
 These will also be customizable with Javascript.
 
 
-## Listing Bucket
+## Listing Buckets
 
 *Listing buckets should NOT be used on any production system*
 
