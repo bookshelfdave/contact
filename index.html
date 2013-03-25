@@ -262,22 +262,18 @@ delete "MyKey" and options "w"="1";
 <h3>Available delete options:</h3>
 
 <ul>
-<li>r</li>
-<li>w</li>
-<li>pr</li>
-<li>pw</li>
-<li>dw</li>
+<li>r (Integer)</li>
+<li>w (Integer)</li>
+<li>pr (Integer)</li>
+<li>pw (Integer)</li>
+<li>dw (Integer)</li>
 <li>
 <em>**vclock</em>* not implemented at the moment*</li>
-</ul><h3>Options</h3>
-
-<p><strong>Not implemented</strong></p>
-
-<h2>Secondary Index Query</h2>
+</ul><h2>Secondary Index Query</h2>
 
 <p><strong>Query names and parameters must always appear in double quotes.</strong></p>
 
-<p>Setup sample data with these:</p>
+<p>Setup sample data with these commands:</p>
 
 <pre><code>using bucket "Foo" 
 store "First" 
@@ -292,8 +288,7 @@ and text "This is text 2";
 
 <p>Execute queries like this:</p>
 
-<pre><code>using bucket "Foo" query2i with index "twitter_bin" and value "test";
-using bucket "Foo" query2i with index "range_int" and value "1";
+<pre><code>using bucket "Foo" query2i with index "range_int" and value "1";
 </code></pre>
 
 <p>or with <code>use bucket</code>:</p>
@@ -830,7 +825,7 @@ any Contact code you want.</p>
 <li>Boolean: false, true</li>
 <li>Here documents</li>
 </ul><pre><code>~%~
-Any text between the "scissor operators" doesn't need to be escaped. 
+Any text between the "scissor operators" most likely won't need to be escaped. 
 This means you can paste a full XML or JSON document here, and you don't 
 have to worry about escaping quotes! Of course, you'll need to escape the scissor operator with: \~%~
 ~%~
