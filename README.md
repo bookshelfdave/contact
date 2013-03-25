@@ -220,22 +220,18 @@ using bucket "Foo" store "MyKey" with xml
 	
 ###Available delete options:
 	
-* r
-* w
-* pr
-* pw
-* dw
+* r (Integer)
+* w (Integer)
+* pr (Integer)
+* pw (Integer)
+* dw (Integer)
 * ***vclock** not implemented at the moment*
-
-### Options
-
-**Not implemented**
 
 ## Secondary Index Query
 
 **Query names and parameters must always appear in double quotes.**
 
-Setup sample data with these:
+Setup sample data with these commands:
 
 	using bucket "Foo" 
 	store "First" 
@@ -249,7 +245,6 @@ Setup sample data with these:
 
 Execute queries like this:
 
-	using bucket "Foo" query2i with index "twitter_bin" and value "test";
 	using bucket "Foo" query2i with index "range_int" and value "1";
 
 or with `use bucket`:
