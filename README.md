@@ -564,7 +564,7 @@ For example, if you always connect to the same host, you can add this to the .co
 
 ```
 ~%~
-Any text between the "scissor operators" doesn't need to be escaped. 
+Any text between the "scissor operators" most likely won't need to be escaped. 
 This means you can paste a full XML or JSON document here, and you don't 
 have to worry about escaping quotes! Of course, you'll need to escape the scissor operator with: \~%~
 ~%~
