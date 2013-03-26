@@ -2,33 +2,20 @@ package com.basho.contact.commands;
 
 import com.basho.contact.ContactConnectionProvider;
 import com.basho.contact.RuntimeContext;
-import com.basho.contact.actions.ContactActionListener;
 import com.basho.contact.commands.params.FetchParams;
-import com.basho.contact.commands.params.ListBucketsParams;
-import com.basho.contact.symbols.StringSetSymbol;
-import com.basho.contact.testing.EmptyActionListener;
 import com.basho.contact.testing.EmptyConnectionProvider;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
-import com.basho.riak.client.RiakException;
-import com.basho.riak.client.RiakRetryFailedException;
-import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.bucket.FetchBucket;
 import com.basho.riak.client.operations.FetchObject;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
