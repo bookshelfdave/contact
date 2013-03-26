@@ -1,5 +1,5 @@
-HTTP=3
 LSQUARE=49
+HTTP=3
 PROPERTIES=35
 FILTERS=27
 BUCKETS=37
@@ -110,6 +110,6 @@ PB=2
 'connect'=9
 'to'=25
 'false'=40
-'or'=15
 '['=49
+'or'=15
 'from'=23

@@ -90,37 +90,37 @@ public class ContactWalker extends ContactBaseListener {
         super.exitStat(ctx);
     }
 
-    @Override
-    public void exitShow(ShowContext ctx) {
-        ContactSymbol<?> obj = null;
-        if (ctx.ID() != null) {
-            // TODO: make getBinding allow more more than one SymbolType
-            obj = runtimeCtx.getBinding(ctx.ID().getText(), SymbolType.RESULT);
-        } else {
-            obj = runtimeCtx.lastResult;
-        }
-
-        if (ctx.DETAIL() != null) {
-            if (obj.type == ContactSymbol.SymbolType.RESULT) {
-                IRiakObject result = (IRiakObject) obj.value;
-                StringBuilder sb = new StringBuilder();
-                sb.append("Key:" + result.getKey() + "\n");
-                sb.append("Bucket:" + result.getBucket() + "\n");
-                sb.append("VClock:" + result.getVClockAsString() + "\n");
-                // TODO: add more detail!
-                sb.append("Value: " + result.getValueAsString() + "\n");
-                NonSymbolOutput nsym = new NonSymbolOutput(sb.toString());
-                runtimeCtx.lastOutput = nsym;
-            }
-        } else {
-            if (obj.type == ContactSymbol.SymbolType.RESULT) {
-                IRiakObject result = (IRiakObject) obj.value;
-                NonSymbolOutput nsym = new NonSymbolOutput(result.getValueAsString());
-                runtimeCtx.lastOutput = nsym;
-            }
-        }
-        super.exitShow(ctx);
-    }
+//    @Override
+//    public void exitShow(ShowContext ctx) {
+//        ContactSymbol<?> obj = null;
+//        if (ctx.ID() != null) {
+//            // TODO: make getBinding allow more more than one SymbolType
+//            obj = runtimeCtx.getBinding(ctx.ID().getText(), SymbolType.RESULT);
+//        } else {
+//            obj = runtimeCtx.lastResult;
+//        }
+//
+//        if (ctx.DETAIL() != null) {
+//            if (obj.type == ContactSymbol.SymbolType.RESULT) {
+//                IRiakObject result = (IRiakObject) obj.value;
+//                StringBuilder sb = new StringBuilder();
+//                sb.append("Key:" + result.getKey() + "\n");
+//                sb.append("Bucket:" + result.getBucket() + "\n");
+//                sb.append("VClock:" + result.getVClockAsString() + "\n");
+//                // TODO: add more detail!
+//                sb.append("Value: " + result.getValueAsString() + "\n");
+//                NonSymbolOutput nsym = new NonSymbolOutput(sb.toString());
+//                runtimeCtx.lastOutput = nsym;
+//            }
+//        } else {
+//            if (obj.type == ContactSymbol.SymbolType.RESULT) {
+//                IRiakObject result = (IRiakObject) obj.value;
+//                NonSymbolOutput nsym = new NonSymbolOutput(result.getValueAsString());
+//                runtimeCtx.lastOutput = nsym;
+//            }
+//        }
+//        super.exitShow(ctx);
+//    }
 
     @Override
     public void exitCode_string(Code_stringContext ctx) {

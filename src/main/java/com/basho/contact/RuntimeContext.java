@@ -56,7 +56,7 @@ public class RuntimeContext {
 
     public void reset() {
         output = new StringBuilder();
-        errors.clear();
+        errors = new ArrayList<Throwable>();
     }
 
     public void appendOutput(String line) {

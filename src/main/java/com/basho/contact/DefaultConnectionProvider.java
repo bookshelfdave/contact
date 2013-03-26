@@ -12,12 +12,10 @@ public class DefaultConnectionProvider implements ContactConnectionProvider {
 
     private Map<String, IRiakClient> pbclients = new HashMap<String, IRiakClient>();
 
-    @Override
     public IRiakClient getDefaultClient(RuntimeContext ctx) {
         return getClientByName(DEFAULT_CONNECTION_NAME, ctx);
     }
 
-    @Override
     public IRiakClient getClientByName(String name, RuntimeContext ctx) {
         // TODO: conn might not exist
         if (!pbclients.containsKey(name)) {
@@ -26,12 +24,10 @@ public class DefaultConnectionProvider implements ContactConnectionProvider {
         return pbclients.get(name);
     }
 
-    @Override
     public IRiakClient createDefaultConnection(String host, int port, RuntimeContext ctx) {
         return createNamedConnection(host, port, DEFAULT_CONNECTION_NAME, ctx);
     }
 
-    @Override
     public IRiakClient createNamedConnection(String host, int pbport,
                                              String name, RuntimeContext ctx) {
         try {
