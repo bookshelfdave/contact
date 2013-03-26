@@ -73,7 +73,7 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
         });
     }
 
-    private FetchObject<IRiakObject> processOptions(RuntimeContext runtimeCtx, FetchObject<IRiakObject> o) {
+    public FetchObject<IRiakObject> processOptions(RuntimeContext runtimeCtx, FetchObject<IRiakObject> o) {
         if (params.options != null) {
             for (String key : params.options.keySet()) {
                 Object val = params.options.get(key);
