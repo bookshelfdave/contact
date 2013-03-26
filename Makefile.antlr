@@ -1,2 +1,2 @@
 antlr:
-	java -classpath lib/antlr-4.0-complete.jar org.antlr.v4.Tool -o ./ -listener -no-visitor -package com.basho.contact ./src/main/java/com/basho/contact/Contact.g4
+	java -classpath /usr/local/lib/antlr-4.0-complete.jar org.antlr.v4.Tool -o ./ -listener -no-visitor -package com.basho.contact ./src/main/java/com/basho/contact/Contact.g4

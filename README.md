@@ -573,8 +573,9 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 #TODO
 * TESTING TESTING TESTING
+* bucket properties via pb
 * implement Javascript resolvers + retiers
-* bucket properties via pb (the HTTP interface code is currently commented out)
+* `use bucket with options` statements
 * script mode (read from stdin etc)
 * clean up mr syntax + implementation
 * link walking

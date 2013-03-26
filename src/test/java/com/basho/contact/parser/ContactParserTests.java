@@ -20,14 +20,7 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.params;
+package com.basho.contact.parser;
 
-import com.basho.contact.actions.ActionParams;
-
-public class SetBucketPropsParams {
-    public static class Pre extends ActionParams {
-    }
-
-    public static class Post extends ActionParams {
-    }
+public class ContactParserTests {
 }

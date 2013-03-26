@@ -3,7 +3,7 @@ grammar Contact;
 prog        :  (stat)+ EOF;
 
 // this should really be expr
-stat        :  assignment? (connect | using | op_with_options | use | listbuckets | console_op) SEMI;
+stat        :  assignment? (connect | using | op_with_options | listbuckets | console_op) SEMI;
 
 console_op: get | set ;
 
@@ -13,7 +13,7 @@ using       :   USING BUCKET bucket=STRING op_with_options;
 
 with        :   (WITH | AND);
 
-op_with_options: (fetch | store | delete | query2i | listkeys) options?;
+op_with_options: (fetch | store | delete | query2i | listkeys | use) options?;
 
 options: with OPTIONS (optionslist | ID);
 
