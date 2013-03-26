@@ -22,5 +22,26 @@
 
 package com.basho.contact.parser;
 
+import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
+
 public class ContactParserTests {
+
+    @Test
+    public void testResources() {
+        try {
+            System.out.println(ContactParserTests.loadResource("connection.test"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String loadResource(String name) throws Exception {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource(name);
+        File f = new File(url.getPath());
+        return org.apache.commons.io.FileUtils.readFileToString(f);
+    }
 }

@@ -162,9 +162,9 @@ public class ContactWalker extends ContactBaseListener {
             setValue(ctx, getValue(ctx.get()));
         } else if (ctx.set() != null) {
             setValue(ctx, getValue(ctx.set()));
-        } else if (ctx.show() != null) {
+        } /*else if (ctx.show() != null) {
             setValue(ctx, getValue(ctx.show()));
-        }
+        }   */
         super.exitConsole_op(ctx);
     }
 
