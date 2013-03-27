@@ -41,6 +41,9 @@ public class Query2iParams {
 
         @Binding(name = "index_max")
         public String max;
+
+        @Binding(name = "doFetch")
+        public boolean doFetch = false;
     }
 
     public static class Post extends ActionParams {

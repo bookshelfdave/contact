@@ -72,7 +72,7 @@ public class JSActionListener implements ContactActionListener {
     private String preDeleteBody = "";
     private String postDeleteBody = "";
     private String preQuery2iBody = "";
-    private String postQuery2iBody = "if(results != undefined) { out.println(results); }";
+    private String postQuery2iBody = "if(results != undefined && doFetch == false) { out.println(results); }";
     private String preMapredBody = "";
     private String postMapredBody = "";
     private String preListBucketsBody = "";

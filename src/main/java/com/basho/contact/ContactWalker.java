@@ -322,6 +322,9 @@ public class ContactWalker extends ContactBaseListener {
             query.params.min = stripQuotes(ctx.vmin.getText());
             query.params.max = stripQuotes(ctx.vmax.getText());
         }
+        if(ctx.FETCH() != null) {
+            query.params.doFetch = true;
+        }
 
         setValue(ctx, query);
         super.exitQuery2i(ctx);

@@ -34,6 +34,8 @@ import com.basho.riak.client.query.indexes.BinIndex;
 import com.basho.riak.client.query.indexes.FetchIndex;
 import com.basho.riak.client.query.indexes.IntIndex;
 
+import java.util.List;
+
 public class Query2iCommand extends BucketCommand<Query2IResultsSymbol, Query2iParams.Pre> {
 
     public Query2iCommand() {
@@ -104,6 +106,9 @@ public class Query2iCommand extends BucketCommand<Query2IResultsSymbol, Query2iP
             postParams.max = params.max;
             postParams.min = params.min;
             runtimeCtx.getActionListener().postQuery2iAction(postParams);
+            if(params.doFetch) {
+                doFetch(results.value);
+            }
             return results;
         } catch (RiakException e) {
             runtimeCtx.appendError("Error executing 2i query", e);
@@ -112,5 +117,15 @@ public class Query2iCommand extends BucketCommand<Query2IResultsSymbol, Query2iP
         return null;
     }
 
-
+    private void doFetch(List<?> results) {
+        List<String> stringResults = (List<String>)results;
+        for(String key : stringResults) {
+            FetchCommand fetch = new FetchCommand();
+            fetch.params.key = key;
+            fetch.params.bucket = this.params.bucket;
+            fetch.params.ctx = this.params.ctx;
+            // throw out the result
+            fetch.exec(this.params.ctx);
+        }
+    }
 }

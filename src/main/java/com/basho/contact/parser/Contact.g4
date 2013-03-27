@@ -35,7 +35,7 @@ content_string: (TEXT | JSON | XML) (STRING | DATA_CONTENT);
 
 delete:    DELETE key=STRING;
 
-query2i: QUERY2I with INDEX index=STRING 
+query2i: QUERY2I (AND FETCH)? with INDEX index=STRING
             (with VALUE exact=STRING | FROM vmin=STRING TO vmax=STRING);
 
 use:    USE ( (BUCKET name=STRING useBucketOptions?)
