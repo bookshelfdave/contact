@@ -82,8 +82,6 @@ public class FetchCommandTest {
         assertEquals("Bucket not selected for fetch op.", ctx.getErrors().get(0).getMessage());
     }
 
-    @Captor ArgumentCaptor<FetchObject<IRiakObject>> captor;
-
     @Test
     public void testParams() {
         FetchCommand command = new FetchCommand();
