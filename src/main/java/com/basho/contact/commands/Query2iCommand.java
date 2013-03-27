@@ -124,6 +124,9 @@ public class Query2iCommand extends BucketCommand<Query2IResultsSymbol, Query2iP
             fetch.params.key = key;
             fetch.params.bucket = this.params.bucket;
             fetch.params.ctx = this.params.ctx;
+            // TODO: check into this
+            // default to the bucket fetch options
+            fetch.params.options = this.params.ctx.getCurrentFetchOptions();
             // throw out the result
             fetch.exec(this.params.ctx);
         }
