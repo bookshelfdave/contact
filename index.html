@@ -313,6 +313,15 @@ query2i with index "range_int" and value "2";
 query2i with index "range_int" from "1" to "2";
 </code></pre>
 
+<h3>Secondary Index Query with Fetch</h3>
+
+<p>To fetch the results of all keys as the result of a 2i query, use the <code>query2i and fetch</code> command:</p>
+
+<pre><code>query2i and fetch with index "year_int" and value "2010";
+</code></pre>
+
+<p>See <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> for an example 2i query with custom rendered JSON output.</p>
+
 <h2>Map/Reduce</h2>
 
 <p><strong>NOT IMPLEMENTED</strong> at the moment</p>
