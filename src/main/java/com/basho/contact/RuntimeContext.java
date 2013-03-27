@@ -36,7 +36,7 @@ public class RuntimeContext {
 
     // these might make more sense in the ContactWalker
     private List<Throwable> errors = new ArrayList<Throwable>();
-
+    private boolean parseError = false;
     ContactConnectionProvider connections = null;
 
     private Map<String, ContactSymbol<?>> bindings = new HashMap<String, ContactSymbol<?>>();
@@ -79,6 +79,15 @@ public class RuntimeContext {
     public void reset() {
         output = new StringBuilder();
         errors = new ArrayList<Throwable>();
+        parseError = false;
+    }
+
+    public boolean isParseError() {
+        return parseError;
+    }
+
+    public void setParseError(boolean parseError) {
+        this.parseError = parseError;
     }
 
     public void appendOutput(String line) {

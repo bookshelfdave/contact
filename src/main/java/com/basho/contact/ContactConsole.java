@@ -93,7 +93,10 @@ public class ContactConsole {
         ContactLexer lexer = new ContactLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ContactParser parser = new ContactParser(tokens);
+
+        // combine these two into one
         parser.addErrorListener(new ContactErrorListener(runtimeCtx));
+
         ParseTreeWalker walker = new ParseTreeWalker();
         try {
             walker.walk(cw, parser.prog());
@@ -230,6 +233,7 @@ public class ContactConsole {
             }
             if (config != null && !config.trim().isEmpty()) {
                 processInput(config, walker, ctx);
+                processOutput(ctx, out, !commandLine.hasOption("nocolor"));
             }
         }
 

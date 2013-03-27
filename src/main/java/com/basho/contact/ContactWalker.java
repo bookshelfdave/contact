@@ -90,6 +90,10 @@ public class ContactWalker extends ContactBaseListener {
             o = getValue(ctx.console_op());
         }
 
+        if(runtimeCtx.isParseError()) {
+            super.exitStat(ctx);
+        }
+
         if (o != null) {
             //System.out.println("Executing " + o.getClass().getName());
             if (o != null && o instanceof RiakCommand) {

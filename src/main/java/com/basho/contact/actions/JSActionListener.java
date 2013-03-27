@@ -82,7 +82,7 @@ public class JSActionListener implements ContactActionListener {
     private String preGetBucketProps = "";
     private String postGetBucketProps = "";
     private String preConnectBody = "";
-    private String postConnectBody = "out.println('Connected to Riak @ ' + riak_host + ':' + riak_pb_port);";
+    private String postConnectBody = "out.println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);";
     private RuntimeContext runtimeCtx = null;
     private Map<String, String> js = new HashMap<String, String>();
 
