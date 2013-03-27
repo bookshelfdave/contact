@@ -22,9 +22,9 @@
 
 package com.basho.contact.commands;
 
-public class SetBucketProps {
+public class SetBucketPropsCommand {
 
-    public SetBucketProps() {
+    public SetBucketPropsCommand() {
         super();
     }
 

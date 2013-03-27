@@ -22,19 +22,25 @@
 
 package com.basho.contact.commands;
 
+import com.basho.contact.BucketCommand;
 import com.basho.contact.RiakCommand;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.params.GetBucketPropsParams;
 import com.basho.contact.symbols.ResultSymbol;
+import com.basho.riak.client.IRiakClient;
 
-public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPropsParams.Pre> {
+public class GetBucketPropsCommand extends BucketCommand<ResultSymbol, GetBucketPropsParams.Pre> {
 
     public GetBucketPropsCommand() {
-        super(GetBucketPropsParams.Pre.class);
+        super("get bucket properties", GetBucketPropsParams.Pre.class);
     }
 
     @Override
-    public ResultSymbol exec(RuntimeContext runtimeCtx) {
+    public ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+        return null;
+    }
+//    @Override
+//    public ResultSymbol exec(RuntimeContext runtimeCtx) {
 //		IRiakClient httpClient = runtimeCtx.getNextHTTPClient();
 //		if(httpClient != null) {
 //			if(this.bucket != null) {
@@ -49,7 +55,7 @@ public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPr
 //					props.put("last_write_wins", b.getLastWriteWins());
 //					props.put("name", b.getName());
 //					props.put("not_found_ok",b.getNotFoundOK());
-//					props.put("n_val",b.getNVal());					
+//					props.put("n_val",b.getNVal());
 //					props.put("pr",b.getPR());
 //					props.put("pw",b.getPW());
 //					props.put("r",b.getR());
@@ -59,7 +65,7 @@ public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPr
 //					props.put("w",b.getW());
 //					props.put("young_vclock",b.getYoungVClock());
 //					props.put("old_vclock",b.getOldVClock());
-//					
+//
 //					List<String> postCommitHooks = new ArrayList<String>();
 //					if(b.getPostcommitHooks() != null) {
 //						for(NamedErlangFunction f : b.getPostcommitHooks()) {
@@ -67,7 +73,7 @@ public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPr
 //						}
 //					}
 //					props.put("post_commit_hooks", postCommitHooks);
-//					
+//
 //					//TODO: look into why one is NamedErlangFunction and the other is just NamedFunction
 //					List<String> preCommitHooks = new ArrayList<String>();
 //					if(b.getPrecommitHooks() != null) {
@@ -78,12 +84,12 @@ public class GetBucketPropsCommand extends RiakCommand<ResultSymbol, GetBucketPr
 //					props.put("pre_commit_hooks",preCommitHooks);
 //
 //					runtimeCtx.getNotifier().postGetBucketPropsAction(props);
-//					
+//
 //				} catch (RiakRetryFailedException e) {
 //					runtimeCtx.appendError("Error fetching bucket properties for " + bucket + ":" + e.getMessage());
 //				}
 //			}
 //		}
-        return null;
-    }
+//        return null;
+//    }
 }
