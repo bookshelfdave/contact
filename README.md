@@ -108,10 +108,9 @@ Once you have a binding ("myKey" in the example above), you can refer to it from
 	
 	fetch "MyKey" 
 		with options 
-			"r" = 1, 
-			"pr" = 1;
+			r = 1,
+			pr = 1;
 
-All options need to appear between double quotes (for now).
 
 ###Available fetch options:
 
@@ -185,7 +184,7 @@ using bucket "Foo" store "MyKey" with xml
 	using bucket "Foo" 
 		store "MyKey" 
 			with text "This is text" 
-			with options "w" = 1, "pw" = 2;
+			with options w = 1, pw = 2;
 
 ###Available store options:
 
@@ -215,7 +214,7 @@ using bucket "Foo" store "MyKey" with xml
 
 	delete "MyKey";
 	
-	delete "MyKey" and options "w"="1";
+	delete "MyKey" and options w="1";
 
 	
 ###Available delete options:

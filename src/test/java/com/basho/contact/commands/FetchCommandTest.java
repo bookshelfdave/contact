@@ -135,13 +135,13 @@ public class FetchCommandTest {
 
         command.params.bucket = "Foo";
         command.params.key    = "Bar";
-        Map<String, Object> options = new HashMap<String, Object>();
+        Map<String, String> options = new HashMap<String, String>();
 
-        options.put("r", 10);
-        options.put("pr", 2);
-        options.put("basic_quorum", true);
-        options.put("notfound_ok", false);
-        options.put("deletedvclock", true);
+        options.put("r", "10");
+        options.put("pr", "2");
+        options.put("basic_quorum", "true");
+        options.put("notfound_ok", "false");
+        options.put("deletedvclock", "true");
 
         command.params.options = options;
         command.processOptions(ctx, fetchObject);

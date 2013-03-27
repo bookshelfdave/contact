@@ -232,7 +232,7 @@ public class ContactWalker extends ContactBaseListener {
         }
         if (o instanceof RiakCommand) {
             RiakCommand<?, ?> c = (RiakCommand<?, ?>) o;
-            c.params.options = (Map<String, Object>) options;
+            c.params.options = (Map<String, String>) options;
             setValue(ctx, c);
         }
         super.exitOp_with_options(ctx);
@@ -333,16 +333,14 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitPair(PairContext ctx) {
-        Object o = getValue(ctx.pairValue());
+        String s = (String)getValue(ctx.pairValue());
         if (ctx.name != null) {
             String name = stripQuotes(ctx.name.getText());
-            Pair p = new Pair(name, o);
-            trace("New pair " + p);
+            Pair p = new Pair(name, s);
             setValue(ctx, p);
         } else {
             String name = ctx.id.getText();
-            Pair p = new Pair(name, o);
-            trace("New id pair " + p);
+            Pair p = new Pair(name, s);
             setValue(ctx, p);
         }
         super.exitPair(ctx);
@@ -356,13 +354,13 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitPairIntValue(PairIntValueContext ctx) {
-        setValue(ctx, Integer.parseInt(ctx.intValue.getText()));
+        setValue(ctx, ctx.intValue.getText());
         super.exitPairIntValue(ctx);
     }
 
     @Override
     public void exitPairBoolValue(PairBoolValueContext ctx) {
-        setValue(ctx, Boolean.parseBoolean(ctx.boolValue.getText()));
+        setValue(ctx, ctx.boolValue.getText());
         super.exitPairBoolValue(ctx);
     }
 

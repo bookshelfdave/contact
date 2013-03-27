@@ -55,6 +55,7 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
 //	    optional bool head = 8;
 //	    optional bool deletedvclock = 9;
 
+        // TODO: I don't need objectToInt anymore if everything passed in is a string
         optionsMap.put("r", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
                     FetchObject<IRiakObject> o, Object value) {

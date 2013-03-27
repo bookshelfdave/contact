@@ -31,7 +31,7 @@ public class ActionParams {
     public String bucket = null;
 
     @Binding(name = "options", copy = true)
-    public Map<String, Object> options = null;
+    public Map<String, String> options = null;
 
     @Binding(name = "contact", copy = true)
     public RuntimeContext ctx;
