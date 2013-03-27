@@ -307,6 +307,12 @@ query with
 
 ```
 
+
+## Sample Data
+
+See the [Contact Sample Data](https://github.com/metadave/contact_sample_data) repository for sample data that can be easily imported.
+
+
 ## Customizable Output
 
 There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. 
