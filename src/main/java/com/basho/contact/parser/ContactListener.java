@@ -55,6 +55,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterListbuckets(ContactParser.ListbucketsContext ctx);
 	void exitListbuckets(ContactParser.ListbucketsContext ctx);
 
+	void enterLoadscript(ContactParser.LoadscriptContext ctx);
+	void exitLoadscript(ContactParser.LoadscriptContext ctx);
+
 	void enterContent_string(ContactParser.Content_stringContext ctx);
 	void exitContent_string(ContactParser.Content_stringContext ctx);
 
@@ -78,6 +81,9 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterGet_bucketprops(ContactParser.Get_bucketpropsContext ctx);
 	void exitGet_bucketprops(ContactParser.Get_bucketpropsContext ctx);
+
+	void enterScript(ContactParser.ScriptContext ctx);
+	void exitScript(ContactParser.ScriptContext ctx);
 
 	void enterStat(ContactParser.StatContext ctx);
 	void exitStat(ContactParser.StatContext ctx);

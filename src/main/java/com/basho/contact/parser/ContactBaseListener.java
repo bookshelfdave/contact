@@ -58,6 +58,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterListbuckets(ContactParser.ListbucketsContext ctx) { }
 	@Override public void exitListbuckets(ContactParser.ListbucketsContext ctx) { }
 
+	@Override public void enterLoadscript(ContactParser.LoadscriptContext ctx) { }
+	@Override public void exitLoadscript(ContactParser.LoadscriptContext ctx) { }
+
 	@Override public void enterContent_string(ContactParser.Content_stringContext ctx) { }
 	@Override public void exitContent_string(ContactParser.Content_stringContext ctx) { }
 
@@ -81,6 +84,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterGet_bucketprops(ContactParser.Get_bucketpropsContext ctx) { }
 	@Override public void exitGet_bucketprops(ContactParser.Get_bucketpropsContext ctx) { }
+
+	@Override public void enterScript(ContactParser.ScriptContext ctx) { }
+	@Override public void exitScript(ContactParser.ScriptContext ctx) { }
 
 	@Override public void enterStat(ContactParser.StatContext ctx) { }
 	@Override public void exitStat(ContactParser.StatContext ctx) { }

@@ -65,6 +65,8 @@ public interface ContactActionListener {
 
     public void postGetBucketPropsAction(GetBucketPropsParams.Post params);
 
-    public void loadScript(String filename, String content);
+    public void loadScript(String filename);
+
+    public void evalScript(String script);
 
 }

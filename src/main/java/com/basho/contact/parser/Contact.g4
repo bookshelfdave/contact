@@ -5,7 +5,7 @@ prog        :  (stat)+ EOF;
 // this should really be expr
 stat        :  assignment? (connect | using | op_with_options | listbuckets | console_op | use) SEMI;
 
-console_op: get | set ;
+console_op: get | set | loadscript | script;
 
 assignment: LET name=ID EQUALS;
 
@@ -58,6 +58,9 @@ get: GET (get_action | get_bucketprops | BUCKET);
 get_action: ACTION actionname=ID;
 get_bucketprops: BUCKET PROPERTIES;
 
+loadscript: LOAD SCRIPT filename=STRING;
+script: SCRIPT content=(STRING | DATA_CONTENT);
+
 pair: (name=STRING | id=ID) EQUALS pairValue;
 
 pairValue: stringValue=STRING #PairStringValue 
@@ -104,7 +107,8 @@ PHASE       :    'phase';
 //SHOW        :    'show';
 DETAIL      :    'detail';
 PROPERTIES  :    'properties';
-
+LOAD        :    'load';
+SCRIPT      :    'script';
 LIST        :    'list';
 BUCKETS     :    'buckets';
 KEYS        :    'keys';

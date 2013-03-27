@@ -28,6 +28,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -252,7 +254,23 @@ public class JSActionListener implements ContactActionListener {
         evalWithParams(params, POSTGETBUCKETPROPS);
     }
 
-    public void loadScript(String filename, String content) {
-        jsctx.evaluateString(jsscope, content, "<script: " + filename + ">", 1, null);
+    public void loadScript(String filename) {
+        File f = new File(filename);
+        if(f.exists()) {
+            try {
+                String content = org.apache.commons.io.FileUtils.readFileToString(f);
+                jsctx.evaluateString(jsscope, content, "<script: " + filename + ">", 1, null);
+            } catch (IOException e) {
+                // TODO: report these to the runtimeCtx?
+                System.err.println("Error loading script: " + e.getMessage());
+            }
+        } else {
+            // TODO: report these to the runtimeCtx?
+            System.err.println("Error loading script: Script file " + filename + " does not exist");
+        }
+    }
+
+    public void evalScript(String script) {
+        jsctx.evaluateString(jsscope, script, "<script>", 1, null);
     }
 }

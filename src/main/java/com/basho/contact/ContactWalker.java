@@ -24,6 +24,7 @@ package com.basho.contact;
 
 import com.basho.contact.commands.*;
 import com.basho.contact.parser.ContactBaseListener;
+import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.ContactParser.*;
 import com.basho.contact.symbols.ContactSymbol;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -496,5 +497,22 @@ public class ContactWalker extends ContactBaseListener {
         }
 
         super.exitUseBucketOptions(ctx);
+    }
+
+    @Override
+    public void exitLoadscript(LoadscriptContext ctx) {
+        String filename = stripQuotes(ctx.filename.getText());
+        runtimeCtx.getActionListener().loadScript(filename);
+    }
+
+    @Override
+    public void exitScript(ScriptContext ctx) {
+        String content = "";
+        if(ctx.DATA_CONTENT() != null) {
+            content = this.getDataContent(ctx.DATA_CONTENT().getText());
+        } else {
+            content = stripQuotes(ctx.STRING().getText());
+        }
+        runtimeCtx.getActionListener().evalScript(content);
     }
 }
