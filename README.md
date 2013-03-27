@@ -316,7 +316,7 @@ Here's an example of the default action for rendering the results of a fetch:
 ```
 set action postfetch with javascript 
 ~%~
-  if(obj != undefined) { out.println(obj.getValueAsString()); }
+  if(riak_object != undefined) { out.println(riak_object.getValueAsString()); }
 ~%~;
 ```
 
@@ -331,7 +331,7 @@ For example, to print out the last modified date:
 ```
 set action postfetch with javascript 
 ~%~
-  if(obj != undefined) { out.println(obj.getLastModified()); }
+  if(riak_object != undefined) { out.println(riak_object.getLastModified()); }
 ~%~;
 ```
 
@@ -373,8 +373,8 @@ store "JsonTest2" with json
 
 set action postfetch with javascript 
 ~%~
-if(obj != undefined) { 
-    var v = obj.getValueAsString(); 
+if(riak_object != undefined) { 
+    var v = riak_object.getValueAsString(); 
     var j = JSON.parse(v);
     out.println(j.firstName + " " + j.lastName);
     out.println("Address:");
@@ -591,7 +591,6 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * TESTING TESTING TESTING
 * bucket properties via pb
 * implement Javascript resolvers + retiers
-* `use bucket with options` statements
 * script mode (read from stdin etc)
 * clean up mr syntax + implementation
 * link walking
