@@ -24,6 +24,8 @@ package com.basho.contact;
 
 // NOTE: source for the JLine v1 ANSIBuffer is in this project
 
+import com.basho.contact.parser.ContactLexer;
+import com.basho.contact.parser.ContactParser;
 import jline.ANSIBuffer;
 import jline.console.ConsoleReader;
 import org.antlr.v4.runtime.ANTLRInputStream;

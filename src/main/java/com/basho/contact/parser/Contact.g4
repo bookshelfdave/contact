@@ -13,7 +13,7 @@ using       :   USING BUCKET bucket=STRING op_with_options;
 
 with        :   (WITH | AND);
 
-op_with_options: (fetch | store | delete | query2i | listkeys | use) options?;
+op_with_options: (fetch | store | delete | query2i | listkeys) options?;
 
 options: with OPTIONS (optionslist | ID);
 
@@ -38,8 +38,15 @@ delete:    DELETE key=STRING;
 query2i: QUERY2I with INDEX index=STRING 
             (with VALUE exact=STRING | FROM vmin=STRING TO vmax=STRING);
 
-use:    USE ( (BUCKET name=STRING) 
+use:    USE ( (BUCKET name=STRING useBucketOptions?)
               | (CONN var=ID) );
+
+useBucketOptions:
+        (with FETCH OPTIONS optionslist)?
+        (with STORE OPTIONS optionslist)?
+        (with DELETE OPTIONS optionslist)?
+        (with QUERY2I OPTIONS optionslist)?
+        ;
 
 connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?);
 

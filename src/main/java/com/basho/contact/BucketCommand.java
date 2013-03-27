@@ -42,7 +42,14 @@ public abstract class BucketCommand<K extends ContactSymbol<?>, O extends Action
         IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
         if (client != null) {
             if (this.params.bucket != null) {
-                return bucketExec(runtimeCtx, client, this.params.bucket);
+                K val = null;
+                try {
+                    val = bucketExec(runtimeCtx, client, this.params.bucket);
+                } catch (Exception e) {
+                    // should be taken care of in the command
+                    // famous last words...
+                }
+
             } else {
                 runtimeCtx.appendError("Bucket not selected for " + name + " op.");
                 return null;

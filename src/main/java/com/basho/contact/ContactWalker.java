@@ -22,11 +22,10 @@
 
 package com.basho.contact;
 
-import com.basho.contact.ContactParser.*;
+import com.basho.contact.parser.ContactBaseListener;
+import com.basho.contact.parser.ContactParser.*;
 import com.basho.contact.commands.*;
 import com.basho.contact.symbols.ContactSymbol;
-import com.basho.contact.symbols.ContactSymbol.SymbolType;
-import com.basho.riak.client.IRiakObject;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
@@ -230,6 +229,7 @@ public class ContactWalker extends ContactBaseListener {
         } else if (ctx.listkeys() != null) {
             o = getValue(ctx.listkeys());
         }
+
         if (o instanceof RiakCommand) {
             RiakCommand<?, ?> c = (RiakCommand<?, ?>) o;
             c.params.options = (Map<String, String>) options;

@@ -34,22 +34,27 @@ import java.util.Map;
 
 public class RuntimeContext {
 
-    // these might make more sense in the ContactWalker
     private List<Throwable> errors = new ArrayList<Throwable>();
     private boolean parseError = false;
+
     ContactConnectionProvider connections = null;
 
     private Map<String, ContactSymbol<?>> bindings = new HashMap<String, ContactSymbol<?>>();
 
     public ContactSymbol<?> lastResult = null;
+    // TODO: do I still need this?
     public NonSymbolOutput lastOutput = null; // for commands that don't return
-    // a symbol,
-    // but still need to display
-    // text (ie show)
+                                              // a symbol,
+                                              // but still need to display
+                                              // text (ie show)
 
     private StringBuilder output = new StringBuilder();
-    private String currentBucket = null;
     private ContactActionListener listener = null;
+
+    // use bucket "Foo" sets this value.
+    // TODO: change it to a Bucket object
+    private String currentBucket = null;
+    private Map<String, String> currentBucketProps = new HashMap<String, String>();
 
     public boolean trace = false;
 
@@ -142,5 +147,13 @@ public class RuntimeContext {
 
     public void setCurrentBucket(String currentBucket) {
         this.currentBucket = currentBucket;
+    }
+
+    public Map<String, String> getCurrentBucketProps() {
+        return currentBucketProps;
+    }
+
+    public void setCurrentBucketProps(Map<String, String> currentBucketProps) {
+        this.currentBucketProps = currentBucketProps;
     }
 }
