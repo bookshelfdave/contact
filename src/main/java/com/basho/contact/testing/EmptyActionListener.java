@@ -86,4 +86,8 @@ public class EmptyActionListener implements ContactActionListener {
 
     public void postGetBucketPropsAction(GetBucketPropsParams.Post params) {
     }
+
+    public void loadScript(String filename, String content) {
+
+    }
 }

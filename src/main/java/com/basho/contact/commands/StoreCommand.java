@@ -125,7 +125,6 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
                     // TODO: watch for errors here
                     builder = builder.addIndex(p.getKey(), Long.parseLong(p.getValue().toString()));
                 }
-                System.out.println(p);
             }
         }
         return builder;

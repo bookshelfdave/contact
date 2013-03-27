@@ -252,5 +252,7 @@ public class JSActionListener implements ContactActionListener {
         evalWithParams(params, POSTGETBUCKETPROPS);
     }
 
-
+    public void loadScript(String filename, String content) {
+        jsctx.evaluateString(jsscope, content, "<script: " + filename + ">", 1, null);
+    }
 }
