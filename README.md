@@ -82,6 +82,23 @@ Otherwise, all commands that require a bucket will need to be prefixed with:
 	
 	using bucket "Foo" … 
 
+### Use with default options
+
+You can specify default options to use for `fetch`, `store`, `delete` and `query2i`. Any
+options you specify in a fetch, store, delete or query2i command will override these defaults.
+See documentation for corresponding commands for available options.
+
+    use bucket "Foo"
+            with fetch options r = "1"
+
+
+    use bucket "Foo"
+        with fetch options  r = "1"
+        and  store options  w = "1", dw="1"
+        and  delete options foo = "baz"
+        and query2i options foo = "bar";
+
+
 ## Fetching Data
 
 To fetch a key named "MyKey" from bucket "Foo", use the following:

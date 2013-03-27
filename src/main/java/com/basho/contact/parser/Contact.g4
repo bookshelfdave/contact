@@ -3,7 +3,7 @@ grammar Contact;
 prog        :  (stat)+ EOF;
 
 // this should really be expr
-stat        :  assignment? (connect | using | op_with_options | listbuckets | console_op) SEMI;
+stat        :  assignment? (connect | using | op_with_options | listbuckets | console_op | use) SEMI;
 
 console_op: get | set ;
 
@@ -42,10 +42,10 @@ use:    USE ( (BUCKET name=STRING useBucketOptions?)
               | (CONN var=ID) );
 
 useBucketOptions:
-        (with FETCH OPTIONS optionslist)?
-        (with STORE OPTIONS optionslist)?
-        (with DELETE OPTIONS optionslist)?
-        (with QUERY2I OPTIONS optionslist)?
+        (with FETCH OPTIONS fetchOptions=optionslist)?
+        (with STORE OPTIONS storeOptions=optionslist)?
+        (with DELETE OPTIONS deleteOptions=optionslist)?
+        (with QUERY2I OPTIONS query2iOptions=optionslist)?
         ;
 
 connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?);

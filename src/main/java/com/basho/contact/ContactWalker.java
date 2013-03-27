@@ -22,9 +22,9 @@
 
 package com.basho.contact;
 
+import com.basho.contact.commands.*;
 import com.basho.contact.parser.ContactBaseListener;
 import com.basho.contact.parser.ContactParser.*;
-import com.basho.contact.commands.*;
 import com.basho.contact.symbols.ContactSymbol;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
@@ -95,7 +95,7 @@ public class ContactWalker extends ContactBaseListener {
 
         if (o != null) {
             //System.out.println("Executing " + o.getClass().getName());
-            if (o != null && o instanceof RiakCommand) {
+            if (o instanceof RiakCommand) {
                 RiakCommand<?, ?> cmd = (RiakCommand<?, ?>) o;
 
                 if (cmd.params.bucket == null) {
@@ -149,7 +149,7 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitCode_string(Code_stringContext ctx) {
-        String value = "";
+        String value;
         if (ctx.STRING() != null) {
             value = stripQuotes(ctx.STRING().getText());
         } else {
@@ -218,21 +218,36 @@ public class ContactWalker extends ContactBaseListener {
     public void exitOp_with_options(Op_with_optionsContext ctx) {
         Object options = getValue(ctx.options());
         Object o = null;
+        Map<String, String> bucketOptions = null;
+
         if (ctx.fetch() != null) {
             o = getValue(ctx.fetch());
+            bucketOptions = runtimeCtx.getCurrentFetchOptions();
         } else if (ctx.store() != null) {
             o = getValue(ctx.store());
+            bucketOptions = runtimeCtx.getCurrentStoreOptions();
         } else if (ctx.delete() != null) {
             o = getValue(ctx.delete());
+            bucketOptions = runtimeCtx.getCurrentDeleteOptions();
         } else if (ctx.query2i() != null) {
             o = getValue(ctx.query2i());
+            bucketOptions = runtimeCtx.getCurrentQuery2iOptions();
         } else if (ctx.listkeys() != null) {
             o = getValue(ctx.listkeys());
         }
 
         if (o instanceof RiakCommand) {
             RiakCommand<?, ?> c = (RiakCommand<?, ?>) o;
-            c.params.options = (Map<String, String>) options;
+            if(bucketOptions != null && bucketOptions.size() > 0) {
+                Map<String, String> combined = new HashMap<String, String>();
+                // use all bucket options, then override with any options from
+                // curent command
+                combined.putAll(bucketOptions);
+                combined.putAll((Map<String, String>) options);
+                c.params.options = combined;
+            } else {
+                c.params.options = (Map<String, String>) options;
+            }
             setValue(ctx, c);
         }
         super.exitOp_with_options(ctx);
@@ -437,5 +452,46 @@ public class ContactWalker extends ContactBaseListener {
         ListKeysCommand listKeys = new ListKeysCommand();
         setValue(ctx, listKeys);
         super.exitListkeys(ctx);
+    }
+
+    @Override
+    public void exitUseBucketOptions(UseBucketOptionsContext ctx) {
+        if(ctx.FETCH() != null) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> fo = (Map<String, String>)getValue(ctx.fetchOptions);
+            runtimeCtx.setCurrentFetchOptions(fo);
+            System.out.println("Fetch options =" + fo);
+        } else {
+            runtimeCtx.setCurrentFetchOptions(new HashMap<String, String>());
+        }
+
+        if(ctx.STORE() != null) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> so = (Map<String, String>)getValue(ctx.storeOptions);
+            runtimeCtx.setCurrentStoreOptions(so);
+            System.out.println("Store options =" + so);
+        } else {
+            runtimeCtx.setCurrentStoreOptions(new HashMap<String, String>());
+        }
+
+        if(ctx.DELETE() != null) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> del_o = (Map<String, String>)getValue(ctx.deleteOptions);
+            runtimeCtx.setCurrentDeleteOptions(del_o);
+            System.out.println("Delete options =" + del_o);
+        } else {
+            runtimeCtx.setCurrentDeleteOptions(new HashMap<String, String>());
+        }
+
+        if(ctx.QUERY2I() != null) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> qo = (Map<String, String>)getValue(ctx.query2iOptions);
+            runtimeCtx.setCurrentQuery2iOptions(qo);
+            System.out.println("Query2i options =" + qo);
+        } else {
+            runtimeCtx.setCurrentQuery2iOptions(new HashMap<String, String>());
+        }
+
+        super.exitUseBucketOptions(ctx);
     }
 }

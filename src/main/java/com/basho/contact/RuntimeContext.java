@@ -54,7 +54,10 @@ public class RuntimeContext {
     // use bucket "Foo" sets this value.
     // TODO: change it to a Bucket object
     private String currentBucket = null;
-    private Map<String, String> currentBucketProps = new HashMap<String, String>();
+    private Map<String, String> currentFetchOptions = new HashMap<String, String>();
+    private Map<String, String> currentStoreOptions = new HashMap<String, String>();
+    private Map<String, String> currentDeleteOptions = new HashMap<String, String>();
+    private Map<String, String> currentQuery2iOptions = new HashMap<String, String>();
 
     public boolean trace = false;
 
@@ -149,11 +152,35 @@ public class RuntimeContext {
         this.currentBucket = currentBucket;
     }
 
-    public Map<String, String> getCurrentBucketProps() {
-        return currentBucketProps;
+    public Map<String, String> getCurrentFetchOptions() {
+        return currentFetchOptions;
     }
 
-    public void setCurrentBucketProps(Map<String, String> currentBucketProps) {
-        this.currentBucketProps = currentBucketProps;
+    public void setCurrentFetchOptions(Map<String, String> currentFetchOptions) {
+        this.currentFetchOptions = currentFetchOptions;
+    }
+
+    public Map<String, String> getCurrentStoreOptions() {
+        return currentStoreOptions;
+    }
+
+    public void setCurrentStoreOptions(Map<String, String> currentStoreOptions) {
+        this.currentStoreOptions = currentStoreOptions;
+    }
+
+    public Map<String, String> getCurrentDeleteOptions() {
+        return currentDeleteOptions;
+    }
+
+    public void setCurrentDeleteOptions(Map<String, String> currentDeleteOptions) {
+        this.currentDeleteOptions = currentDeleteOptions;
+    }
+
+    public Map<String, String> getCurrentQuery2iOptions() {
+        return currentQuery2iOptions;
+    }
+
+    public void setCurrentQuery2iOptions(Map<String, String> currentQuery2iOptions) {
+        this.currentQuery2iOptions = currentQuery2iOptions;
     }
 }
