@@ -121,6 +121,23 @@ setting in <strong>app.config</strong> for the exact port to use.</p>
 <pre><code>using bucket "Foo" … 
 </code></pre>
 
+<h3>Use with default options</h3>
+
+<p>You can specify default options to use for <code>fetch</code>, <code>store</code>, <code>delete</code> and <code>query2i</code>. Any
+options you specify in a fetch, store, delete or query2i command will override these defaults.
+See documentation for corresponding commands for available options.</p>
+
+<pre><code>use bucket "Foo"
+        with fetch options r = "1"
+
+
+use bucket "Foo"
+    with fetch options  r = "1"
+    and  store options  w = "1", dw="1"
+    and  delete options foo = "baz"
+    and query2i options foo = "bar";
+</code></pre>
+
 <h2>Fetching Data</h2>
 
 <p>To fetch a key named "MyKey" from bucket "Foo", use the following:</p>
@@ -149,11 +166,9 @@ fetch "MyOtherKey";
 
 <pre><code>fetch "MyKey" 
     with options 
-        "r" = 1, 
-        "pr" = 1;
+        r = 1,
+        pr = 1;
 </code></pre>
-
-<p>All options need to appear between double quotes (for now).</p>
 
 <h3>Available fetch options:</h3>
 
@@ -224,7 +239,7 @@ using bucket "Foo" store "MyKey" with xml
 <pre><code>using bucket "Foo" 
     store "MyKey" 
         with text "This is text" 
-        with options "w" = 1, "pw" = 2;
+        with options w = 1, pw = 2;
 </code></pre>
 
 <h3>Available store options:</h3>
@@ -256,7 +271,7 @@ store "MyKey"
 
 delete "MyKey";
 
-delete "MyKey" and options "w"="1";
+delete "MyKey" and options w="1";
 </code></pre>
 
 <h3>Available delete options:</h3>
@@ -333,6 +348,10 @@ query with
 
 </code></pre>
 
+<h2>Sample Data</h2>
+
+<p>See the <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> repository for sample data that can be easily imported.</p>
+
 <h2>Customizable Output</h2>
 
 <p>There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. </p>
@@ -341,7 +360,7 @@ query with
 
 <pre><code>set action postfetch with javascript 
 ~%~
-  if(obj != undefined) { out.println(obj.getValueAsString()); }
+  if(riak_object != undefined) { out.println(riak_object.getValueAsString()); }
 ~%~;
 </code></pre>
 
@@ -354,7 +373,7 @@ query with
 
 <pre><code>set action postfetch with javascript 
 ~%~
-  if(obj != undefined) { out.println(obj.getLastModified()); }
+  if(riak_object != undefined) { out.println(riak_object.getLastModified()); }
 ~%~;
 </code></pre>
 
@@ -395,8 +414,8 @@ store "JsonTest2" with json
 
 set action postfetch with javascript 
 ~%~
-if(obj != undefined) { 
-    var v = obj.getValueAsString(); 
+if(riak_object != undefined) { 
+    var v = riak_object.getValueAsString(); 
     var j = JSON.parse(v);
     out.println(j.firstName + " " + j.lastName);
     out.println("Address:");
@@ -835,8 +854,8 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 <ul>
 <li>TESTING TESTING TESTING</li>
+<li>bucket properties via pb</li>
 <li>implement Javascript resolvers + retiers</li>
-<li>bucket properties via pb (the HTTP interface code is currently commented out)</li>
 <li>script mode (read from stdin etc)</li>
 <li>clean up mr syntax + implementation</li>
 <li>link walking</li>
