@@ -27,13 +27,17 @@ import com.basho.contact.parser.ContactBaseListener;
 import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.ContactParser.*;
 import com.basho.contact.symbols.ContactSymbol;
+import junit.framework.Assert;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static junit.framework.Assert.assertEquals;
 
 public class ContactWalker extends ContactBaseListener {
     ParseTreeProperty<Object> values = new ParseTreeProperty<Object>();
@@ -154,7 +158,7 @@ public class ContactWalker extends ContactBaseListener {
         if (ctx.STRING() != null) {
             value = stripQuotes(ctx.STRING().getText());
         } else {
-            value = getDataContent(ctx.DATA_CONTENT().getText());
+            value = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         }
         setValue(ctx, value);
         super.exitCode_string(ctx);
@@ -291,7 +295,7 @@ public class ContactWalker extends ContactBaseListener {
         if (ctx.STRING() != null) {
             value = stripQuotes(ctx.STRING().getText());
         } else if (ctx.DATA_CONTENT() != null) {
-            value = getDataContent(ctx.DATA_CONTENT().getText());
+            value = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         }
 
         if (ctx.JSON() != null) {
@@ -420,14 +424,6 @@ public class ContactWalker extends ContactBaseListener {
         }
     }
 
-    public String getDataContent(String content) {
-        if (content.startsWith("\n")) {
-            // TODO: determine if ~%~ is on a new line by itself
-            content = content.substring(1, content.length() - 1);
-        }
-        // TODO: replace escaped content, etc
-        return content.substring(3, content.length() - 3);
-    }
 
     private void trace(String msg) {
         if (runtimeCtx.trace) {
@@ -509,7 +505,7 @@ public class ContactWalker extends ContactBaseListener {
     public void exitScript(ScriptContext ctx) {
         String content = "";
         if(ctx.DATA_CONTENT() != null) {
-            content = this.getDataContent(ctx.DATA_CONTENT().getText());
+            content = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         } else {
             content = stripQuotes(ctx.STRING().getText());
         }
