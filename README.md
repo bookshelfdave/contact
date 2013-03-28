@@ -322,9 +322,9 @@ query with
 See the [Contact Sample Data](https://github.com/metadave/contact_sample_data) repository for sample data that can be easily imported.
 
 
-## Customizable Output
+## Customizable Actions and Output
 
-There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. 
+Contact actions and output are customizable via the embedded [Mozilla Rhino Javascript interpreter](https://developer.mozilla.org/en-US/docs/Rhino). Java objects are exposed as Javascript objects, and you have the ability to modify command parameters and output on the fly.  Most actions come in pairs of pre/postcommand. 
 
 Here's an example of the default action for rendering the results of a fetch:
 
@@ -424,6 +424,13 @@ I hope to have a "Cookbook" section on the Contact wiki eventually, but in the m
 
 
 ####Available actions
+
+All scripts have `out` and `err` available to them for writing.
+
+* All actions have these parameters:
+    * out : [java.io.PrintWriter](http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html)
+    * err : [java.io.PrintWriter](http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html)
+
 
 * **listkeys**
     * **Pre** parameters
@@ -548,6 +555,26 @@ I hope to have a "Cookbook" section on the Contact wiki eventually, but in the m
         * buckets : *[java.util.Set](http://docs.oracle.com/javase/7/docs/api/java/util/Set.html)<[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)>*
         * contact : *[com.basho.contact.RuntimeContext]()*
         * bucket : *[java.lang.String](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html)*
+
+### Loading Scripts
+
+To load an entire script file, simply execute the `load script` command:
+
+```
+	load script "filename.js";
+```
+
+To execute arbitrary Javascript:
+
+```
+	script "out.println('hello world');"
+
+	// OR
+	
+	script ~%~
+		out.println("hello world!");
+	~%~;
+```
 
 
 
