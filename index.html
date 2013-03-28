@@ -361,9 +361,9 @@ query with
 
 <p>See the <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> repository for sample data that can be easily imported.</p>
 
-<h2>Customizable Output</h2>
+<h2>Customizable Actions and Output</h2>
 
-<p>There are customizable actions via Javascript for most Contact commands. They come in pairs of pre/postcommand. </p>
+<p>Contact actions and output are customizable via the embedded <a href="https://developer.mozilla.org/en-US/docs/Rhino">Mozilla Rhino Javascript interpreter</a>. Java objects are exposed as Javascript objects, and you have the ability to modify command parameters and output on the fly.  Most actions come in pairs of pre/postcommand. </p>
 
 <p>Here's an example of the default action for rendering the results of a fetch:</p>
 
@@ -458,7 +458,19 @@ Address:
 
 <h4>Available actions</h4>
 
+<p>All scripts have <code>out</code> and <code>err</code> available to them for writing.</p>
+
 <ul>
+<li>
+<p>All actions have these parameters:</p>
+
+<ul>
+<li>out : <a href="http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html">java.io.PrintWriter</a>
+</li>
+<li>err : <a href="http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html">java.io.PrintWriter</a>
+</li>
+</ul>
+</li>
 <li>
 <p><strong>listkeys</strong></p>
 
@@ -807,7 +819,25 @@ Address:
 </li>
 </ul>
 </li>
-</ul><h2>Customizable Conflict Resolvers and Retriers</h2>
+</ul><h3>Loading Scripts</h3>
+
+<p>To load an entire script file, simply execute the <code>load script</code> command:</p>
+
+<pre><code>    load script "filename.js";
+</code></pre>
+
+<p>To execute arbitrary Javascript:</p>
+
+<pre><code>    script "out.println('hello world');"
+
+    // OR
+
+    script ~%~
+        out.println("hello world!");
+    ~%~;
+</code></pre>
+
+<h2>Customizable Conflict Resolvers and Retriers</h2>
 
 <p><strong>TODO</strong></p>
 
