@@ -113,7 +113,7 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
     }
 
     @Override
-    public ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             Bucket b = client.fetchBucket(this.params.bucket).execute();

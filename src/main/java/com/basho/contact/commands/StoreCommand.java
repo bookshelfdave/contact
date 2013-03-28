@@ -132,7 +132,7 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
 
 
     @Override
-    public ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
         try {
             RiakObjectBuilder builder =
                     RiakObjectBuilder

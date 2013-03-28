@@ -98,6 +98,10 @@ public class ContactWalker extends ContactBaseListener {
             super.exitStat(ctx);
         }
 
+        if(ctx.connection_selector() != null) {
+            System.out.println("Using connection " + ctx.connection_selector().getText());
+        }
+
         if (o != null) {
             //System.out.println("Executing " + o.getClass().getName());
             if (o instanceof RiakCommand) {
@@ -107,7 +111,7 @@ public class ContactWalker extends ContactBaseListener {
                     cmd.params.bucket = runtimeCtx.getCurrentBucket();
                 }
                 cmd.params.ctx = runtimeCtx;
-                ContactSymbol<?> sym = cmd.exec(runtimeCtx);
+                ContactSymbol<?> sym = cmd.doExec(runtimeCtx);
                 runtimeCtx.lastResult = sym;
                 if (ctx.assignment() != null) {
                     String name = (String) getValue(ctx.assignment());

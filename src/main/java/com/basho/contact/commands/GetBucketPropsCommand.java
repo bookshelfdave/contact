@@ -36,7 +36,7 @@ public class GetBucketPropsCommand extends BucketCommand<ResultSymbol, GetBucket
     }
 
     @Override
-    public ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
         return null;
     }
 //    @Override

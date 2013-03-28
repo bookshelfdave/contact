@@ -24,6 +24,8 @@ package com.basho.contact;
 
 import com.basho.contact.actions.ContactActionListener;
 import com.basho.contact.actions.JSActionListener;
+import com.basho.contact.security.AccessPolicy;
+import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.symbols.ContactSymbol;
 
 import java.io.PrintStream;
@@ -60,7 +62,7 @@ public class RuntimeContext {
     private Map<String, String> currentQuery2iOptions = new HashMap<String, String>();
 
     public boolean trace = false;
-
+    private AccessPolicy accessPolicy = new DefaultAccessPolicy();
 
     // this always needs to be instantiated
     JSActionListener jsActionListener;
@@ -69,6 +71,14 @@ public class RuntimeContext {
         this.connections = connections;
         jsActionListener = new JSActionListener(this, out, err);
         this.listener = jsActionListener;
+    }
+
+    public AccessPolicy getAccessPolicy() {
+        return accessPolicy;
+    }
+
+    public void setAccessPolicy(AccessPolicy accessPolicy) {
+        this.accessPolicy = accessPolicy;
     }
 
     public ContactConnectionProvider getConnectionProvider() {

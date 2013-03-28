@@ -25,6 +25,7 @@ package com.basho.contact.commands;
 import com.basho.contact.ContactConnectionProvider;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.params.FetchParams;
+import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.testing.EmptyConnectionProvider;
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
@@ -52,7 +53,7 @@ public class FetchCommandTest {
         ContactConnectionProvider connProvider = new EmptyConnectionProvider();
 
         RuntimeContext ctx = new RuntimeContext(connProvider, null, null);
-        command.exec(ctx);
+        command.doExec(ctx);
         assertEquals(1, ctx.getErrors().size());
         assertEquals("Not connected to Riak for fetch op.", ctx.getErrors().get(0).getMessage());
     }
@@ -74,10 +75,11 @@ public class FetchCommandTest {
         doCallRealMethod().when(ctx).reset();
         doCallRealMethod().when(ctx).appendError(anyString());
         doCallRealMethod().when(ctx).getErrors();
+        when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
         when(ctx.getConnectionProvider()).thenReturn(connProvider);
         ctx.reset(); // instantiate the error list
 
-        command.exec(ctx);
+        command.doExec(ctx);
         assertEquals(1,ctx.getErrors().size());
         assertEquals("Bucket not selected for fetch op.", ctx.getErrors().get(0).getMessage());
     }
@@ -98,6 +100,7 @@ public class FetchCommandTest {
         doCallRealMethod().when(ctx).reset();
         doCallRealMethod().when(ctx).appendError(anyString());
         doCallRealMethod().when(ctx).getErrors();
+        when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
         final Map<String, Object> results = new HashMap<String, Object>();
 
         FetchObject<IRiakObject> fetchObject = new FetchObject<IRiakObject>(null, null, null, null) {

@@ -20,35 +20,11 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.security;
 
-import com.basho.contact.actions.ActionParams;
-import com.basho.contact.symbols.ContactSymbol;
-
-public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionParams> {
-    public O params;
-    private Class<O> clazz;
-
-    protected abstract K exec(RuntimeContext ctx);
-
-    public final K doExec(RuntimeContext ctx) {
-        if(checkAccess(ctx)) {
-            return exec(ctx);
-        } else {
-            return null;
-        }
-    }
-
-    public boolean checkAccess(RuntimeContext ctx) {
-        return ctx.getAccessPolicy().canAccess(this.getClass(), null);
-    }
-
-    public RiakCommand(Class<O> c) {
-        clazz = c;
-        try {
-            params = clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+public class DefaultAccessPolicy implements AccessPolicy {
+    public boolean canAccess(Class<?> command, String subcommand) {
+        //System.out.println("Checking access for " + command + ":" + subcommand);
+        return true;
     }
 }

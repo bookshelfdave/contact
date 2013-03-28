@@ -35,10 +35,10 @@ public abstract class BucketCommand<K extends ContactSymbol<?>, O extends Action
         this.name = name;
     }
 
-    public abstract K bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket);
+    protected abstract K bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket);
 
     @Override
-    public K exec(RuntimeContext runtimeCtx) {
+     protected K exec(RuntimeContext runtimeCtx) {
         IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
         if (client != null) {
             if (this.params.bucket != null) {

@@ -36,8 +36,9 @@ public class ListBucketsCommand extends RiakCommand<StringSetSymbol, ListBuckets
         super(ListBucketsParams.Pre.class);
     }
 
+
     @Override
-    public StringSetSymbol exec(RuntimeContext runtimeCtx) {
+    protected StringSetSymbol exec(RuntimeContext runtimeCtx) {
         try {
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preListBucketsAction(params);

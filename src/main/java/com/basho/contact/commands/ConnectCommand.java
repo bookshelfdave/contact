@@ -38,7 +38,7 @@ public class ConnectCommand extends RiakCommand<ConnectionSymbol, ConnectParams.
     }
 
     @Override
-    public ConnectionSymbol exec(RuntimeContext runtimeCtx) {
+    protected ConnectionSymbol exec(RuntimeContext runtimeCtx) {
         runtimeCtx.getActionListener().preConnectAction(params);
         IRiakClient client = runtimeCtx
                 .getConnectionProvider()

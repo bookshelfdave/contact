@@ -43,7 +43,7 @@ public class Query2iCommand extends BucketCommand<Query2IResultsSymbol, Query2iP
     }
 
     @Override
-    public Query2IResultsSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected Query2IResultsSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             Bucket b = client.fetchBucket(params.bucket).execute();
@@ -128,7 +128,7 @@ public class Query2iCommand extends BucketCommand<Query2IResultsSymbol, Query2iP
             // default to the bucket fetch options
             fetch.params.options = this.params.ctx.getCurrentFetchOptions();
             // throw out the result
-            fetch.exec(this.params.ctx);
+            fetch.doExec(this.params.ctx);
         }
     }
 }

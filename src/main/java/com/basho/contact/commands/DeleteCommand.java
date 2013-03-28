@@ -133,7 +133,7 @@ public class DeleteCommand extends BucketCommand<VoidSymbol, DeleteParams.Pre> {
     }
 
     @Override
-    public VoidSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected VoidSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             Bucket b = client.fetchBucket(this.params.bucket).execute();

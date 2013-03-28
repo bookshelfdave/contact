@@ -26,6 +26,7 @@ import com.basho.contact.ContactConnectionProvider;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.actions.ContactActionListener;
 import com.basho.contact.commands.params.ListBucketsParams;
+import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.symbols.StringSetSymbol;
 import com.basho.contact.testing.EmptyActionListener;
 import com.basho.contact.testing.EmptyConnectionProvider;
@@ -80,7 +81,8 @@ public class ListBucketsCommandTest {
         };
         when(ctx.getActionListener()).thenReturn(listener);
         when(ctx.getConnectionProvider()).thenReturn(connProvider);
-        StringSetSymbol results = command.exec(ctx);
+        when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
+        StringSetSymbol results = command.doExec(ctx);
         assertEquals(postParams.buckets, buckets);
         assertEquals(buckets, results.value);
     }

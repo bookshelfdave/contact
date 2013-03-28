@@ -34,7 +34,7 @@ public class MapredCommand extends RiakCommand<ResultsSymbol, MapRedParams.Pre> 
     }
 
     @Override
-    public ResultsSymbol exec(RuntimeContext ctx) {
+    protected ResultsSymbol exec(RuntimeContext ctx) {
         //ctx.getNextPBClient().mapReduce()
 
         return null;

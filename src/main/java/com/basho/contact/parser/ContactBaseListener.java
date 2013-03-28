@@ -16,6 +16,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterUsing(ContactParser.UsingContext ctx) { }
 	@Override public void exitUsing(ContactParser.UsingContext ctx) { }
 
+	@Override public void enterConnection_selector(ContactParser.Connection_selectorContext ctx) { }
+	@Override public void exitConnection_selector(ContactParser.Connection_selectorContext ctx) { }
+
 	@Override public void enterStore(ContactParser.StoreContext ctx) { }
 	@Override public void exitStore(ContactParser.StoreContext ctx) { }
 

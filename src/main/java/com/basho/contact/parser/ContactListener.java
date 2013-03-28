@@ -13,6 +13,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterUsing(ContactParser.UsingContext ctx);
 	void exitUsing(ContactParser.UsingContext ctx);
 
+	void enterConnection_selector(ContactParser.Connection_selectorContext ctx);
+	void exitConnection_selector(ContactParser.Connection_selectorContext ctx);
+
 	void enterStore(ContactParser.StoreContext ctx);
 	void exitStore(ContactParser.StoreContext ctx);
 

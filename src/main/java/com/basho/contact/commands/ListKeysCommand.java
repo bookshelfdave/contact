@@ -40,7 +40,7 @@ public class ListKeysCommand extends BucketCommand<ResultSymbol, ListKeysParams.
     }
 
     @Override
-    public ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             params.ctx = runtimeCtx;

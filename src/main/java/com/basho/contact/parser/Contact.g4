@@ -3,7 +3,15 @@ grammar Contact;
 prog        :  (stat)+ EOF;
 
 // this should really be expr
-stat        :  assignment? (connect | using | op_with_options | listbuckets | console_op | use) SEMI;
+stat        :  assignment? (connect |
+                            using |
+                            op_with_options |
+                            listbuckets |
+                            console_op |
+                            use) connection_selector? SEMI;
+
+connection_selector:
+    AT connname=ID;
 
 console_op: get | set | loadscript | script;
 
@@ -129,6 +137,7 @@ JSON        :    'json';
 TEXT        :    'text';
 XML         :    'xml';
 
+AT          :    '@';
 COMMA       :    ',';
 LSQUARE     :    '[';
 RSQUARE     :    ']';
