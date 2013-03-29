@@ -60,7 +60,31 @@ To connect to a Riak instance, use the `connect` command:
 `pb` refers to the procol buffers port that Riak is configured to use. Check the `pb_port` 
 setting in **app.config** for the exact port to use.
 
+To connect to multiple sources:
+
+	connect "127.0.0.1" pb 10017 as foo;
+	connect "192.168.1.5" pb 10017 as bar;
+
+To use a given connection, you can supply an `@` suffix on most commands:
+
+	using bucket "Foo" fetch "MyKey" @ foo;
+
+
+To see a list of connections, use the `connections` commands:
+
+	connections;
+	> connect "127.0.0.1" pb 10017 as foo;
+	Connecting to Riak @ 127.0.0.1:10017
+	> connect "127.0.0.1" pb 10027 as bar;
+	Connecting to Riak @ 127.0.0.1:10027
+	> connections;
+	<connection:boo:127.0.0.1:10027>
+	<connection:bar:127.0.0.1:10017>
+
+## Exiting
+
 To exit the shell, type `exit`.
+
 
 ## Comments
 
@@ -637,7 +661,6 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * clean up mr syntax + implementation
 * link walking
 * listing and using shell variables (ie from a 2i query)
-* setup connections to multiple clusters, refer to a connection during a fetch, store, etc.
 * load balancing
 * use meta
 * simple interactive web ui ala "Try Riak"
