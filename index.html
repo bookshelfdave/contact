@@ -108,8 +108,7 @@ connect "192.168.1.5" pb 10017 as bar;
 
 <p>To see a list of connections, use the <code>connections</code> commands:</p>
 
-<pre><code>connections;
-&gt; connect "127.0.0.1" pb 10017 as foo;
+<pre><code>&gt; connect "127.0.0.1" pb 10017 as foo;
 Connecting to Riak @ 127.0.0.1:10017
 &gt; connect "127.0.0.1" pb 10027 as bar;
 Connecting to Riak @ 127.0.0.1:10027
@@ -117,6 +116,8 @@ Connecting to Riak @ 127.0.0.1:10027
 &lt;connection:boo:127.0.0.1:10027&gt;
 &lt;connection:bar:127.0.0.1:10017&gt;
 </code></pre>
+
+<p>If multiple connections are made, the default connection is undefined at the moment.</p>
 
 <h2>Exiting</h2>
 
