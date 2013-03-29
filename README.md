@@ -72,7 +72,6 @@ To use a given connection, you can supply an `@` suffix on most commands:
 
 To see a list of connections, use the `connections` commands:
 
-	connections;
 	> connect "127.0.0.1" pb 10017 as foo;
 	Connecting to Riak @ 127.0.0.1:10017
 	> connect "127.0.0.1" pb 10027 as bar;
@@ -80,6 +79,8 @@ To see a list of connections, use the `connections` commands:
 	> connections;
 	<connection:boo:127.0.0.1:10027>
 	<connection:bar:127.0.0.1:10017>
+
+If multiple connections are made, the default connection is undefined at the moment.
 
 ## Exiting
 
