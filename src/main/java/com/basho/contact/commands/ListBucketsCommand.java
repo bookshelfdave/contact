@@ -42,8 +42,7 @@ public class ListBucketsCommand extends RiakCommand<StringSetSymbol, ListBuckets
         try {
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preListBucketsAction(params);
-            Set<String> buckets = (Set<String>) runtimeCtx.getConnectionProvider().
-                    getDefaultClient(runtimeCtx).listBuckets();
+            Set<String> buckets = (Set<String>) conn.listBuckets();
             ListBucketsParams.Post postParams = new ListBucketsParams.Post();
             postParams.ctx = runtimeCtx;
             postParams.buckets = buckets;

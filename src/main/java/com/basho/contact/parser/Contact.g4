@@ -13,7 +13,9 @@ stat        :  assignment? (connect |
 connection_selector:
     AT connname=ID;
 
-console_op: get | set | loadscript | script;
+console_op: get | set | loadscript | script | connections;
+
+connections: CONNS;
 
 assignment: LET name=ID EQUALS;
 
@@ -56,7 +58,7 @@ useBucketOptions:
         (with QUERY2I OPTIONS query2iOptions=optionslist)?
         ;
 
-connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?);
+connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?) (AS connname=ID)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
@@ -88,6 +90,7 @@ STORE       :    'store';
 DELETE      :    'delete';
 VALUE       :    'value';
 CONN        :    'connection';
+CONNS       :    'connections';
 CONNECT     :    'connect';
 USE         :    'use';
 USING       :    'using';
@@ -132,7 +135,7 @@ DEFAULT     :    'default';
 SET         :    'set';
 GET         :    'get';
 ACTION      :    'action';
-
+AS          :    'as';
 JSON        :    'json';
 TEXT        :    'text';
 XML         :    'xml';

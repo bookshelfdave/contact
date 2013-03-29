@@ -22,19 +22,14 @@
 
 package com.basho.contact;
 
-import com.basho.riak.client.IRiakClient;
 
-import java.util.Map;
+public class ConnectionInfo {
+    public String host;
+    public int pbport;
+    public int httpport;
+    public String id;
 
-public interface ContactConnectionProvider {
-
-    public IRiakClient getDefaultClient(RuntimeContext ctx);
-
-    public IRiakClient getClientByName(String name, RuntimeContext ctx);
-
-    public IRiakClient createDefaultConnection(String host, int port, RuntimeContext ctx);
-
-    public IRiakClient createNamedConnection(String host, int port, String name, RuntimeContext ctx);
-
-    public Map<String, ConnectionInfo> getAllConnections();
+    public String toString() {
+        return "<connection:" + id + ":" + host + ":" + pbport + ">";
+    }
 }

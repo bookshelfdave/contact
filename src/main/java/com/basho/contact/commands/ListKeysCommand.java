@@ -40,13 +40,13 @@ public class ListKeysCommand extends BucketCommand<ResultSymbol, ListKeysParams.
     }
 
     @Override
-    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, String bucket) {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preListKeysAction(params);
 
-            Bucket b = client.fetchBucket(params.bucket).execute();
+            Bucket b = conn.fetchBucket(params.bucket).execute();
             List<String> keys = new ArrayList<String>();
             // DO I need a copy here? Seems like it
             for (String k : b.keys()) {

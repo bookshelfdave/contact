@@ -35,16 +35,15 @@ public abstract class BucketCommand<K extends ContactSymbol<?>, O extends Action
         this.name = name;
     }
 
-    protected abstract K bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket);
+    protected abstract K bucketExec(RuntimeContext runtimeCtx, String bucket);
 
     @Override
      protected K exec(RuntimeContext runtimeCtx) {
-        IRiakClient client = runtimeCtx.getConnectionProvider().getDefaultClient(runtimeCtx);
-        if (client != null) {
+        if (this.conn != null) {
             if (this.params.bucket != null) {
                 K val = null;
                 try {
-                    val = bucketExec(runtimeCtx, client, this.params.bucket);
+                    val = bucketExec(runtimeCtx, this.params.bucket);
                 } catch (Exception e) {
                     // should be taken care of in the command
                     // famous last words...

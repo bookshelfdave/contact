@@ -67,6 +67,20 @@ public class ContactWalker extends ContactBaseListener {
 
 
     @Override
+    public void exitConnection_selector(Connection_selectorContext ctx) {
+        setValue(ctx, ctx.connname.getText());
+    }
+
+    @Override
+    public void exitConnections(ConnectionsContext ctx) {
+        Map<String, ConnectionInfo> conns = runtimeCtx.getConnectionProvider().getAllConnections();
+        for(String k: conns.keySet()) {
+            ConnectionInfo desc = conns.get(k);
+            System.out.println(desc);
+        }
+    }
+
+    @Override
     public void exitUsing(UsingContext ctx) {
         String bucket = stripQuotes(ctx.bucket.getText());
         Object o = getValue(ctx.op_with_options());
@@ -98,15 +112,16 @@ public class ContactWalker extends ContactBaseListener {
             super.exitStat(ctx);
         }
 
-        if(ctx.connection_selector() != null) {
-            System.out.println("Using connection " + ctx.connection_selector().getText());
-        }
-
         if (o != null) {
             //System.out.println("Executing " + o.getClass().getName());
             if (o instanceof RiakCommand) {
                 RiakCommand<?, ?> cmd = (RiakCommand<?, ?>) o;
 
+                if(ctx.connection_selector() != null) {
+                    String conn_id = (String)getValue(ctx.connection_selector());
+                    System.out.println("Using connection " + conn_id);
+                    cmd.params.connection_id = conn_id;
+                }
                 if (cmd.params.bucket == null) {
                     cmd.params.bucket = runtimeCtx.getCurrentBucket();
                 }
@@ -402,7 +417,9 @@ public class ContactWalker extends ContactBaseListener {
         ConnectCommand command = new ConnectCommand();
         command.params.host = host;
         command.params.pbPort = pbPort;
-
+        if(ctx.connname != null) {
+            command.params.conn_id = ctx.connname.getText();
+        }
         setValue(ctx, command);
         super.exitConnect(ctx);
     }

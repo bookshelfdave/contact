@@ -24,15 +24,22 @@ package com.basho.contact;
 
 import com.basho.contact.actions.ActionParams;
 import com.basho.contact.symbols.ContactSymbol;
+import com.basho.riak.client.IRiakClient;
 
 public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionParams> {
     public O params;
     private Class<O> clazz;
+    protected IRiakClient conn;
 
     protected abstract K exec(RuntimeContext ctx);
 
     public final K doExec(RuntimeContext ctx) {
         if(checkAccess(ctx)) {
+            if(this.params.connection_id != null) {
+                conn = ctx.getConnectionProvider().getClientByName(this.params.connection_id, ctx);
+            } else {
+                conn = ctx.getConnectionProvider().getDefaultClient(ctx);
+            }
             return exec(ctx);
         } else {
             return null;

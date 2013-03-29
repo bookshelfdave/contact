@@ -36,4 +36,6 @@ public class ActionParams {
     @Binding(name = "contact", copy = true)
     public RuntimeContext ctx;
 
+    @Binding(name = "connection_id")
+    public String connection_id;
 }

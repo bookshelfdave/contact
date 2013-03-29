@@ -40,9 +40,15 @@ public class ConnectCommand extends RiakCommand<ConnectionSymbol, ConnectParams.
     @Override
     protected ConnectionSymbol exec(RuntimeContext runtimeCtx) {
         runtimeCtx.getActionListener().preConnectAction(params);
-        IRiakClient client = runtimeCtx
-                .getConnectionProvider()
-                .createDefaultConnection(params.host, params.pbPort, runtimeCtx);
+
+        ContactConnectionProvider connections = runtimeCtx
+                .getConnectionProvider();
+        IRiakClient client;
+        if(params.conn_id != null) {
+            client = connections.createNamedConnection(params.host, params.pbPort, params.conn_id, runtimeCtx);
+        } else {
+            client = connections.createDefaultConnection(params.host, params.pbPort, runtimeCtx);
+        }
 
         ConnectParams.Post postParams = new ConnectParams.Post();
         postParams.ctx = runtimeCtx;

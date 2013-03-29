@@ -132,7 +132,7 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
 
 
     @Override
-    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, IRiakClient client, String bucket) {
+    protected ResultSymbol bucketExec(RuntimeContext runtimeCtx, String bucket) {
         try {
             RiakObjectBuilder builder =
                     RiakObjectBuilder
@@ -142,7 +142,7 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
             builder = addIndexes(builder);
             IRiakObject obj = builder.build();
             // TODO: cache this
-            Bucket b = client.fetchBucket(params.bucket).execute();
+            Bucket b = conn.fetchBucket(params.bucket).execute();
             StoreObject<IRiakObject> so = processOptions(runtimeCtx,
                     b.store(obj));
             params.ctx = runtimeCtx;

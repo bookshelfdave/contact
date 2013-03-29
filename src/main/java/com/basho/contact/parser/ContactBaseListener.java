@@ -64,17 +64,20 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterLoadscript(ContactParser.LoadscriptContext ctx) { }
 	@Override public void exitLoadscript(ContactParser.LoadscriptContext ctx) { }
 
+	@Override public void enterConnections(ContactParser.ConnectionsContext ctx) { }
+	@Override public void exitConnections(ContactParser.ConnectionsContext ctx) { }
+
 	@Override public void enterContent_string(ContactParser.Content_stringContext ctx) { }
 	@Override public void exitContent_string(ContactParser.Content_stringContext ctx) { }
 
 	@Override public void enterOptions(ContactParser.OptionsContext ctx) { }
 	@Override public void exitOptions(ContactParser.OptionsContext ctx) { }
 
-	@Override public void enterFetch(ContactParser.FetchContext ctx) { }
-	@Override public void exitFetch(ContactParser.FetchContext ctx) { }
-
 	@Override public void enterConsole_op(ContactParser.Console_opContext ctx) { }
 	@Override public void exitConsole_op(ContactParser.Console_opContext ctx) { }
+
+	@Override public void enterFetch(ContactParser.FetchContext ctx) { }
+	@Override public void exitFetch(ContactParser.FetchContext ctx) { }
 
 	@Override public void enterWith(ContactParser.WithContext ctx) { }
 	@Override public void exitWith(ContactParser.WithContext ctx) { }

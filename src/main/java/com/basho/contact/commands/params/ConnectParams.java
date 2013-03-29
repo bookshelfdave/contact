@@ -34,6 +34,9 @@ public class ConnectParams {
 
         @Binding(name = "riak_pb_port")
         public int pbPort;
+
+        @Binding(name = "conn_id")
+        public String conn_id;
     }
 
     public static class Post extends ActionParams {
