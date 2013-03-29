@@ -627,6 +627,19 @@ or
 	list keys;
 
 
+## Command Line Parameters
+
+	./contact.sh --help
+		usage: contact
+		    --help                Print this list of commands
+		    --infile <filename>   Read input from file and exit
+		    --nocolor             Don't use color output
+		    --noconfig            Don't read ~/.contact.config
+
+### Batch mode
+
+Pass in the `--infile <filename>` parameter to contact.sh to process a file containing Contact commands. Contact will exit upon completion. 
+
 ## Configuration
 
 If you want to run some code upon startup, you can create a file called `~/.contact.config` with 
@@ -657,15 +670,15 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * TESTING TESTING TESTING
 * bucket properties via pb
 * implement Javascript resolvers + retiers
-* script mode (read from stdin etc)
 * clean up mr syntax + implementation
+* Riak Search (Yokozuna integration)
 * link walking
-* listing and using shell variables (ie from a 2i query)
 * load balancing
-* use meta
-* simple interactive web ui ala "Try Riak"
-* Pasting text into the shell erroneously kicks off tab completion
+* user meta
 * User content-types
+* simple interactive web ui ala "Try Riak"
+* Fix tab completion
+* Pasting text into the shell erroneously kicks off tab completion
 
 #Contributing
 
