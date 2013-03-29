@@ -95,6 +95,31 @@ help &lt;commandname&gt; ## TODO
 <p><code>pb</code> refers to the procol buffers port that Riak is configured to use. Check the <code>pb_port</code> 
 setting in <strong>app.config</strong> for the exact port to use.</p>
 
+<p>To connect to multiple sources:</p>
+
+<pre><code>connect "127.0.0.1" pb 10017 as foo;
+connect "192.168.1.5" pb 10017 as bar;
+</code></pre>
+
+<p>To use a given connection, you can supply an <code>@</code> suffix on most commands:</p>
+
+<pre><code>using bucket "Foo" fetch "MyKey" @ foo;
+</code></pre>
+
+<p>To see a list of connections, use the <code>connections</code> commands:</p>
+
+<pre><code>connections;
+&gt; connect "127.0.0.1" pb 10017 as foo;
+Connecting to Riak @ 127.0.0.1:10017
+&gt; connect "127.0.0.1" pb 10027 as bar;
+Connecting to Riak @ 127.0.0.1:10027
+&gt; connections;
+&lt;connection:boo:127.0.0.1:10027&gt;
+&lt;connection:bar:127.0.0.1:10017&gt;
+</code></pre>
+
+<h2>Exiting</h2>
+
 <p>To exit the shell, type <code>exit</code>.</p>
 
 <h2>Comments</h2>
@@ -863,6 +888,20 @@ Address:
 list keys;
 </code></pre>
 
+<h2>Command Line Parameters</h2>
+
+<pre><code>./contact.sh --help
+    usage: contact
+        --help                Print this list of commands
+        --infile &lt;filename&gt;   Read input from file and exit
+        --nocolor             Don't use color output
+        --noconfig            Don't read ~/.contact.config
+</code></pre>
+
+<h3>Batch mode</h3>
+
+<p>Pass in the <code>--infile &lt;filename&gt;</code> parameter to contact.sh to process a file containing Contact commands. Contact will exit upon completion. </p>
+
 <h2>Configuration</h2>
 
 <p>If you want to run some code upon startup, you can create a file called <code>~/.contact.config</code> with 
@@ -895,16 +934,15 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 <li>TESTING TESTING TESTING</li>
 <li>bucket properties via pb</li>
 <li>implement Javascript resolvers + retiers</li>
-<li>script mode (read from stdin etc)</li>
 <li>clean up mr syntax + implementation</li>
+<li>Riak Search (Yokozuna integration)</li>
 <li>link walking</li>
-<li>listing and using shell variables (ie from a 2i query)</li>
-<li>setup connections to multiple clusters, refer to a connection during a fetch, store, etc.</li>
 <li>load balancing</li>
-<li>use meta</li>
-<li>simple interactive web ui ala "Try Riak"</li>
-<li>Pasting text into the shell erroneously kicks off tab completion</li>
+<li>user meta</li>
 <li>User content-types</li>
+<li>simple interactive web ui ala "Try Riak"</li>
+<li>Fix tab completion</li>
+<li>Pasting text into the shell erroneously kicks off tab completion</li>
 </ul><h1>Contributing</h1>
 
 <p>If you are a Riak + Java fan, I'm looking for devs to help out.</p>
