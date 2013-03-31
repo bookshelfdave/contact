@@ -64,27 +64,33 @@ public class JSActionListener implements ContactActionListener {
     public static String POSTGETBUCKETPROPS = "postgetbucketprops";
     public static String PRECONNECT = "preconnect";
     public static String POSTCONNECT = "postconnect";
+    public static String PRECONNECTIONS = "preconnections";
+    public static String POSTCONNECTIONS = "postconnections";
+
+
     Context jsctx = null;
     Scriptable jsscope = null;
     // skip getters and setters, they are just taking up space
-    private String postFetchBody = "if(riak_object != undefined) { out.println(riak_object.getValueAsString()); }";
+    private String postFetchBody = "if(riak_object != undefined) { println(riak_object.getValueAsString()); }";
     private String preFetchBody = "";
     private String preStoreBody = "";
-    private String postStoreBody = "if(riak_object != undefined) { out.println(riak_object.getValueAsString()); }";
+    private String postStoreBody = "if(riak_object != undefined) { println(riak_object.getValueAsString()); }";
     private String preDeleteBody = "";
     private String postDeleteBody = "";
     private String preQuery2iBody = "";
-    private String postQuery2iBody = "if(results != undefined && doFetch == false) { out.println(results); }";
+    private String postQuery2iBody = "if(results != undefined && doFetch == false) { println(results); }";
     private String preMapredBody = "";
     private String postMapredBody = "";
     private String preListBucketsBody = "";
-    private String postListBucketsBody = "out.println(buckets);";
+    private String postListBucketsBody = "println(buckets);";
     private String preListKeysBody = "";
-    private String postListKeysBody = "for(var i = 0; i < keys.size(); i++) { out.println(keys.get(i)); }";
+    private String postListKeysBody = "for(var i = 0; i < keys.size(); i++) { println(keys.get(i)); }";
     private String preGetBucketProps = "";
     private String postGetBucketProps = "";
     private String preConnectBody = "";
-    private String postConnectBody = "out.println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);";
+    private String postConnectBody = "println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);";
+    private String preConnectionsBody = "";
+    private String postConnectionsBody = "println('Connections'); println(connections);";
     private RuntimeContext runtimeCtx = null;
     private Map<String, String> js = new HashMap<String, String>();
 
@@ -99,6 +105,10 @@ public class JSActionListener implements ContactActionListener {
 
         Object wrappedErr = Context.javaToJS(err, jsscope);
         ScriptableObject.putProperty(jsscope, "err", wrappedErr);
+
+        // setup some default objects
+        evalScript("var print = function(s) { out.print(s); };");
+        evalScript("var println = function(s) { out.println(s); };");
     }
 
     private void setupDefaults() {
@@ -120,6 +130,8 @@ public class JSActionListener implements ContactActionListener {
         js.put(POSTGETBUCKETPROPS, postGetBucketProps);
         js.put(PRECONNECT, preConnectBody);
         js.put(POSTCONNECT, postConnectBody);
+        js.put(PRECONNECTIONS, preConnectionsBody);
+        js.put(POSTCONNECTIONS, postConnectionsBody);
     }
 
     public void setJSBody(String name, String body) {
@@ -272,5 +284,13 @@ public class JSActionListener implements ContactActionListener {
 
     public void evalScript(String script) {
         jsctx.evaluateString(jsscope, script, "<script>", 1, null);
+    }
+
+    public void preConnections(ConnectionsParams.Pre params) {
+        evalWithParams(params, PRECONNECTIONS);
+    }
+
+    public void postConnections(ConnectionsParams.Post params) {
+        evalWithParams(params, POSTCONNECTIONS);
     }
 }

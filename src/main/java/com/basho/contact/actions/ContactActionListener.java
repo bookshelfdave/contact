@@ -69,4 +69,8 @@ public interface ContactActionListener {
 
     public void evalScript(String script);
 
+    public void preConnections(ConnectionsParams.Pre params);
+
+    public void postConnections(ConnectionsParams.Post params);
+
 }

@@ -356,7 +356,7 @@ Here's an example of the default action for rendering the results of a fetch:
 ```
 set action postfetch with javascript 
 ~%~
-  if(riak_object != undefined) { out.println(riak_object.getValueAsString()); }
+  if(riak_object != undefined) { println(riak_object.getValueAsString()); }
 ~%~;
 ```
 
@@ -371,7 +371,7 @@ For example, to print out the last modified date:
 ```
 set action postfetch with javascript 
 ~%~
-  if(riak_object != undefined) { out.println(riak_object.getLastModified()); }
+  if(riak_object != undefined) { println(riak_object.getLastModified()); }
 ~%~;
 ```
 
@@ -416,10 +416,10 @@ set action postfetch with javascript
 if(riak_object != undefined) { 
     var v = riak_object.getValueAsString(); 
     var j = JSON.parse(v);
-    out.println(j.firstName + " " + j.lastName);
-    out.println("Address:");
-    out.println("   " + j.address.streetAddress);
-    out.println("   " + j.address.city + 
+    println(j.firstName + " " + j.lastName);
+    println("Address:");
+    println("   " + j.address.streetAddress);
+    println("   " + j.address.city +
                     ", " + j.address.state +
                     " " + j.address.postalCode);
 }
@@ -455,6 +455,11 @@ All scripts have `out` and `err` available to them for writing.
 * All actions have these parameters:
     * out : [java.io.PrintWriter](http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html)
     * err : [java.io.PrintWriter](http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html)
+
+In addition, the 2 following convenience functions are setup for you:
+
+    var print = function(s) { out.print(s); };
+    var println = function(s) { out.println(s); };
 
 
 * **listkeys**
@@ -592,12 +597,12 @@ To load an entire script file, simply execute the `load script` command:
 To execute arbitrary Javascript:
 
 ```
-	script "out.println('hello world');"
+	script "println('hello world');"
 
 	// OR
 	
 	script ~%~
-		out.println("hello world!");
+		println("hello world!");
 	~%~;
 ```
 

@@ -73,11 +73,8 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitConnections(ConnectionsContext ctx) {
-        Map<String, ConnectionInfo> conns = runtimeCtx.getConnectionProvider().getAllConnections();
-        for(String k: conns.keySet()) {
-            ConnectionInfo desc = conns.get(k);
-            System.out.println(desc);
-        }
+        ConnectionsCommand cmd = new ConnectionsCommand();
+        setValue(ctx, cmd);
     }
 
     @Override
@@ -106,6 +103,8 @@ public class ContactWalker extends ContactBaseListener {
             o = getValue(ctx.connect());
         } else if (ctx.console_op() != null) {
             o = getValue(ctx.console_op());
+        } else if (ctx.connections() != null) {
+            o = getValue(ctx.connections());
         }
 
         if(runtimeCtx.isParseError()) {

@@ -3,17 +3,20 @@ grammar Contact;
 prog        :  (stat)+ EOF;
 
 // this should really be expr
+/*  connection_selector might be better off somewhere else, as some commands
+    don't make sense with it */
 stat        :  assignment? (connect |
                             using |
                             op_with_options |
                             listbuckets |
                             console_op |
-                            use) connection_selector? SEMI;
+                            use |
+                            connections) connection_selector? SEMI;
 
 connection_selector:
     AT connname=ID;
 
-console_op: get | set | loadscript | script | connections;
+console_op: get | set | loadscript | script;
 
 connections: CONNS;
 
