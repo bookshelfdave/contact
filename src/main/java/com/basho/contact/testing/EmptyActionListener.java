@@ -94,4 +94,20 @@ public class EmptyActionListener implements ContactActionListener {
     public void evalScript(String script) {
 
     }
+
+    public void preConnections(ConnectionsParams.Pre params) {
+
+    }
+
+    public void postConnections(ConnectionsParams.Post params) {
+
+    }
+
+    public void preCountKeys(CountKeysParams.Pre params) {
+
+    }
+
+    public void postCountKeys(CountKeysParams.Post params) {
+
+    }
 }
