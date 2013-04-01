@@ -412,7 +412,9 @@ query with
 ~%~;
 </code></pre>
 
-<p>And here's a more in depth example that renderes sections of a JSON doc:</p>
+<h4>Processing JSON</h4>
+
+<p>Here's a more in depth example that renderes sections of a JSON doc:</p>
 
 <pre><code>use bucket "Foo";
 
@@ -480,7 +482,53 @@ Address:
 
 <p>The key function in the postfetch action above is <code>JSON.parse(v)</code>, which turns evaluates a string and returns a Javascript object.</p>
 
-<p>I hope to have a "Cookbook" section on the Contact wiki eventually, but in the meantime, you can check out the <a href="http://basho.github.com/riak-java-client/1.1.0/index.html">Javadocs for the Riak Java Client</a> for available methods.</p>
+<h4>Processing XML</h4>
+
+<p>Mozilla Rhino comes with E4X embedded, so you can make scripts such as:</p>
+
+<pre><code>use bucket "Users";
+
+store "XMLTest1" with xml
+~%~
+&lt;users&gt;
+    &lt;user&gt;
+      &lt;firstname&gt;Dave&lt;/firstname&gt;
+      &lt;lastname&gt;Parfitt&lt;/lastname&gt;
+      &lt;address&gt;
+        &lt;line1&gt;21 2nd Street&lt;/line1&gt;
+        &lt;line2&gt;Apt 3k&lt;/line2&gt;
+        &lt;city&gt;Buffalo&lt;/city&gt;
+        &lt;state&gt;New York&lt;/state&gt;
+        &lt;postalcode&gt;10021&lt;/postalcode&gt;
+      &lt;/address&gt;
+    &lt;/user&gt;
+    &lt;user&gt;
+      &lt;firstname&gt;John&lt;/firstname&gt;
+      &lt;lastname&gt;Smith&lt;/lastname&gt;
+      &lt;address&gt;
+        &lt;line1&gt;21 3nd Street&lt;/line1&gt;
+        &lt;line2&gt;Apt 3d&lt;/line2&gt;
+        &lt;city&gt;Albany&lt;/city&gt;
+        &lt;state&gt;New York&lt;/state&gt;
+        &lt;postalcode&gt;10025&lt;/postalcode&gt;
+      &lt;/address&gt;
+    &lt;/user&gt;
+&lt;/users&gt;
+~%~;
+
+//https://developer.mozilla.org/en-US/docs/JavaScript/Server-Side_JavaScript/Walkthrough
+//https://developer.mozilla.org/en-US/docs/E4X_Tutorial
+set action postfetch with javascript 
+~%~
+if(riak_object != undefined) {
+    var v = riak_object.getValueAsString();
+    var users = new XML(v)
+    println(users.user[0].firstname);
+}
+~%~;
+
+fetch "XMLTest1";
+</code></pre>
 
 <h4>Available actions</h4>
 
