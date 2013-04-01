@@ -375,7 +375,9 @@ set action postfetch with javascript
 ~%~;
 ```
 
-And here's a more in depth example that renderes sections of a JSON doc:
+#### Processing JSON
+
+Here's a more in depth example that renderes sections of a JSON doc:
 
 ```
 use bucket "Foo";
@@ -445,7 +447,55 @@ Address:
 
 The key function in the postfetch action above is `JSON.parse(v)`, which turns evaluates a string and returns a Javascript object.
 
-I hope to have a "Cookbook" section on the Contact wiki eventually, but in the meantime, you can check out the [Javadocs for the Riak Java Client](http://basho.github.com/riak-java-client/1.1.0/index.html) for available methods.
+#### Processing XML
+
+Mozilla Rhino comes with E4X embedded, so you can make scripts such as:
+
+```
+use bucket "Users";
+
+store "XMLTest1" with xml
+~%~
+<users>
+    <user>
+      <firstname>Dave</firstname>
+      <lastname>Parfitt</lastname>
+      <address>
+        <line1>21 2nd Street</line1>
+        <line2>Apt 3k</line2>
+        <city>Buffalo</city>
+        <state>New York</state>
+        <postalcode>10021</postalcode>
+      </address>
+    </user>
+    <user>
+      <firstname>John</firstname>
+      <lastname>Smith</lastname>
+      <address>
+        <line1>21 3nd Street</line1>
+        <line2>Apt 3d</line2>
+        <city>Albany</city>
+        <state>New York</state>
+        <postalcode>10025</postalcode>
+      </address>
+    </user>
+</users>
+~%~;
+
+//https://developer.mozilla.org/en-US/docs/JavaScript/Server-Side_JavaScript/Walkthrough
+//https://developer.mozilla.org/en-US/docs/E4X_Tutorial
+set action postfetch with javascript 
+~%~
+if(riak_object != undefined) {
+    var v = riak_object.getValueAsString();
+    var users = new XML(v)
+    println(users.user[0].firstname);
+}
+~%~;
+
+fetch "XMLTest1";
+```
+
 
 
 ####Available actions
