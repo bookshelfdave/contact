@@ -19,7 +19,7 @@ See the TODO section below.
 
 ## Language Grammer
 
-See: [Contact.g4](https://github.com/metadave/contact/blob/master/src/com/basho/contact/Contact.g4)
+See: [Contact.g4](https://github.com/metadave/contact/blob/master/src/main/java/com/basho/contact/parser/Contact.g4)
 
 Contact uses an Antlr 4 grammar under the hood for all lexical + semantic goodness.
 
