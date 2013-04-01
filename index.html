@@ -895,6 +895,24 @@ var println = function(s) { out.println(s); };
 list keys;
 </code></pre>
 
+<h2>Counting Keys in a Bucket</h2>
+
+<pre><code>using bucket "Foo" count keys;
+</code></pre>
+
+<p>or</p>
+
+<pre><code>use bucket "Foo";
+count keys;
+</code></pre>
+
+<p>Example:</p>
+
+<pre><code>&gt; using bucket "Google" count keys;
+Counting keys for Google...
+Bucket Google contains 1438 keys
+</code></pre>
+
 <h2>Command Line Parameters</h2>
 
 <pre><code>./contact.sh --help
@@ -939,6 +957,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 <ul>
 <li>TESTING TESTING TESTING</li>
+<li>delete bucket</li>
 <li>bucket properties via pb</li>
 <li>implement Javascript resolvers + retiers</li>
 <li>clean up mr syntax + implementation</li>
