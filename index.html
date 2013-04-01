@@ -395,7 +395,7 @@ query with
 
 <pre><code>set action postfetch with javascript 
 ~%~
-  if(riak_object != undefined) { out.println(riak_object.getValueAsString()); }
+  if(riak_object != undefined) { println(riak_object.getValueAsString()); }
 ~%~;
 </code></pre>
 
@@ -408,7 +408,7 @@ query with
 
 <pre><code>set action postfetch with javascript 
 ~%~
-  if(riak_object != undefined) { out.println(riak_object.getLastModified()); }
+  if(riak_object != undefined) { println(riak_object.getLastModified()); }
 ~%~;
 </code></pre>
 
@@ -452,10 +452,10 @@ set action postfetch with javascript
 if(riak_object != undefined) { 
     var v = riak_object.getValueAsString(); 
     var j = JSON.parse(v);
-    out.println(j.firstName + " " + j.lastName);
-    out.println("Address:");
-    out.println("   " + j.address.streetAddress);
-    out.println("   " + j.address.city + 
+    println(j.firstName + " " + j.lastName);
+    println("Address:");
+    println("   " + j.address.streetAddress);
+    println("   " + j.address.city +
                     ", " + j.address.state +
                     " " + j.address.postalCode);
 }
@@ -487,8 +487,7 @@ Address:
 <p>All scripts have <code>out</code> and <code>err</code> available to them for writing.</p>
 
 <ul>
-<li>
-<p>All actions have these parameters:</p>
+<li>All actions have these parameters:
 
 <ul>
 <li>out : <a href="http://docs.oracle.com/javase/7/docs/api/java/io/PrintWriter.html">java.io.PrintWriter</a>
@@ -497,6 +496,13 @@ Address:
 </li>
 </ul>
 </li>
+</ul><p>In addition, the 2 following convenience functions are setup for you:</p>
+
+<pre><code>var print = function(s) { out.print(s); };
+var println = function(s) { out.println(s); };
+</code></pre>
+
+<ul>
 <li>
 <p><strong>listkeys</strong></p>
 
@@ -854,12 +860,12 @@ Address:
 
 <p>To execute arbitrary Javascript:</p>
 
-<pre><code>    script "out.println('hello world');"
+<pre><code>    script "println('hello world');"
 
     // OR
 
     script ~%~
-        out.println("hello world!");
+        println("hello world!");
     ~%~;
 </code></pre>
 
