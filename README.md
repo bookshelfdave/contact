@@ -303,6 +303,40 @@ query2i and fetch with index "year_int" and value "2010";
 ```
 		
 See [Contact Sample Data](https://github.com/metadave/contact_sample_data) for an example 2i query with custom rendered JSON output.
+
+## Listing Buckets
+
+*Listing buckets should NOT be used on any production system*
+
+	list buckets;
+
+## Listing Keys
+
+*Listing keys should NOT be used on any production system*
+
+	using bucket "Foo" list keys;
+
+or
+
+	use bucket "Foo";
+	list keys;
+
+## Counting Keys in a Bucket
+
+	using bucket "Foo" count keys;
+	
+or
+
+	use bucket "Foo";
+	count keys;
+
+Example:
+
+```
+> using bucket "Google" count keys;
+Counting keys for Google...
+Bucket Google contains 1438 keys
+```
 		
 	
 ## Map/Reduce
@@ -717,39 +751,6 @@ To execute arbitrary Javascript:
 These will also be customizable with Javascript.
 
 
-## Listing Buckets
-
-*Listing buckets should NOT be used on any production system*
-
-	list buckets;
-
-## Listing Keys
-
-*Listing keys should NOT be used on any production system*
-
-	using bucket "Foo" list keys;
-
-or
-
-	use bucket "Foo";
-	list keys;
-
-## Counting Keys in a Bucket
-
-	using bucket "Foo" count keys;
-	
-or
-
-	use bucket "Foo";
-	count keys;
-
-Example:
-
-```
-> using bucket "Google" count keys;
-Counting keys for Google...
-Bucket Google contains 1438 keys
-```
 
 ## Command Line Parameters
 
