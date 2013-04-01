@@ -348,6 +348,44 @@ query2i with index "range_int" from "1" to "2";
 
 <p>See <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> for an example 2i query with custom rendered JSON output.</p>
 
+<h2>Listing Buckets</h2>
+
+<p><em>Listing buckets should NOT be used on any production system</em></p>
+
+<pre><code>list buckets;
+</code></pre>
+
+<h2>Listing Keys</h2>
+
+<p><em>Listing keys should NOT be used on any production system</em></p>
+
+<pre><code>using bucket "Foo" list keys;
+</code></pre>
+
+<p>or</p>
+
+<pre><code>use bucket "Foo";
+list keys;
+</code></pre>
+
+<h2>Counting Keys in a Bucket</h2>
+
+<pre><code>using bucket "Foo" count keys;
+</code></pre>
+
+<p>or</p>
+
+<pre><code>use bucket "Foo";
+count keys;
+</code></pre>
+
+<p>Example:</p>
+
+<pre><code>&gt; using bucket "Google" count keys;
+Counting keys for Google...
+Bucket Google contains 1438 keys
+</code></pre>
+
 <h2>Map/Reduce</h2>
 
 <p><strong>NOT IMPLEMENTED</strong> at the moment</p>
@@ -1044,44 +1082,6 @@ var println = function(s) { out.println(s); };
 <p><strong>TODO</strong></p>
 
 <p>These will also be customizable with Javascript.</p>
-
-<h2>Listing Buckets</h2>
-
-<p><em>Listing buckets should NOT be used on any production system</em></p>
-
-<pre><code>list buckets;
-</code></pre>
-
-<h2>Listing Keys</h2>
-
-<p><em>Listing keys should NOT be used on any production system</em></p>
-
-<pre><code>using bucket "Foo" list keys;
-</code></pre>
-
-<p>or</p>
-
-<pre><code>use bucket "Foo";
-list keys;
-</code></pre>
-
-<h2>Counting Keys in a Bucket</h2>
-
-<pre><code>using bucket "Foo" count keys;
-</code></pre>
-
-<p>or</p>
-
-<pre><code>use bucket "Foo";
-count keys;
-</code></pre>
-
-<p>Example:</p>
-
-<pre><code>&gt; using bucket "Google" count keys;
-Counting keys for Google...
-Bucket Google contains 1438 keys
-</code></pre>
 
 <h2>Command Line Parameters</h2>
 
