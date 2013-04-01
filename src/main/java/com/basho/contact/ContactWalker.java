@@ -257,6 +257,8 @@ public class ContactWalker extends ContactBaseListener {
             bucketOptions = runtimeCtx.getCurrentQuery2iOptions();
         } else if (ctx.listkeys() != null) {
             o = getValue(ctx.listkeys());
+        } else if(ctx.countkeys() != null) {
+            o = getValue(ctx.countkeys());
         }
 
         if (o instanceof RiakCommand) {
@@ -513,6 +515,12 @@ public class ContactWalker extends ContactBaseListener {
         }
 
         super.exitUseBucketOptions(ctx);
+    }
+
+    @Override
+    public void exitCountkeys(CountkeysContext ctx) {
+        CountKeysCommand cmd = new CountKeysCommand();
+        setValue(ctx, cmd);
     }
 
     @Override

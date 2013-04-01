@@ -632,6 +632,22 @@ or
 	use bucket "Foo";
 	list keys;
 
+## Counting Keys in a Bucket
+
+	using bucket "Foo" count keys;
+	
+or
+
+	use bucket "Foo";
+	count keys;
+
+Example:
+
+```
+> using bucket "Google" count keys;
+Counting keys for Google...
+Bucket Google contains 1438 keys
+```
 
 ## Command Line Parameters
 
@@ -674,6 +690,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 #TODO
 * TESTING TESTING TESTING
+* delete bucket
 * bucket properties via pb
 * implement Javascript resolvers + retiers
 * clean up mr syntax + implementation

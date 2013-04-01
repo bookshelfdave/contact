@@ -73,4 +73,8 @@ public interface ContactActionListener {
 
     public void postConnections(ConnectionsParams.Post params);
 
+    public void preCountKeys(CountKeysParams.Pre params);
+
+    public void postCountKeys(CountKeysParams.Post params);
+
 }

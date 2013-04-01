@@ -26,13 +26,15 @@ using       :   USING BUCKET bucket=STRING op_with_options;
 
 with        :   (WITH | AND);
 
-op_with_options: (fetch | store | delete | query2i | listkeys) options?;
+op_with_options: (fetch | store | delete | query2i | listkeys | countkeys) options?;
 
 options: with OPTIONS (optionslist | ID);
 
 listbuckets:   LIST BUCKETS;
 
 listkeys:      LIST KEYS;
+
+countkeys:     COUNT KEYS;
 
 optionslist: opts+=pair (COMMA opts+=pair)*;
 
@@ -104,6 +106,7 @@ OR          :    'or';
 NOT         :    'not';
 OPTIONS     :    'options';
 QUERY2I     :    'query2i';
+COUNT       :    'count';
 MAP         :    'map';
 REDUCE      :    'reduce';
 LINK        :    'link';

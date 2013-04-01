@@ -67,6 +67,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterConnections(ContactParser.ConnectionsContext ctx) { }
 	@Override public void exitConnections(ContactParser.ConnectionsContext ctx) { }
 
+	@Override public void enterCountkeys(ContactParser.CountkeysContext ctx) { }
+	@Override public void exitCountkeys(ContactParser.CountkeysContext ctx) { }
+
 	@Override public void enterContent_string(ContactParser.Content_stringContext ctx) { }
 	@Override public void exitContent_string(ContactParser.Content_stringContext ctx) { }
 

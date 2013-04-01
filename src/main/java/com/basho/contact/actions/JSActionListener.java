@@ -66,31 +66,12 @@ public class JSActionListener implements ContactActionListener {
     public static String POSTCONNECT = "postconnect";
     public static String PRECONNECTIONS = "preconnections";
     public static String POSTCONNECTIONS = "postconnections";
-
+    public static String PRECOUNTKEYS = "precountkeys";
+    public static String POSTCOUNTKEYS = "postcountkeys";
 
     Context jsctx = null;
     Scriptable jsscope = null;
-    // skip getters and setters, they are just taking up space
-    private String postFetchBody = "if(riak_object != undefined) { println(riak_object.getValueAsString()); }";
-    private String preFetchBody = "";
-    private String preStoreBody = "";
-    private String postStoreBody = "if(riak_object != undefined) { println(riak_object.getValueAsString()); }";
-    private String preDeleteBody = "";
-    private String postDeleteBody = "";
-    private String preQuery2iBody = "";
-    private String postQuery2iBody = "if(results != undefined && doFetch == false) { println(results); }";
-    private String preMapredBody = "";
-    private String postMapredBody = "";
-    private String preListBucketsBody = "";
-    private String postListBucketsBody = "println(buckets);";
-    private String preListKeysBody = "";
-    private String postListKeysBody = "for(var i = 0; i < keys.size(); i++) { println(keys.get(i)); }";
-    private String preGetBucketProps = "";
-    private String postGetBucketProps = "";
-    private String preConnectBody = "";
-    private String postConnectBody = "println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);";
-    private String preConnectionsBody = "";
-    private String postConnectionsBody = "println('Connections'); println(connections);";
+
     private RuntimeContext runtimeCtx = null;
     private Map<String, String> js = new HashMap<String, String>();
 
@@ -112,26 +93,30 @@ public class JSActionListener implements ContactActionListener {
     }
 
     private void setupDefaults() {
-        js.put(PREFETCH, preFetchBody);
-        js.put(POSTFETCH, postFetchBody);
-        js.put(PRESTORE, preStoreBody);
-        js.put(POSTSTORE, postStoreBody);
-        js.put(PREDELETE, preDeleteBody);
-        js.put(POSTDELETE, postDeleteBody);
-        js.put(PREQUERY2I, preQuery2iBody);
-        js.put(POSTQUERY2I, postQuery2iBody);
-        js.put(PREMAPRED, preMapredBody);
-        js.put(POSTMAPRED, postMapredBody);
-        js.put(PRELISTBUCKETS, preListBucketsBody);
-        js.put(POSTLISTBUCKETS, postListBucketsBody);
-        js.put(PRELISTKEYS, preListKeysBody);
-        js.put(POSTLISTKEYS, postListKeysBody);
-        js.put(PREGETBUCKETPROPS, preGetBucketProps);
-        js.put(POSTGETBUCKETPROPS, postGetBucketProps);
-        js.put(PRECONNECT, preConnectBody);
-        js.put(POSTCONNECT, postConnectBody);
-        js.put(PRECONNECTIONS, preConnectionsBody);
-        js.put(POSTCONNECTIONS, postConnectionsBody);
+        js.put(PREFETCH, "");
+        js.put(POSTFETCH, "if(riak_object != undefined) { println(riak_object.getValueAsString()); }");
+        js.put(PRESTORE, "");
+        js.put(POSTSTORE, "if(riak_object != undefined) { println(riak_object.getValueAsString()); }");
+        js.put(PREDELETE, "");
+        js.put(POSTDELETE, "");
+        js.put(PREQUERY2I, "");
+        js.put(POSTQUERY2I, "if(results != undefined && doFetch == false) { println(results); }");
+        js.put(PREMAPRED, "");
+        js.put(POSTMAPRED, "");
+        js.put(PRELISTBUCKETS, "");
+        js.put(POSTLISTBUCKETS, "println(buckets);");
+        js.put(PRELISTKEYS, "");
+        js.put(POSTLISTKEYS, "for(var i = 0; i < keys.size(); i++) { println(keys.get(i)); }");
+        js.put(PREGETBUCKETPROPS, "");
+        js.put(POSTGETBUCKETPROPS, "");
+        js.put(PRECONNECT, "");
+        js.put(POSTCONNECT, "println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);");
+        js.put(PRECONNECTIONS, "");
+        js.put(POSTCONNECTIONS, "println('Connections'); println(connections);");
+        js.put(PRECONNECTIONS, "");
+        js.put(POSTCONNECTIONS, "println('Connections'); println(connections);");
+        js.put(PRECOUNTKEYS, "println('Counting keys for ' + bucket + '...');");
+        js.put(POSTCOUNTKEYS, "println('Bucket ' + bucket + ' contains ' + keycount + ' keys');");
     }
 
     public void setJSBody(String name, String body) {
@@ -292,5 +277,13 @@ public class JSActionListener implements ContactActionListener {
 
     public void postConnections(ConnectionsParams.Post params) {
         evalWithParams(params, POSTCONNECTIONS);
+    }
+
+    public void preCountKeys(CountKeysParams.Pre params) {
+        evalWithParams(params, PRECOUNTKEYS);
+    }
+
+    public void postCountKeys(CountKeysParams.Post params) {
+        evalWithParams(params, POSTCOUNTKEYS);
     }
 }
