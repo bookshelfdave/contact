@@ -107,6 +107,11 @@ Otherwise, all commands that require a bucket will need to be prefixed with:
 	
 	using bucket "Foo" … 
 
+To see the current bucket that you're using:
+
+	get bucket;
+	
+
 ### Use with default options
 
 You can specify default options to use for `fetch`, `store`, `delete` and `query2i`. Any
