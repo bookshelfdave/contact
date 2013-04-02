@@ -35,7 +35,8 @@ public class CountKeysCommand extends BucketCommand<VoidSymbol, CountKeysParams.
             postParams.bucket = this.params.bucket;
             runtimeCtx.getActionListener().postCountKeys(postParams);
         } catch (RiakException e) {
-            e.printStackTrace();
+            runtimeCtx.appendError(e);
+
         }
         return new VoidSymbol();
     }

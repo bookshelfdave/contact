@@ -198,8 +198,6 @@ public class ContactWalker extends ContactBaseListener {
     public void exitGet(GetContext ctx) {
         if (ctx.get_action() != null) {
             setValue(ctx, getValue(ctx.get_action()));
-        } else if (ctx.get_bucketprops() != null) {
-            setValue(ctx, getValue(ctx.get_bucketprops()));
         }
         super.exitGet(ctx);
     }
@@ -259,6 +257,8 @@ public class ContactWalker extends ContactBaseListener {
             o = getValue(ctx.listkeys());
         } else if(ctx.countkeys() != null) {
             o = getValue(ctx.countkeys());
+        } else if(ctx.get_bucketprops() != null) {
+            o = getValue(ctx.get_bucketprops());
         }
 
         if (o instanceof RiakCommand) {

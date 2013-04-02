@@ -304,6 +304,25 @@ query2i and fetch with index "year_int" and value "2010";
 		
 See [Contact Sample Data](https://github.com/metadave/contact_sample_data) for an example 2i query with custom rendered JSON output.
 
+## Fetching Bucket Properties
+
+To fetch a map of bucket properties, use:
+
+	using bucket "Foo" get properties;
+
+or
+
+	use bucket "Foo";
+	get properties;
+	
+
+```
+> using bucket "Foo" get properties;
+
+{dw=null, basic_quorum=null, not_found_ok=null, small_vclock=null, young_vclock=null, w=null, backend=null, r=null, search=null, allow_siblings=false, name=Foo, last_write_wins=null, post_commit_hooks=[], n_val=3, pw=null, pre_commit_hooks=[], old_vclock=null, rw=null, pr=null}
+```
+
+
 ## Listing Buckets
 
 *Listing buckets should NOT be used on any production system*

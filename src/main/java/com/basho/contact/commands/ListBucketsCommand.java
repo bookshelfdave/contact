@@ -50,7 +50,7 @@ public class ListBucketsCommand extends RiakCommand<StringSetSymbol, ListBuckets
             StringSetSymbol result = new StringSetSymbol(buckets);
             return result;
         } catch (RiakException e) {
-            e.printStackTrace();
+            runtimeCtx.appendError(e);
         }
 
         return null;

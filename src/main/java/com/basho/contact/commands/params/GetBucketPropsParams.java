@@ -23,6 +23,9 @@
 package com.basho.contact.commands.params;
 
 import com.basho.contact.actions.ActionParams;
+import com.basho.contact.actions.Binding;
+
+import java.util.Map;
 
 public class GetBucketPropsParams {
     public static class Pre extends ActionParams {
@@ -30,6 +33,7 @@ public class GetBucketPropsParams {
     }
 
     public static class Post extends ActionParams {
-
+        @Binding(name="bucket_props")
+        public Map<String, Object> bucket_props;
     }
 }

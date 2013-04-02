@@ -159,7 +159,6 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
 //					}
             return result;
         } catch (RiakRetryFailedException e) {
-            e.printStackTrace();
             runtimeCtx.appendError("Can't store object in bucket", e);
             return null;
         }

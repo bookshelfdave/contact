@@ -6,11 +6,11 @@ prog        :  (stat)+ EOF;
 /*  connection_selector might be better off somewhere else, as some commands
     don't make sense with it */
 stat        :  assignment? (connect |
+                            use |
                             using |
                             op_with_options |
                             listbuckets |
                             console_op |
-                            use |
                             connections) connection_selector? SEMI;
 
 connection_selector:
@@ -26,7 +26,14 @@ using       :   USING BUCKET bucket=STRING op_with_options;
 
 with        :   (WITH | AND);
 
-op_with_options: (fetch | store | delete | query2i | listkeys | countkeys) options?;
+op_with_options: (  fetch     |
+                    store     |
+                    delete    |
+                    query2i   |
+                    listkeys  |
+                    countkeys |
+                    get_bucketprops
+                  ) options?;
 
 options: with OPTIONS (optionslist | ID);
 
@@ -63,15 +70,17 @@ useBucketOptions:
         (with QUERY2I OPTIONS query2iOptions=optionslist)?
         ;
 
+get_bucketprops: GET PROPERTIES;
+
 connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?) (AS connname=ID)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
 
-get: GET (get_action | get_bucketprops | BUCKET);
+get: GET (get_action | BUCKET);
 
 get_action: ACTION actionname=ID;
-get_bucketprops: BUCKET PROPERTIES;
+
 
 loadscript: LOAD SCRIPT filename=STRING;
 script: SCRIPT content=(STRING | DATA_CONTENT);

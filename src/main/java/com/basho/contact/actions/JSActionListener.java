@@ -108,7 +108,7 @@ public class JSActionListener implements ContactActionListener {
         js.put(PRELISTKEYS, "");
         js.put(POSTLISTKEYS, "for(var i = 0; i < keys.size(); i++) { println(keys.get(i)); }");
         js.put(PREGETBUCKETPROPS, "");
-        js.put(POSTGETBUCKETPROPS, "");
+        js.put(POSTGETBUCKETPROPS, "if(bucket_props != undefined) { println(bucket_props); }");
         js.put(PRECONNECT, "");
         js.put(POSTCONNECT, "println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);");
         js.put(PRECONNECTIONS, "");
