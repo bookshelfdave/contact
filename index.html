@@ -348,6 +348,24 @@ query2i with index "range_int" from "1" to "2";
 
 <p>See <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> for an example 2i query with custom rendered JSON output.</p>
 
+<h2>Fetching Bucket Properties</h2>
+
+<p>To fetch a map of bucket properties, use:</p>
+
+<pre><code>using bucket "Foo" get properties;
+</code></pre>
+
+<p>or</p>
+
+<pre><code>use bucket "Foo";
+get properties;
+</code></pre>
+
+<pre><code>&gt; using bucket "Foo" get properties;
+
+{dw=null, basic_quorum=null, not_found_ok=null, small_vclock=null, young_vclock=null, w=null, backend=null, r=null, search=null, allow_siblings=false, name=Foo, last_write_wins=null, post_commit_hooks=[], n_val=3, pw=null, pre_commit_hooks=[], old_vclock=null, rw=null, pr=null}
+</code></pre>
+
 <h2>Listing Buckets</h2>
 
 <p><em>Listing buckets should NOT be used on any production system</em></p>
