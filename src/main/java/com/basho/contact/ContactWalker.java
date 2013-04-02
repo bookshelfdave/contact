@@ -188,9 +188,7 @@ public class ContactWalker extends ContactBaseListener {
             setValue(ctx, getValue(ctx.get()));
         } else if (ctx.set() != null) {
             setValue(ctx, getValue(ctx.set()));
-        } /*else if (ctx.show() != null) {
-            setValue(ctx, getValue(ctx.show()));
-        }   */
+        }
         super.exitConsole_op(ctx);
     }
 
@@ -198,8 +196,15 @@ public class ContactWalker extends ContactBaseListener {
     public void exitGet(GetContext ctx) {
         if (ctx.get_action() != null) {
             setValue(ctx, getValue(ctx.get_action()));
+        } else if(ctx.BUCKET() != null) {
+                // TODO: This would be better in stmt.
+                GetBucketCommand cmd = new GetBucketCommand();
+                cmd.params.bucket = runtimeCtx.getCurrentBucket();
+                cmd.params.ctx = runtimeCtx;
+                ContactSymbol<?> sym = cmd.doExec(runtimeCtx);
+                runtimeCtx.lastResult = sym;
+                setValue(ctx, sym);
         }
-        super.exitGet(ctx);
     }
 
     @Override

@@ -109,44 +109,24 @@ CONNECT     :    'connect';
 USE         :    'use';
 USING       :    'using';
 WITH        :    'with';
-BUCKET      :    'bucket';
 AND         :    'and';
-OR          :    'or';
-NOT         :    'not';
+BUCKET      :    'bucket';
 OPTIONS     :    'options';
 QUERY2I     :    'query2i';
 COUNT       :    'count';
-MAP         :    'map';
-REDUCE      :    'reduce';
-LINK        :    'link';
-MAPRED      :    'mapred';
 FROM        :    'from';
 INDEX       :    'index';
 TO          :    'to';
-INPUTS      :    'inputs';
-FILTERS     :    'filters';
-KEEP        :    'keep';
 JAVASCRIPT  :    'javascript';
-ERLANG      :    'erlang';
-JAVA        :    'java';
-PHASE       :    'phase';
-//SHOW        :    'show';
-DETAIL      :    'detail';
 PROPERTIES  :    'properties';
 LOAD        :    'load';
 SCRIPT      :    'script';
 LIST        :    'list';
 BUCKETS     :    'buckets';
 KEYS        :    'keys';
-
 TRUE        :    'true';
 FALSE       :    'false';
-
-//FOR         :    'for';
-//IN          :    'in';
-//PRINT       :    'print';
 DEFAULT     :    'default';
-
 SET         :    'set';
 GET         :    'get';
 ACTION      :    'action';
@@ -154,7 +134,6 @@ AS          :    'as';
 JSON        :    'json';
 TEXT        :    'text';
 XML         :    'xml';
-
 AT          :    '@';
 COMMA       :    ',';
 LSQUARE     :    '[';
@@ -162,9 +141,19 @@ RSQUARE     :    ']';
 LPAREN      :    '(';
 RPAREN      :    ')';
 EQUALS      :    '=';
+DOT         :    '.';
 SEMI        :    ';';
-ID          :       [a-z][A-Za-z_]*;
-INT         :       [0-9]+;
+ID          :       LOWER (UPPER | LOWER)*;
+
+fragment LOWER : 'a' .. 'z';
+fragment UPPER : 'A' .. 'Z';
+
+INT             :   DIGIT+;
+fragment DIGIT  : '0' .. '9';
+
+FLOAT       :       DIGIT+ DOT DIGIT*
+                    | DOT DIGIT+
+                       ;
 
 STRING  :  '"' (ESC|.)*? '"';
 fragment ESC : '\\"' | '\\\\' ;

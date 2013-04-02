@@ -68,6 +68,8 @@ public class JSActionListener implements ContactActionListener {
     public static String POSTCONNECTIONS = "postconnections";
     public static String PRECOUNTKEYS = "precountkeys";
     public static String POSTCOUNTKEYS = "postcountkeys";
+    public static String PREGETBUCKET = "pregetbucket";
+    public static String POSTGETBUCKET = "postgetbucket";
 
     Context jsctx = null;
     Scriptable jsscope = null;
@@ -117,6 +119,8 @@ public class JSActionListener implements ContactActionListener {
         js.put(POSTCONNECTIONS, "println('Connections'); println(connections);");
         js.put(PRECOUNTKEYS, "println('Counting keys for ' + bucket + '...');");
         js.put(POSTCOUNTKEYS, "println('Bucket ' + bucket + ' contains ' + keycount + ' keys');");
+        js.put(PREGETBUCKET, "");
+        js.put(POSTGETBUCKET, "println(bucket);");
     }
 
     public void setJSBody(String name, String body) {
@@ -285,5 +289,13 @@ public class JSActionListener implements ContactActionListener {
 
     public void postCountKeys(CountKeysParams.Post params) {
         evalWithParams(params, POSTCOUNTKEYS);
+    }
+
+    public void preGetBucket(GetBucketParams.Pre params) {
+        evalWithParams(params, PREGETBUCKET);
+    }
+
+    public void postGetBucket(GetBucketParams.Post params) {
+        evalWithParams(params, POSTGETBUCKET);
     }
 }

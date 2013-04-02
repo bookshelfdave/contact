@@ -110,4 +110,12 @@ public class EmptyActionListener implements ContactActionListener {
     public void postCountKeys(CountKeysParams.Post params) {
 
     }
+
+    public void preGetBucket(GetBucketParams.Pre params) {
+
+    }
+
+    public void postGetBucket(GetBucketParams.Post params) {
+
+    }
 }
