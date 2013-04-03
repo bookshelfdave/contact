@@ -22,18 +22,20 @@
 
 package com.basho.contact.commands;
 
-public class SetBucketPropsCommand {
+import com.basho.contact.BucketCommand;
+import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.params.SetBucketPropsParams;
+import com.basho.contact.symbols.VoidSymbol;
+
+public class SetBucketPropsCommand extends BucketCommand<VoidSymbol, SetBucketPropsParams.Pre> {
 
     public SetBucketPropsCommand() {
-        super();
+        super("set bucket properties", SetBucketPropsParams.Pre.class);
     }
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
+    @Override
+    protected VoidSymbol bucketExec(RuntimeContext runtimeCtx, String bucket) {
+        //conn.createBucket("Foo").
+        return null;
     }
-
 }

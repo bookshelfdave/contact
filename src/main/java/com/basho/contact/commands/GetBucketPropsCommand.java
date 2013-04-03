@@ -77,6 +77,7 @@ public class GetBucketPropsCommand extends BucketCommand<VoidSymbol, GetBucketPr
 
             //TODO: look into why one is NamedErlangFunction and the other is just NamedFunction
             List<String> preCommitHooks = new ArrayList<String>();
+
             if(b.getPrecommitHooks() != null) {
                 for(NamedFunction f : b.getPrecommitHooks()) {
                     preCommitHooks.add(f.toString());

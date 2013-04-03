@@ -27,10 +27,8 @@ import com.basho.contact.parser.ContactBaseListener;
 import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.ContactParser.*;
 import com.basho.contact.symbols.ContactSymbol;
-import junit.framework.Assert;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -314,7 +312,8 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitContent_string(Content_stringContext ctx) {
-        // content_string: (TEXT | JSON | XML) (STRING | DATA_CONTENT);
+        // content_string: (TEXT | JSON | XML | user_content) (STRING | DATA_CONTENT);
+
         String value = "";
 
         if (ctx.STRING() != null) {
@@ -324,14 +323,23 @@ public class ContactWalker extends ContactBaseListener {
         }
 
         if (ctx.JSON() != null) {
-            setValue(ctx, new Content(Constants.ContentType.JSON, value));
+            setValue(ctx, new Content(Content.ContentType.JSON, value));
         } else if (ctx.TEXT() != null) {
-            setValue(ctx, new Content(Constants.ContentType.TEXT, value));
+            setValue(ctx, new Content(Content.ContentType.TEXT, value));
         } else if (ctx.XML() != null) {
-            setValue(ctx, new Content(Constants.ContentType.XML, value));
+            setValue(ctx, new Content(Content.ContentType.XML, value));
+        } else if(ctx.user_content() != null) {
+            String userDefinedContentType = (String)getValue(ctx.user_content());
+            setValue(ctx, new Content(Content.ContentType.USER_DEFINED, userDefinedContentType, value));
         }
 
         super.exitContent_string(ctx);
+    }
+
+    @Override
+    public void exitUser_content(User_contentContext ctx) {
+        //user_content: CONTENTTYPE content_type=STRING AND
+        setValue(ctx, stripQuotes(ctx.content_type.getText()));
     }
 
     @Override

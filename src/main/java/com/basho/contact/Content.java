@@ -23,20 +23,36 @@
 package com.basho.contact;
 
 public class Content {
-    private Constants.ContentType contentType = null;
+    private ContentType contentType = null;
+    private String userDefinedContentType;
     private String value = null;
 
-    public Content(Constants.ContentType contentType, String value) {
+    public Content(ContentType contentType, String value) {
         super();
         this.contentType = contentType;
         this.value = value;
     }
 
-    public Constants.ContentType getContentType() {
+    public Content(ContentType contentType, String userDefinedContentType, String value) {
+        super();
+        this.contentType = contentType;
+        this.userDefinedContentType = userDefinedContentType;
+        this.value = value;
+    }
+
+    public ContentType getContentType() {
         return contentType;
     }
 
-    public void setContentType(Constants.ContentType contentType) {
+    public String getUserDefinedContentType() {
+        return userDefinedContentType;
+    }
+
+    public void setUserDefinedContentType(String userDefinedContentType) {
+        this.userDefinedContentType = userDefinedContentType;
+    }
+
+    public void setContentType(ContentType contentType) {
         this.contentType = contentType;
     }
 
@@ -52,4 +68,21 @@ public class Content {
         return "<<" + this.contentType + ":" + this.value + ">>";
     }
 
+    // todo: move to Content
+    public enum ContentType {
+        TEXT("text/plain"),
+        JSON("application/json"),
+        XML("application/xml"),
+        USER_DEFINED("");
+
+        private String contentType;
+
+        ContentType(String value) {
+            contentType = value;
+        }
+
+        public String toString() {
+            return contentType;
+        }
+    }
 }

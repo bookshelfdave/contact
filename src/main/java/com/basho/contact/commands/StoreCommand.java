@@ -22,10 +22,7 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.BucketCommand;
-import com.basho.contact.CommandUtils;
-import com.basho.contact.Pair;
-import com.basho.contact.RuntimeContext;
+import com.basho.contact.*;
 import com.basho.contact.commands.params.StoreParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakClient;
@@ -136,11 +133,17 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
         try {
             RiakObjectBuilder builder =
                     RiakObjectBuilder
-                            .newBuilder(params.bucket, params.key)
-                            .withContentType(params.content.getContentType().toString())
-                            .withValue(params.content.getValue());
+                            .newBuilder(params.bucket, params.key);
+            if(params.content.getContentType() == Content.ContentType.USER_DEFINED) {
+                builder = builder.withContentType(params.content.getUserDefinedContentType());
+            } else {
+                builder = builder.withContentType(params.content.getContentType().toString());
+            }
+
+            builder = builder.withValue(params.content.getValue());
             builder = addIndexes(builder);
             IRiakObject obj = builder.build();
+            System.out.println("Content type = " + obj.getContentType());
             // TODO: cache this
             Bucket b = conn.fetchBucket(params.bucket).execute();
             StoreObject<IRiakObject> so = processOptions(runtimeCtx,

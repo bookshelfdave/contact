@@ -53,7 +53,9 @@ store:    STORE (key=STRING | existing_obj=ID) store_indexes with content_string
 
 store_indexes: (with INDEX pair)*;
 
-content_string: (TEXT | JSON | XML) (STRING | DATA_CONTENT);
+content_string: (TEXT | JSON | XML | user_content) (STRING | DATA_CONTENT);
+
+user_content: CONTENTTYPE content_type=STRING AND;
 
 delete:    DELETE key=STRING;
 
@@ -92,6 +94,8 @@ pairValue: stringValue=STRING #PairStringValue
             | boolValue=bool  #PairBoolValue
             ;
 
+
+
 code_string: JAVASCRIPT (STRING | DATA_CONTENT);
 
 bool : TRUE | FALSE;
@@ -103,6 +107,7 @@ FETCH       :    'fetch';
 STORE       :    'store';
 DELETE      :    'delete';
 VALUE       :    'value';
+CONTENTTYPE :    'content-type';
 CONN        :    'connection';
 CONNS       :    'connections';
 CONNECT     :    'connect';

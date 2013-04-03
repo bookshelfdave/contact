@@ -41,6 +41,7 @@ public class StoreParams {
 
         @Binding(name = "content")
         public Content content;
+
     }
 
     public static class Post extends ActionParams {

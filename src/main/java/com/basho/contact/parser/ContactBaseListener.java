@@ -31,11 +31,11 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterPairStringValue(ContactParser.PairStringValueContext ctx) { }
 	@Override public void exitPairStringValue(ContactParser.PairStringValueContext ctx) { }
 
-	@Override public void enterOptionslist(ContactParser.OptionslistContext ctx) { }
-	@Override public void exitOptionslist(ContactParser.OptionslistContext ctx) { }
-
 	@Override public void enterSet(ContactParser.SetContext ctx) { }
 	@Override public void exitSet(ContactParser.SetContext ctx) { }
+
+	@Override public void enterOptionslist(ContactParser.OptionslistContext ctx) { }
+	@Override public void exitOptionslist(ContactParser.OptionslistContext ctx) { }
 
 	@Override public void enterQuery2i(ContactParser.Query2iContext ctx) { }
 	@Override public void exitQuery2i(ContactParser.Query2iContext ctx) { }
@@ -54,6 +54,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterProg(ContactParser.ProgContext ctx) { }
 	@Override public void exitProg(ContactParser.ProgContext ctx) { }
+
+	@Override public void enterUser_content(ContactParser.User_contentContext ctx) { }
+	@Override public void exitUser_content(ContactParser.User_contentContext ctx) { }
 
 	@Override public void enterDelete(ContactParser.DeleteContext ctx) { }
 	@Override public void exitDelete(ContactParser.DeleteContext ctx) { }
