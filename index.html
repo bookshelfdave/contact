@@ -228,6 +228,9 @@ using bucket "Foo"
 using bucket "Foo" 
     store "MyKey" 
     with xml "This is text";
+
+/* you can also define your own content type */
+store "MyKey" with content-type "text/csv" and "1,2,3,4";
 </code></pre>
 
 <p>Note, any double quotes appearing in the content string will need to be escaped. To store larger 
@@ -1150,15 +1153,15 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 <ul>
 <li>TESTING TESTING TESTING</li>
-<li>delete bucket</li>
+<li>update</li>
 <li>bucket properties via pb</li>
+<li>delete bucket</li>
 <li>implement Javascript resolvers + retiers</li>
 <li>clean up mr syntax + implementation</li>
 <li>Riak Search (Yokozuna integration)</li>
 <li>link walking</li>
 <li>load balancing</li>
 <li>user meta</li>
-<li>User content-types</li>
 <li>simple interactive web ui ala "Try Riak"</li>
 <li>Fix tab completion</li>
 <li>Pasting text into the shell erroneously kicks off tab completion</li>
