@@ -71,7 +71,7 @@ public class JSActionListener implements ContactActionListener {
     public static String PREGETBUCKET = "pregetbucket";
     public static String POSTGETBUCKET = "postgetbucket";
 
-    Context jsctx = null;
+
     Scriptable jsscope = null;
 
     private RuntimeContext runtimeCtx = null;
@@ -81,8 +81,8 @@ public class JSActionListener implements ContactActionListener {
     public JSActionListener(RuntimeContext ctx, PrintStream out, PrintStream err) {
         this.runtimeCtx = ctx;
         setupDefaults();
-        jsctx = Context.enter();
-        jsscope = jsctx.initStandardObjects();
+        Context cx = Context.enter();
+        jsscope = cx.initStandardObjects();
         Object wrappedOut = Context.javaToJS(out, jsscope);
         ScriptableObject.putProperty(jsscope, "out", wrappedOut);
 
@@ -92,6 +92,7 @@ public class JSActionListener implements ContactActionListener {
         // setup some default objects
         evalScript("var print = function(s) { out.print(s); };");
         evalScript("var println = function(s) { out.println(s); };");
+        Context.exit();
     }
 
     private void setupDefaults() {
@@ -149,17 +150,21 @@ public class JSActionListener implements ContactActionListener {
     }
 
     public void term() {
-        Context.exit();
+
     }
 
     private void evalWithParams(Object params, String commandName) {
         wrapObjectWithAnnotations(params);
+
         // TODO: introduce a scope (via a function?) to contain objects
         // so we don't leak!
+
         try {
             String body = js.get(commandName);
             if (body != null && !body.isEmpty()) {
-                jsctx.evaluateString(jsscope, body, commandName, 1, null);
+                Context localContext = Context.enter();
+                localContext.evaluateString(jsscope, body, commandName, 1, null);
+                Context.exit();
             }
         } catch (Exception e) {
             runtimeCtx.appendError("Error processing Javascript:" + e.getMessage());
@@ -167,20 +172,25 @@ public class JSActionListener implements ContactActionListener {
     }
 
     private void wrapObjectWithAnnotations(Object o) {
-        Field[] fields = o.getClass().getFields();
-        for (Field f : fields) {
-            if (f.isAnnotationPresent(Binding.class)) {
-                Binding b = f.getAnnotation(Binding.class);
-                String boundName = b.name();
-                try {
-                    //System.out.println("Binding " + boundName);
-                    Object fieldValue = f.get(o);
-                    Object wrappedObj = Context.javaToJS(fieldValue, jsscope);
-                    ScriptableObject.putProperty(jsscope, boundName, wrappedObj);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        try {
+            Context.enter();
+            Field[] fields = o.getClass().getFields();
+            for (Field f : fields) {
+                if (f.isAnnotationPresent(Binding.class)) {
+                    Binding b = f.getAnnotation(Binding.class);
+                    String boundName = b.name();
+                    try {
+                        //System.out.println("Binding " + boundName);
+                        Object fieldValue = f.get(o);
+                        Object wrappedObj = Context.javaToJS(fieldValue, jsscope);
+                        ScriptableObject.putProperty(jsscope, boundName, wrappedObj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+        } finally {
+            Context.exit();
         }
     }
 
@@ -260,10 +270,13 @@ public class JSActionListener implements ContactActionListener {
         if(f.exists()) {
             try {
                 String content = org.apache.commons.io.FileUtils.readFileToString(f);
-                jsctx.evaluateString(jsscope, content, "<script: " + filename + ">", 1, null);
+                Context cx = Context.enter();
+                cx.evaluateString(jsscope, content, "<script: " + filename + ">", 1, null);
             } catch (IOException e) {
                 // TODO: report these to the runtimeCtx?
                 System.err.println("Error loading script: " + e.getMessage());
+            } finally {
+                Context.exit();
             }
         } else {
             // TODO: report these to the runtimeCtx?
@@ -272,7 +285,16 @@ public class JSActionListener implements ContactActionListener {
     }
 
     public void evalScript(String script) {
-        jsctx.evaluateString(jsscope, script, "<script>", 1, null);
+        Context cx = Context.enter();
+
+        try {
+            cx.evaluateString(jsscope, script, "<script>", 1, null);
+        } catch (Exception e) {
+            // TODO
+            e.printStackTrace();
+        } finally {
+            Context.exit();
+        }
     }
 
     public void preConnections(ConnectionsParams.Pre params) {

@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class RuntimeContext {
 
@@ -52,6 +56,7 @@ public class RuntimeContext {
 
     private StringBuilder output = new StringBuilder();
     private ContactActionListener listener = null;
+    private ContactExecutor executor = new ContactExecutor();
 
     // use bucket "Foo" sets this value.
     // TODO: change it to a Bucket object
@@ -71,6 +76,7 @@ public class RuntimeContext {
         this.connections = connections;
         jsActionListener = new JSActionListener(this, out, err);
         this.listener = jsActionListener;
+
     }
 
     public AccessPolicy getAccessPolicy() {
@@ -192,5 +198,9 @@ public class RuntimeContext {
 
     public void setCurrentQuery2iOptions(Map<String, String> currentQuery2iOptions) {
         this.currentQuery2iOptions = currentQuery2iOptions;
+    }
+
+    public ContactExecutor getExecutor() {
+        return executor;
     }
 }

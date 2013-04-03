@@ -23,6 +23,7 @@
 package com.basho.contact.commands;
 
 import com.basho.contact.ContactConnectionProvider;
+import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.actions.ContactActionListener;
 import com.basho.contact.commands.params.ListBucketsParams;
@@ -82,6 +83,9 @@ public class ListBucketsCommandTest {
         when(ctx.getActionListener()).thenReturn(listener);
         when(ctx.getConnectionProvider()).thenReturn(connProvider);
         when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
+        ContactExecutor exec = new ContactExecutor();
+        when(ctx.getExecutor()).thenReturn(exec);
+
         StringSetSymbol results = command.doExec(ctx);
         assertEquals(postParams.buckets, buckets);
         assertEquals(buckets, results.value);

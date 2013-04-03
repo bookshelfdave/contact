@@ -26,6 +26,9 @@ import com.basho.contact.actions.ActionParams;
 import com.basho.contact.symbols.ContactSymbol;
 import com.basho.riak.client.IRiakClient;
 
+
+import java.util.concurrent.*;
+
 public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionParams> {
     public O params;
     private Class<O> clazz;
@@ -40,7 +43,28 @@ public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionPa
             } else {
                 conn = ctx.getConnectionProvider().getDefaultClient(ctx);
             }
-            return exec(ctx);
+
+            final RuntimeContext c = ctx;
+            Callable<K> task = new Callable<K>() {
+                public K call() throws Exception {
+                    return exec(c);
+                }
+            };
+
+            Future<K> future = (Future<K>)ctx.getExecutor().submitTask(task);
+            try {
+
+                K result = future.get();
+                return result;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                return null;
+            } finally {
+                ctx.getExecutor().cleanCurrentFuture();
+            }
         } else {
             return null;
         }

@@ -51,6 +51,19 @@ At a Contact console prompt, try one of:
 
 ***(3/17/2013 - Only `help commands` is supported at the moment.)***
 
+### Command line parameters
+You can pass --help to contact.sh for command line parameters.
+
+```
+$ ./contact.sh --help
+usage: contact
+    --help                Print this list of commands
+    --infile <filename>   Read input from file and exit
+    --nocolor             Don't use color output
+    --noconfig            Don't read ~/.contact.config
+    --nosignals           Don't catch the Ctrl-C (INT) signal
+```
+
 ## Connecting
 
 To connect to a Riak instance, use the `connect` command:
@@ -86,6 +99,10 @@ If multiple connections are made, the default connection is undefined at the mom
 
 To exit the shell, type `exit`.
 
+
+## Canceling a command
+
+Unless the `--nosignals` command line paramter is passed to `contact.sh`, typing Control-C *while a command is running* will cancel the command. Otherwise, a Control-C will exit the shell normally. 
 
 ## Comments
 

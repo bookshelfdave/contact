@@ -23,6 +23,7 @@
 package com.basho.contact.commands;
 
 import com.basho.contact.ContactConnectionProvider;
+import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.params.FetchParams;
 import com.basho.contact.security.DefaultAccessPolicy;
@@ -75,6 +76,8 @@ public class FetchCommandTest {
         doCallRealMethod().when(ctx).reset();
         doCallRealMethod().when(ctx).appendError(anyString());
         doCallRealMethod().when(ctx).getErrors();
+        ContactExecutor exec = new ContactExecutor();
+        when(ctx.getExecutor()).thenReturn(exec);
         when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
         when(ctx.getConnectionProvider()).thenReturn(connProvider);
         ctx.reset(); // instantiate the error list

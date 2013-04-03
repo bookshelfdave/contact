@@ -20,10 +20,31 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.mr;
+package com.basho.contact;
 
-import com.basho.contact.Constants;
+import com.basho.contact.symbols.ContactSymbol;
 
-public class MRPhase {
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+public class ContactExecutor {
+
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+
+    Future<?> currentFuture = null;
+
+    public Future<?> submitTask(Callable<? extends ContactSymbol<?>> task) {
+        currentFuture = executor.submit(task);
+        return currentFuture;
+    }
+
+    public Future<?> getCurrentFuture() {
+        return currentFuture;
+    }
+
+    public void cleanCurrentFuture() {
+        currentFuture = null;
+    }
 }

@@ -163,17 +163,22 @@ public class ContactConsole {
                 .withLongOpt("noconfig")
                 .withDescription("Don't read ~/.contact.config").create();
 
-        Option infile = OptionBuilder.withLongOpt("infile")
+        Option infile = OptionBuilder
+                .withLongOpt("infile")
                 .withDescription("Read input from file and exit")
                 .hasArg()
                 .withArgName("filename")
                 .create();
 
+        Option nosignals = OptionBuilder
+                .withLongOpt("nosignals")
+                .withDescription("Don't catch the Ctrl-C (INT) signal").create();
+
         options.addOption(help);
         options.addOption(nocolor);
         options.addOption(noconfig);
         options.addOption(infile);
-
+        options.addOption(nosignals);
         CommandLineParser parser = new org.apache.commons.cli.GnuParser();
         try {
             CommandLine line = parser.parse(options, args);
@@ -216,6 +221,9 @@ public class ContactConsole {
         PrintWriter out = new PrintWriter(System.out);
         DefaultConnectionProvider connections = new DefaultConnectionProvider();
         RuntimeContext ctx = new RuntimeContext(connections, System.out, System.err);
+        if (!commandLine.hasOption("nosignals")) {
+            ConsoleSignalHander.install("INT", ctx);
+        }
         ContactWalker walker = new ContactWalker(ctx);
 
         boolean nextLinePrompt = false;
