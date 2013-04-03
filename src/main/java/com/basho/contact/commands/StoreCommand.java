@@ -143,7 +143,7 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
             builder = builder.withValue(params.content.getValue());
             builder = addIndexes(builder);
             IRiakObject obj = builder.build();
-            System.out.println("Content type = " + obj.getContentType());
+
             // TODO: cache this
             Bucket b = conn.fetchBucket(params.bucket).execute();
             StoreObject<IRiakObject> so = processOptions(runtimeCtx,
