@@ -188,6 +188,10 @@ To store plain text, json, or xml, you can use the following commands:
 		store "MyKey" 
 		with xml "This is text";
 
+	/* you can also define your own content type */
+	store "MyKey" with content-type "text/csv" and "1,2,3,4";
+
+
 Note, any double quotes appearing in the content string will need to be escaped. To store larger 
 chunks of text, use a here doc:
 
@@ -817,15 +821,15 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 #TODO
 * TESTING TESTING TESTING
-* delete bucket
+* update
 * bucket properties via pb
+* delete bucket
 * implement Javascript resolvers + retiers
 * clean up mr syntax + implementation
 * Riak Search (Yokozuna integration)
 * link walking
 * load balancing
 * user meta
-* User content-types
 * simple interactive web ui ala "Try Riak"
 * Fix tab completion
 * Pasting text into the shell erroneously kicks off tab completion
