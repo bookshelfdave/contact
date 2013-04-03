@@ -85,6 +85,19 @@ help &lt;commandname&gt; ## TODO
 
 <p><strong><em>(3/17/2013 - Only <code>help commands</code> is supported at the moment.)</em></strong></p>
 
+<h3>Command line parameters</h3>
+
+<p>You can pass --help to contact.sh for command line parameters.</p>
+
+<pre><code>$ ./contact.sh --help
+usage: contact
+    --help                Print this list of commands
+    --infile &lt;filename&gt;   Read input from file and exit
+    --nocolor             Don't use color output
+    --noconfig            Don't read ~/.contact.config
+    --nosignals           Don't catch the Ctrl-C (INT) signal
+</code></pre>
+
 <h2>Connecting</h2>
 
 <p>To connect to a Riak instance, use the <code>connect</code> command:</p>
@@ -122,6 +135,10 @@ Connecting to Riak @ 127.0.0.1:10027
 <h2>Exiting</h2>
 
 <p>To exit the shell, type <code>exit</code>.</p>
+
+<h2>Canceling a command</h2>
+
+<p>Unless the <code>--nosignals</code> command line paramter is passed to <code>contact.sh</code>, typing Control-C <em>while a command is running</em> will cancel the command. Otherwise, a Control-C will exit the shell normally. </p>
 
 <h2>Comments</h2>
 
