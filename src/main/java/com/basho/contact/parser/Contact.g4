@@ -26,13 +26,14 @@ using       :   USING BUCKET bucket=STRING op_with_options;
 
 with        :   (WITH | AND);
 
-op_with_options: (  fetch     |
-                    store     |
-                    delete    |
-                    query2i   |
-                    listkeys  |
-                    countkeys |
-                    get_bucketprops
+op_with_options: (  fetch           |
+                    store           |
+                    delete          |
+                    query2i         |
+                    listkeys        |
+                    countkeys       |
+                    get_bucketprops |
+                    update
                   ) options?;
 
 options: with OPTIONS (optionslist | ID);
@@ -48,6 +49,8 @@ optionslist: opts+=pair (COMMA opts+=pair)*;
 fetch:    FETCH key=STRING; 
                 
 store:    STORE (key=STRING | existing_obj=ID) store_indexes with content_string;
+
+update: UPDATE;
 
 //show:     SHOW ID? (with DETAIL)?;
 
@@ -105,6 +108,7 @@ PB          :    'pb';
 HTTP        :    'http';
 FETCH       :    'fetch';
 STORE       :    'store';
+UPDATE      :    'update';
 DELETE      :    'delete';
 VALUE       :    'value';
 CONTENTTYPE :    'content-type';

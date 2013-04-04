@@ -37,7 +37,7 @@ At the console, type:
 
 After you've built Contact, just type:
 
-	./contact.sh
+	./contact
 
 ## Help
 
@@ -52,10 +52,10 @@ At a Contact console prompt, try one of:
 ***(3/17/2013 - Only `help commands` is supported at the moment.)***
 
 ### Command line parameters
-You can pass --help to contact.sh for command line parameters.
+You can pass --help to contact for command line parameters.
 
 ```
-$ ./contact.sh --help
+$ ./contact --help
 usage: contact
     --help                Print this list of commands
     --infile <filename>   Read input from file and exit
@@ -102,7 +102,7 @@ To exit the shell, type `exit`.
 
 ## Canceling a command
 
-Unless the `--nosignals` command line paramter is passed to `contact.sh`, typing Control-C *while a command is running* will cancel the command. Otherwise, a Control-C will exit the shell normally. 
+Unless the `--nosignals` command line paramter is passed to `contact`, typing Control-C *while a command is running* will cancel the command. Otherwise, a Control-C will exit the shell normally. 
 
 ## Comments
 
@@ -799,7 +799,7 @@ These will also be customizable with Javascript.
 
 ## Command Line Parameters
 
-	./contact.sh --help
+	./contact --help
 		usage: contact
 		    --help                Print this list of commands
 		    --infile <filename>   Read input from file and exit
@@ -808,7 +808,7 @@ These will also be customizable with Javascript.
 
 ### Batch mode
 
-Pass in the `--infile <filename>` parameter to contact.sh to process a file containing Contact commands. Contact will exit upon completion. 
+Pass in the `--infile <filename>` parameter to contact to process a file containing Contact commands. Contact will exit upon completion. 
 
 ## Configuration
 
