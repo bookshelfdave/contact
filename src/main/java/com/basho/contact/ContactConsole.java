@@ -28,6 +28,7 @@ import com.basho.contact.parser.ContactLexer;
 import com.basho.contact.parser.ContactParser;
 import jline.ANSIBuffer;
 import jline.console.ConsoleReader;
+import jline.console.completer.CompletionHandler;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -46,47 +47,78 @@ public class ContactConsole {
             "http",
             "fetch",
             "store",
+            "update",
             "delete",
             "value",
+            "content-type",
             "connection",
+            "connections",
             "connect",
             "use",
             "using",
             "with",
-            "bucket",
             "and",
+            "bucket",
             "options",
             "query2i",
-            "mapred",
+            "count",
             "from",
             "index",
             "to",
-            "instores",
-            "jsquery",
-            "erlquery",
-            "for",
-            "in",
-            "print",
-            "default"
+            "javascript",
+            "properties",
+            "load",
+            "script",
+            "list",
+            "buckets",
+            "keys",
+            "true",
+            "false",
+            "default",
+            "set",
+            "get",
+            "action",
+            "as",
+            "json",
+            "text",
+            "xml",
+
+            "exit",
+            "quit",
+            "clear",
+            "help"
     };
 
     static Map<String, ConsoleCommand> consoleOnlyCommands = new HashMap<String, ConsoleCommand>();
 
     static {
         consoleOnlyCommands.put("help", new ConsoleCommand() {
-            public void run(String line) {
+            @Override
+            public void run(String line, ConsoleReader reader) {
                 new ContactConsoleHelp(System.out).help(line);
             }
         });
 
         ConsoleCommand exit = new ConsoleCommand() {
-            public void run(String line) {
+            @Override
+            public void run(String line, ConsoleReader reader) {
                 System.out.println("Goodbye");
                 System.exit(0);
             }
         };
+        ConsoleCommand clear = new ConsoleCommand() {
+            @Override
+            public void run(String line, ConsoleReader reader) {
+                try {
+                    reader.clearScreen();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         consoleOnlyCommands.put("exit", exit);
         consoleOnlyCommands.put("quit", exit);
+        consoleOnlyCommands.put("clear", clear);
     }
 
     // TODO: this is a waste... reuse objects!
@@ -215,7 +247,8 @@ public class ContactConsole {
         ConsoleReader reader = new ConsoleReader();
         reader.setBellEnabled(false);
         reader.setExpandEvents(false); // TODO: look into this
-        reader.addCompleter(new jline.console.completer.StringsCompleter(keywords));
+        // TODO: Pasting in text with tabs prints out a ton of completions
+        //reader.addCompleter(new jline.console.completer.StringsCompleter(keywords));
 
         String line;
         PrintWriter out = new PrintWriter(System.out);
@@ -267,7 +300,7 @@ public class ContactConsole {
             String chunks[] = line.split(" ");
             String consoleCommandCheck = chunks[0].toLowerCase().trim();
             if (consoleOnlyCommands.containsKey(consoleCommandCheck)) {
-                consoleOnlyCommands.get(consoleCommandCheck).run(line);
+                consoleOnlyCommands.get(consoleCommandCheck).run(line, reader);
                 continue;
             }
 

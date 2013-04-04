@@ -20,10 +20,12 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.parser;
 
 
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ParseUtils {
     public static String getDataContent(String content) {
@@ -37,15 +39,19 @@ public class ParseUtils {
         }  else {
             content=content.substring(0, content.length() - 3);
         }
+        if(content.contains("\\~%~")) {
+             content = content.replaceAll("\\\\~%~","~%~");
+        }
         return content;
     }
 
     @Test
     public void testDataContent() {
-        org.junit.Assert.assertEquals("This is a test", getDataContent("~%~This is a test~%~"));
-        org.junit.Assert.assertEquals("This is a test",getDataContent("~%~\nThis is a test~%~"));
-        org.junit.Assert.assertEquals("This is a test",getDataContent("~%~\nThis is a test~%~"));
-        org.junit.Assert.assertEquals("This is a test",getDataContent("~%~\nThis is a test\n~%~"));
+        assertEquals("This is a test", getDataContent("~%~This is a test~%~"));
+        assertEquals("This is a test", getDataContent("~%~\nThis is a test~%~"));
+        assertEquals("This is a test", getDataContent("~%~\nThis is a test~%~"));
+        assertEquals("This is a test", getDataContent("~%~\nThis is a test\n~%~"));
+        assertEquals("This is a ~%~test~%~", getDataContent("~%~This is a \\~%~test\\~%~~%~"));
     }
 
 }

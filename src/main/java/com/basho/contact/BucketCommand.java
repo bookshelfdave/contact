@@ -38,6 +38,11 @@ public abstract class BucketCommand<K extends ContactSymbol<?>, O extends Action
     protected abstract K bucketExec(RuntimeContext runtimeCtx, String bucket);
 
     @Override
+    protected boolean requiresConnection() {
+        return true;
+    }
+
+    @Override
      protected K exec(RuntimeContext runtimeCtx) {
         if (this.conn != null) {
             if (this.params.bucket != null) {

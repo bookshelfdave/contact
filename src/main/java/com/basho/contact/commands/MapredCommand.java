@@ -34,6 +34,11 @@ public class MapredCommand extends RiakCommand<ResultsSymbol, MapRedParams.Pre> 
     }
 
     @Override
+    protected boolean requiresConnection() {
+        return true;
+    }
+
+    @Override
     protected ResultsSymbol exec(RuntimeContext ctx) {
         //ctx.getNextPBClient().mapReduce()
 

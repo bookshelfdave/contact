@@ -839,17 +839,15 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 #TODO
 * TESTING TESTING TESTING
 * update
-* bucket properties via pb
-* delete bucket
+* set bucket properties via pb
+* unescape ~%~
 * implement Javascript resolvers + retiers
 * clean up mr syntax + implementation
 * Riak Search (Yokozuna integration)
 * link walking
-* load balancing
-* user meta
-* simple interactive web ui ala "Try Riak"
-* Fix tab completion
-* Pasting text into the shell erroneously kicks off tab completion
+* user meta for store
+* Fix tab completion 
+    * pasting text into the shell erroneously kicks off tab completion
 
 #Contributing
 

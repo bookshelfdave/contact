@@ -38,6 +38,11 @@ public class ConnectCommand extends RiakCommand<ConnectionSymbol, ConnectParams.
     }
 
     @Override
+    protected boolean requiresConnection() {
+        return false;
+    }
+
+    @Override
     protected ConnectionSymbol exec(RuntimeContext runtimeCtx) {
         runtimeCtx.getActionListener().preConnectAction(params);
 

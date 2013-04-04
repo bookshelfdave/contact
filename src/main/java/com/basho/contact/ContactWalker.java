@@ -24,8 +24,8 @@ package com.basho.contact;
 
 import com.basho.contact.commands.*;
 import com.basho.contact.parser.ContactBaseListener;
-import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.ContactParser.*;
+import com.basho.contact.parser.ParseUtils;
 import com.basho.contact.symbols.ContactSymbol;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;

@@ -35,6 +35,7 @@ public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionPa
     protected IRiakClient conn;
 
     protected abstract K exec(RuntimeContext ctx);
+    protected abstract boolean requiresConnection();
 
     public final K doExec(RuntimeContext ctx) {
         if(checkAccess(ctx)) {
@@ -42,6 +43,11 @@ public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionPa
                 conn = ctx.getConnectionProvider().getClientByName(this.params.connection_id, ctx);
             } else {
                 conn = ctx.getConnectionProvider().getDefaultClient(ctx);
+            }
+
+            if(requiresConnection() && conn == null) {
+                ctx.appendError("Not connected to Riak");
+                return null;
             }
 
             final RuntimeContext c = ctx;

@@ -36,6 +36,11 @@ public class ConnectionsCommand extends RiakCommand<VoidSymbol, ConnectionsParam
     }
 
     @Override
+    protected boolean requiresConnection() {
+        return false;
+    }
+
+    @Override
     protected VoidSymbol exec(RuntimeContext ctx) {
         ctx.getActionListener().preConnections(this.params);
         Map<String, ConnectionInfo> conns = ctx.getConnectionProvider().getAllConnections();

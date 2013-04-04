@@ -36,6 +36,10 @@ public class ListBucketsCommand extends RiakCommand<StringSetSymbol, ListBuckets
         super(ListBucketsParams.Pre.class);
     }
 
+    @Override
+    protected boolean requiresConnection() {
+        return true;
+    }
 
     @Override
     protected StringSetSymbol exec(RuntimeContext runtimeCtx) {

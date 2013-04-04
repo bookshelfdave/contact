@@ -45,6 +45,11 @@ public class GetBucketPropsCommand extends BucketCommand<VoidSymbol, GetBucketPr
     }
 
     @Override
+    protected boolean requiresConnection() {
+        return true;
+    }
+
+    @Override
     protected VoidSymbol bucketExec(RuntimeContext runtimeCtx, String bucket) {
         try {
             runtimeCtx.getActionListener().preGetBucketPropsAction(this.params);

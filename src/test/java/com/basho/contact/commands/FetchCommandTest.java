@@ -56,7 +56,7 @@ public class FetchCommandTest {
         RuntimeContext ctx = new RuntimeContext(connProvider, null, null);
         command.doExec(ctx);
         assertEquals(1, ctx.getErrors().size());
-        assertEquals("Not connected to Riak for fetch op.", ctx.getErrors().get(0).getMessage());
+        assertEquals("Not connected to Riak", ctx.getErrors().get(0).getMessage());
     }
 
     @Test
