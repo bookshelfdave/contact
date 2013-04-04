@@ -50,7 +50,7 @@
 <li>An easy way to incorporate text, JSON, XML, Javascript into a Contact script file without escape-character madness.</li>
 <li>A console that supports simple command completion and history.</li>
 <li>Extensible object output, conflict resolution and retrier with Javascript (via Mozilla Rhino)</li>
-</ol><h2>Language Grammer</h2>
+</ol><h2>Language Grammar</h2>
 
 <p>See: <a href="https://github.com/metadave/contact/blob/master/src/main/java/com/basho/contact/parser/Contact.g4">Contact.g4</a></p>
 
@@ -69,7 +69,7 @@
 
 <p>After you've built Contact, just type:</p>
 
-<pre><code>./contact.sh
+<pre><code>./contact
 </code></pre>
 
 <h2>Help</h2>
@@ -87,9 +87,9 @@ help &lt;commandname&gt; ## TODO
 
 <h3>Command line parameters</h3>
 
-<p>You can pass --help to contact.sh for command line parameters.</p>
+<p>You can pass --help to contact for command line parameters.</p>
 
-<pre><code>$ ./contact.sh --help
+<pre><code>$ ./contact --help
 usage: contact
     --help                Print this list of commands
     --infile &lt;filename&gt;   Read input from file and exit
@@ -138,7 +138,7 @@ Connecting to Riak @ 127.0.0.1:10027
 
 <h2>Canceling a command</h2>
 
-<p>Unless the <code>--nosignals</code> command line paramter is passed to <code>contact.sh</code>, typing Control-C <em>while a command is running</em> will cancel the command. Otherwise, a Control-C will exit the shell normally. </p>
+<p>Unless the <code>--nosignals</code> command line paramter is passed to <code>contact</code>, typing Control-C <em>while a command is running</em> will cancel the command. Otherwise, a Control-C will exit the shell normally. </p>
 
 <h2>Comments</h2>
 
@@ -1128,7 +1128,7 @@ var println = function(s) { out.println(s); };
 
 <h2>Command Line Parameters</h2>
 
-<pre><code>./contact.sh --help
+<pre><code>./contact --help
     usage: contact
         --help                Print this list of commands
         --infile &lt;filename&gt;   Read input from file and exit
@@ -1138,7 +1138,7 @@ var println = function(s) { out.println(s); };
 
 <h3>Batch mode</h3>
 
-<p>Pass in the <code>--infile &lt;filename&gt;</code> parameter to contact.sh to process a file containing Contact commands. Contact will exit upon completion. </p>
+<p>Pass in the <code>--infile &lt;filename&gt;</code> parameter to contact to process a file containing Contact commands. Contact will exit upon completion. </p>
 
 <h2>Configuration</h2>
 
@@ -1171,17 +1171,19 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 <ul>
 <li>TESTING TESTING TESTING</li>
 <li>update</li>
-<li>bucket properties via pb</li>
-<li>delete bucket</li>
+<li>set bucket properties via pb</li>
+<li>unescape ~%~</li>
 <li>implement Javascript resolvers + retiers</li>
 <li>clean up mr syntax + implementation</li>
 <li>Riak Search (Yokozuna integration)</li>
 <li>link walking</li>
-<li>load balancing</li>
-<li>user meta</li>
-<li>simple interactive web ui ala "Try Riak"</li>
-<li>Fix tab completion</li>
-<li>Pasting text into the shell erroneously kicks off tab completion</li>
+<li>user meta for store</li>
+<li>Fix tab completion 
+
+<ul>
+<li>pasting text into the shell erroneously kicks off tab completion</li>
+</ul>
+</li>
 </ul><h1>Contributing</h1>
 
 <p>If you are a Riak + Java fan, I'm looking for devs to help out.</p>
