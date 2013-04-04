@@ -17,7 +17,7 @@ See the TODO section below.
 3. A console that supports simple command completion and history.
 4. Extensible object output, conflict resolution and retrier with Javascript (via Mozilla Rhino)
 
-## Language Grammer
+## Language Grammar
 
 See: [Contact.g4](https://github.com/metadave/contact/blob/master/src/main/java/com/basho/contact/parser/Contact.g4)
 
