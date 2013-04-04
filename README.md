@@ -203,7 +203,7 @@ To store plain text, json, or xml, you can use the following commands:
 	/* using "json" will set the content-type to application/xml */
 	using bucket "Foo" 
 		store "MyKey" 
-		with xml "This is text";
+		with xml "<foo>bar</foo>";
 
 	/* you can also define your own content type */
 	store "MyKey" with content-type "text/csv" and "1,2,3,4";
