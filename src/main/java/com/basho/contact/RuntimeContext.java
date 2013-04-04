@@ -27,16 +27,14 @@ import com.basho.contact.actions.JSActionListener;
 import com.basho.contact.security.AccessPolicy;
 import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.symbols.ContactSymbol;
+import com.basho.riak.client.IRiakObject;
+import com.basho.riak.client.cap.ConflictResolver;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class RuntimeContext {
 
@@ -48,11 +46,6 @@ public class RuntimeContext {
     private Map<String, ContactSymbol<?>> bindings = new HashMap<String, ContactSymbol<?>>();
 
     public ContactSymbol<?> lastResult = null;
-    // TODO: do I still need this?
-    public NonSymbolOutput lastOutput = null; // for commands that don't return
-                                              // a symbol,
-                                              // but still need to display
-                                              // text (ie show)
 
     private StringBuilder output = new StringBuilder();
     private ContactActionListener listener = null;
@@ -61,6 +54,7 @@ public class RuntimeContext {
     // use bucket "Foo" sets this value.
     // TODO: change it to a Bucket object
     private String currentBucket = null;
+
     private Map<String, String> currentFetchOptions = new HashMap<String, String>();
     private Map<String, String> currentStoreOptions = new HashMap<String, String>();
     private Map<String, String> currentDeleteOptions = new HashMap<String, String>();
@@ -72,11 +66,12 @@ public class RuntimeContext {
     // this always needs to be instantiated
     JSActionListener jsActionListener;
 
+    private Map<String, ConflictResolver<IRiakObject>> bucketResolvers = new HashMap<String, ConflictResolver<IRiakObject>>();
+
     public RuntimeContext(ContactConnectionProvider connections, PrintStream out, PrintStream err) {
         this.connections = connections;
-        jsActionListener = new JSActionListener(this, out, err);
+        this.jsActionListener = new JSActionListener(this, out, err);
         this.listener = jsActionListener;
-
     }
 
     public AccessPolicy getAccessPolicy() {
@@ -114,14 +109,14 @@ public class RuntimeContext {
         this.parseError = parseError;
     }
 
-    public void appendOutput(String line) {
-        output.append(line);
-        output.append("\n");
-    }
-
-    public String getOutput() {
-        return output.toString();
-    }
+//    public void appendOutput(String line) {
+//        output.append(line);
+//        output.append("\n");
+//    }
+//
+//    public String getOutput() {
+//        return output.toString();
+//    }
 
     public void appendError(String msg, Throwable e) {
         errors.add(new Exception(msg, e));
@@ -202,5 +197,13 @@ public class RuntimeContext {
 
     public ContactExecutor getExecutor() {
         return executor;
+    }
+
+    public Map<String, ConflictResolver<IRiakObject>> getBucketResolvers() {
+        return bucketResolvers;
+    }
+
+    public void setBucketResolver(String bucket, ConflictResolver<IRiakObject> resolver) {
+        bucketResolvers.put(bucket, resolver);
     }
 }

@@ -29,7 +29,9 @@ import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.RiakRetryFailedException;
 import com.basho.riak.client.bucket.Bucket;
+import com.basho.riak.client.bucket.DomainBucket;
 import com.basho.riak.client.builders.RiakObjectBuilder;
+import com.basho.riak.client.cap.ConflictResolver;
 import com.basho.riak.client.operations.StoreObject;
 
 import java.util.HashMap;
@@ -142,12 +144,16 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
 
             builder = builder.withValue(params.content.getValue());
             builder = addIndexes(builder);
+
             IRiakObject obj = builder.build();
 
             // TODO: cache this
             Bucket b = conn.fetchBucket(params.bucket).execute();
+
             StoreObject<IRiakObject> so = processOptions(runtimeCtx,
                     b.store(obj));
+
+            so = so.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preStoreAction(params);
             ResultSymbol result = new ResultSymbol(so.execute());

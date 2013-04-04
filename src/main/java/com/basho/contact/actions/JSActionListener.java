@@ -24,6 +24,8 @@ package com.basho.contact.actions;
 
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.params.*;
+import com.basho.riak.client.IRiakObject;
+import com.basho.riak.client.cap.ConflictResolver;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -32,11 +34,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class JSActionListener implements ContactActionListener {
+public class JSActionListener implements ContactActionListener, ContactConflictResolverMill {
 
     //    String body = "var methods = []; " +
     //    			  " for (var m in obj) { " +
@@ -62,6 +65,9 @@ public class JSActionListener implements ContactActionListener {
     public static String POSTLISTKEYS = "postlistkeys";
     public static String PREGETBUCKETPROPS = "pregetbucketprops";
     public static String POSTGETBUCKETPROPS = "postgetbucketprops";
+    public static String PRESETBUCKETPROPS = "presetbucketprops";
+    public static String POSTSETBUCKETPROPS = "postsetbucketprops";
+
     public static String PRECONNECT = "preconnect";
     public static String POSTCONNECT = "postconnect";
     public static String PRECONNECTIONS = "preconnections";
@@ -76,7 +82,21 @@ public class JSActionListener implements ContactActionListener {
 
     private RuntimeContext runtimeCtx = null;
     private Map<String, String> js = new HashMap<String, String>();
+    private Map<String, ConflictResolver<IRiakObject>> resolversByBucket = new HashMap<String, ConflictResolver<IRiakObject>>();
 
+    ConflictResolver<IRiakObject> defaultResolver = new ConflictResolver<IRiakObject>() {
+        // TODO: I should probably use whatever default resolver the
+        // Java client is using
+        @Override
+        public IRiakObject resolve(Collection<IRiakObject> siblings) {
+            System.out.println("Default resolver!");
+            if(siblings != null) {
+                return siblings.iterator().next();
+            } else {
+                return null;
+            }
+        }
+    };
 
     public JSActionListener(RuntimeContext ctx, PrintStream out, PrintStream err) {
         this.runtimeCtx = ctx;
@@ -112,6 +132,10 @@ public class JSActionListener implements ContactActionListener {
         js.put(POSTLISTKEYS, "for(var i = 0; i < keys.size(); i++) { println(keys.get(i)); }");
         js.put(PREGETBUCKETPROPS, "");
         js.put(POSTGETBUCKETPROPS, "if(bucket_props != undefined) { println(bucket_props); }");
+
+        js.put(PRESETBUCKETPROPS, "");
+        js.put(POSTSETBUCKETPROPS, "");
+
         js.put(PRECONNECT, "");
         js.put(POSTCONNECT, "println('Connecting to Riak @ ' + riak_host + ':' + riak_pb_port);");
         js.put(PRECONNECTIONS, "");
@@ -194,73 +218,91 @@ public class JSActionListener implements ContactActionListener {
         }
     }
 
+    @Override
     public void preFetchAction(FetchParams.Pre params) {
         evalWithParams(params, PREFETCH);
     }
 
+    @Override
     public void postFetchAction(FetchParams.Post params) {
         evalWithParams(params, POSTFETCH);
     }
 
+    @Override
     public void preConnectAction(ConnectParams.Pre params) {
         evalWithParams(params, PRECONNECT);
     }
 
+    @Override
     public void postConnectAction(ConnectParams.Post params) {
         evalWithParams(params, POSTCONNECT);
     }
 
+    @Override
     public void preStoreAction(StoreParams.Pre params) {
         evalWithParams(params, PRESTORE);
     }
 
+    @Override
     public void postStoreAction(StoreParams.Post params) {
         evalWithParams(params, POSTSTORE);
     }
 
+    @Override
     public void preDeleteAction(DeleteParams.Pre params) {
         evalWithParams(params, PREDELETE);
     }
 
+    @Override
     public void postDeleteAction(DeleteParams.Post params) {
         evalWithParams(params, POSTDELETE);
     }
 
+    @Override
     public void preQuery2iAction(Query2iParams.Pre params) {
         evalWithParams(params, PREQUERY2I);
     }
 
+    @Override
     public void postQuery2iAction(Query2iParams.Post params) {
         evalWithParams(params, POSTQUERY2I);
     }
 
+    @Override
     public void preMapredAction(MapRedParams.Pre params) {
 
     }
 
+    @Override
     public void postMapredAction(MapRedParams.Post params) {
     }
 
+    @Override
     public void preListBucketsAction(ListBucketsParams.Pre params) {
         evalWithParams(params, PRELISTBUCKETS);
     }
 
+    @Override
     public void postListBucketsAction(ListBucketsParams.Post params) {
         evalWithParams(params, POSTLISTBUCKETS);
     }
 
+    @Override
     public void preListKeysAction(ListKeysParams.Pre params) {
         evalWithParams(params, PRELISTKEYS);
     }
 
+    @Override
     public void postListKeysAction(ListKeysParams.Post params) {
         evalWithParams(params, POSTLISTKEYS);
     }
 
+    @Override
     public void preGetBucketPropsAction(GetBucketPropsParams.Pre params) {
         evalWithParams(params, PREGETBUCKETPROPS);
     }
 
+    @Override
     public void postGetBucketPropsAction(GetBucketPropsParams.Post params) {
         evalWithParams(params, POSTGETBUCKETPROPS);
     }
@@ -297,27 +339,85 @@ public class JSActionListener implements ContactActionListener {
         }
     }
 
+    public Object evalResolverScript(Collection<IRiakObject> siblings, String script) {
+        Context cx = Context.enter();
+        Object wrappedObj = Context.javaToJS(siblings, jsscope);
+        ScriptableObject.putProperty(jsscope, "siblings", wrappedObj);
+        Object result = null;
+        try {
+            result = cx.evaluateString(jsscope, script, "<js_resolver>", 1, null);
+        } catch (Exception e) {
+            // TODO
+            e.printStackTrace();
+        } finally {
+            Context.exit();
+        }
+        return result;
+    }
+
+    @Override
     public void preConnections(ConnectionsParams.Pre params) {
         evalWithParams(params, PRECONNECTIONS);
     }
 
+    @Override
     public void postConnections(ConnectionsParams.Post params) {
         evalWithParams(params, POSTCONNECTIONS);
     }
 
+    @Override
     public void preCountKeys(CountKeysParams.Pre params) {
         evalWithParams(params, PRECOUNTKEYS);
     }
 
+    @Override
     public void postCountKeys(CountKeysParams.Post params) {
         evalWithParams(params, POSTCOUNTKEYS);
     }
 
+    @Override
     public void preGetBucket(GetBucketParams.Pre params) {
         evalWithParams(params, PREGETBUCKET);
     }
 
+    @Override
     public void postGetBucket(GetBucketParams.Post params) {
         evalWithParams(params, POSTGETBUCKET);
+    }
+
+    @Override
+    public void preSetBucketPropsAction(SetBucketPropsParams.Pre params) {
+        evalWithParams(params, PRESETBUCKETPROPS);
+    }
+
+    @Override
+    public void postSetBucketPropsAction(SetBucketPropsParams.Post params) {
+        evalWithParams(params, POSTSETBUCKETPROPS);
+    }
+
+    @Override
+    public ConflictResolver<IRiakObject> getResolverForBucket(String bucket) {
+        if(resolversByBucket.containsKey(bucket)) {
+            return resolversByBucket.get(bucket);
+        } else {
+            return defaultResolver;
+        }
+    }
+
+    @Override
+    public void defineResolver(String bucket, String body) {
+        final String jsBody = body;
+        ConflictResolver<IRiakObject> resolver = new ConflictResolver<IRiakObject>() {
+            @Override
+            public IRiakObject resolve(Collection<IRiakObject> siblings) {
+                return (IRiakObject)evalResolverScript(siblings, jsBody);
+            }
+        };
+        resolversByBucket.put(bucket, resolver);
+    }
+
+    @Override
+    public ContactConflictResolverMill getResolverMill() {
+        return this;
     }
 }

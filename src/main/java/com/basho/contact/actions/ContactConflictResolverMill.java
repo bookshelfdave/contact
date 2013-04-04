@@ -20,18 +20,15 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.params;
+package com.basho.contact.actions;
 
-import com.basho.contact.actions.ActionParams;
-import com.basho.contact.actions.Binding;
-import com.basho.riak.client.bucket.WriteBucket;
+import com.basho.riak.client.IRiakObject;
+import com.basho.riak.client.cap.ConflictResolver;
 
-public class SetBucketPropsParams {
-    public static class Pre extends ActionParams {
-        @Binding(name="write_bucket")
-        public WriteBucket writebucket;
-    }
+import java.util.Collection;
 
-    public static class Post extends ActionParams {
-    }
+// IT'S NOT A FACTORY, IT'S A MILL!!!
+public interface ContactConflictResolverMill {
+    public ConflictResolver<IRiakObject> getResolverForBucket(String bucket);
+    public void defineResolver(String bucket, String body);
 }

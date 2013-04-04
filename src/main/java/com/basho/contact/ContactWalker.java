@@ -24,9 +24,11 @@ package com.basho.contact;
 
 import com.basho.contact.commands.*;
 import com.basho.contact.parser.ContactBaseListener;
+import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.ContactParser.*;
 import com.basho.contact.parser.ParseUtils;
 import com.basho.contact.symbols.ContactSymbol;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
@@ -60,7 +62,6 @@ public class ContactWalker extends ContactBaseListener {
         if (ctx.name != null) {
             setValue(ctx, ctx.name.getText());
         }
-        super.exitAssignment(ctx);
     }
 
 
@@ -85,7 +86,6 @@ public class ContactWalker extends ContactBaseListener {
         }
         trace("Using bucket " + bucket);
         setValue(ctx, o);
-        super.exitUsing(ctx);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ContactWalker extends ContactBaseListener {
         }
 
         if(runtimeCtx.isParseError()) {
-            super.exitStat(ctx);
+            return;
         }
 
         if (o != null) {
@@ -133,7 +133,6 @@ public class ContactWalker extends ContactBaseListener {
 
             }
         }
-        super.exitStat(ctx);
     }
 
 //    @Override
@@ -165,7 +164,6 @@ public class ContactWalker extends ContactBaseListener {
 //                runtimeCtx.lastOutput = nsym;
 //            }
 //        }
-//        super.exitShow(ctx);
 //    }
 
     @Override
@@ -177,7 +175,6 @@ public class ContactWalker extends ContactBaseListener {
             value = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         }
         setValue(ctx, value);
-        super.exitCode_string(ctx);
     }
 
     @Override
@@ -187,7 +184,6 @@ public class ContactWalker extends ContactBaseListener {
         } else if (ctx.set() != null) {
             setValue(ctx, getValue(ctx.set()));
         }
-        super.exitConsole_op(ctx);
     }
 
     @Override
@@ -214,7 +210,6 @@ public class ContactWalker extends ContactBaseListener {
         } else {
             runtimeCtx.appendError(action + " is an invalid action");
         }
-        super.exitGet_action(ctx);
     }
 
     @Override
@@ -227,15 +222,9 @@ public class ContactWalker extends ContactBaseListener {
         } else {
             runtimeCtx.appendError(action + " is an invalid action");
         }
-        super.exitSet_action(ctx);
     }
 
-    @Override
-    public void exitGet_bucketprops(Get_bucketpropsContext ctx) {
-        GetBucketPropsCommand cmd = new GetBucketPropsCommand();
-        setValue(ctx, cmd);
-        super.exitGet_bucketprops(ctx);
-    }
+
 
     @SuppressWarnings("unchecked")
     @Override
@@ -260,25 +249,28 @@ public class ContactWalker extends ContactBaseListener {
             o = getValue(ctx.listkeys());
         } else if(ctx.countkeys() != null) {
             o = getValue(ctx.countkeys());
-        } else if(ctx.get_bucketprops() != null) {
-            o = getValue(ctx.get_bucketprops());
+        } else if(ctx.bucketprops() != null) {
+            o = getValue(ctx.bucketprops());
         }
 
         if (o instanceof RiakCommand) {
             RiakCommand<?, ?> c = (RiakCommand<?, ?>) o;
             if(bucketOptions != null && bucketOptions.size() > 0) {
-                Map<String, String> combined = new HashMap<String, String>();
-                // use all bucket options, then override with any options from
-                // curent command
-                combined.putAll(bucketOptions);
-                combined.putAll((Map<String, String>) options);
-                c.params.options = combined;
+                if(!(o instanceof SetBucketPropsCommand)) {
+                    Map<String, String> combined = new HashMap<String, String>();
+                    // use all bucket options, then override with any options from
+                    // curent command
+                    combined.putAll(bucketOptions);
+                    combined.putAll((Map<String, String>) options);
+                    c.params.options = combined;
+                }
             } else {
-                c.params.options = (Map<String, String>) options;
+                if(!(o instanceof SetBucketPropsCommand)) {
+                    c.params.options = (Map<String, String>) options;
+                }
             }
             setValue(ctx, c);
         }
-        super.exitOp_with_options(ctx);
     }
 
 
@@ -286,9 +278,7 @@ public class ContactWalker extends ContactBaseListener {
     public void exitFetch(FetchContext ctx) {
         FetchCommand fetch = new FetchCommand();
         fetch.params.key = stripQuotes(ctx.key.getText());
-        //System.out.println("Fetching key " + fetch.key);
         setValue(ctx, fetch);
-        super.exitFetch(ctx);
     }
 
 
@@ -307,7 +297,6 @@ public class ContactWalker extends ContactBaseListener {
             store.params.indexes = indexes;
         }
         setValue(ctx, store);
-        super.exitStore(ctx);
     }
 
     @Override
@@ -332,8 +321,6 @@ public class ContactWalker extends ContactBaseListener {
             String userDefinedContentType = (String)getValue(ctx.user_content());
             setValue(ctx, new Content(Content.ContentType.USER_DEFINED, userDefinedContentType, value));
         }
-
-        super.exitContent_string(ctx);
     }
 
     @Override
@@ -347,7 +334,6 @@ public class ContactWalker extends ContactBaseListener {
         DeleteCommand cmd = new DeleteCommand();
         cmd.params.key = stripQuotes(ctx.key.getText());
         setValue(ctx, cmd);
-        super.exitDelete(ctx);
     }
 
     @Override
@@ -365,7 +351,6 @@ public class ContactWalker extends ContactBaseListener {
         }
 
         setValue(ctx, query);
-        super.exitQuery2i(ctx);
     }
 
 
@@ -377,13 +362,11 @@ public class ContactWalker extends ContactBaseListener {
             pairs.put(p.getKey(), p.getValue());
         }
         setValue(ctx, pairs);
-        super.exitOptionslist(ctx);
     }
 
     @Override
     public void exitOptions(OptionsContext ctx) {
         setValue(ctx, getValue(ctx.optionslist()));
-        super.exitOptions(ctx);
     }
 
 
@@ -399,25 +382,21 @@ public class ContactWalker extends ContactBaseListener {
             Pair p = new Pair(name, s);
             setValue(ctx, p);
         }
-        super.exitPair(ctx);
     }
 
     @Override
     public void exitPairStringValue(PairStringValueContext ctx) {
         setValue(ctx, stripQuotes(ctx.stringValue.getText()));
-        super.exitPairStringValue(ctx);
     }
 
     @Override
     public void exitPairIntValue(PairIntValueContext ctx) {
         setValue(ctx, ctx.intValue.getText());
-        super.exitPairIntValue(ctx);
     }
 
     @Override
     public void exitPairBoolValue(PairBoolValueContext ctx) {
         setValue(ctx, ctx.boolValue.getText());
-        super.exitPairBoolValue(ctx);
     }
 
 
@@ -435,16 +414,19 @@ public class ContactWalker extends ContactBaseListener {
             command.params.conn_id = ctx.connname.getText();
         }
         setValue(ctx, command);
-        super.exitConnect(ctx);
     }
 
+
+    @Override
+    public void enterUse(UseContext ctx) {
+        System.out.println("CLEAR RESOLVER");
+    }
 
     @Override
     public void exitUse(UseContext ctx) {
         if (ctx.BUCKET() != null) {
             String bucket = stripQuotes(ctx.name.getText());
             runtimeCtx.setCurrentBucket(bucket);
-            super.exitUse(ctx);
         }
     }
 
@@ -472,21 +454,18 @@ public class ContactWalker extends ContactBaseListener {
             List<PairContext> pctxs = ctx.pair();
             setValue(ctx, pctxs);
         }
-        super.exitStore_indexes(ctx);
     }
 
     @Override
     public void exitListbuckets(ListbucketsContext ctx) {
         ListBucketsCommand listBuckets = new ListBucketsCommand();
         setValue(ctx, listBuckets);
-        super.exitListbuckets(ctx);
     }
 
     @Override
     public void exitListkeys(ListkeysContext ctx) {
         ListKeysCommand listKeys = new ListKeysCommand();
         setValue(ctx, listKeys);
-        super.exitListkeys(ctx);
     }
 
     @Override
@@ -526,8 +505,11 @@ public class ContactWalker extends ContactBaseListener {
         } else {
             runtimeCtx.setCurrentQuery2iOptions(new HashMap<String, String>());
         }
+        if(ctx.RESOLVER() != null) {
 
-        super.exitUseBucketOptions(ctx);
+        } else {
+            // set current resolver to null
+        }
     }
 
     @Override
@@ -551,5 +533,30 @@ public class ContactWalker extends ContactBaseListener {
             content = stripQuotes(ctx.STRING().getText());
         }
         runtimeCtx.getActionListener().evalScript(content);
+    }
+
+
+    @Override
+    public void exitBucketprops(BucketpropsContext ctx) {
+        if(ctx.get_bucketprops() != null) {
+            setValue(ctx, getValue(ctx.get_bucketprops()));
+        } else {
+            setValue(ctx, getValue(ctx.set_bucketprops()));
+        }
+    }
+
+    @Override
+    public void exitGet_bucketprops(Get_bucketpropsContext ctx) {
+        GetBucketPropsCommand cmd = new GetBucketPropsCommand();
+        setValue(ctx, cmd);
+    }
+
+    @Override
+    public void exitSet_bucketprops(Set_bucketpropsContext ctx) {
+        SetBucketPropsCommand cmd = new SetBucketPropsCommand();
+        // TODO: <String, Object> vs <String, String>
+        // I would prefer <String, String>
+        cmd.params.options = (Map<String, String>)getValue(ctx.optionslist());
+        setValue(ctx, cmd);
     }
 }
