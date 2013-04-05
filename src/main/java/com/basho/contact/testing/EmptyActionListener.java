@@ -24,6 +24,7 @@ package com.basho.contact.testing;
 
 
 import com.basho.contact.actions.ContactActionListener;
+import com.basho.contact.actions.ContactConflictResolverMill;
 import com.basho.contact.commands.params.*;
 
 public class EmptyActionListener implements ContactActionListener {
@@ -153,5 +154,10 @@ public class EmptyActionListener implements ContactActionListener {
     @Override
     public void postSetBucketPropsAction(SetBucketPropsParams.Post params) {
 
+    }
+
+    @Override
+    public ContactConflictResolverMill getResolverMill() {
+        return null;
     }
 }

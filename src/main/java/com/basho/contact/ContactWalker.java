@@ -78,7 +78,7 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitUsing(UsingContext ctx) {
-        String bucket = stripQuotes(ctx.bucket.getText());
+        String bucket = ParseUtils.stripQuotes(ctx.bucket.getText());
         Object o = getValue(ctx.op_with_options());
         if (o instanceof RiakCommand) {
             RiakCommand<?, ?> c = (RiakCommand<?, ?>) o;
@@ -170,7 +170,7 @@ public class ContactWalker extends ContactBaseListener {
     public void exitCode_string(Code_stringContext ctx) {
         String value;
         if (ctx.STRING() != null) {
-            value = stripQuotes(ctx.STRING().getText());
+            value = ParseUtils.stripQuotes(ctx.STRING().getText());
         } else {
             value = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         }
@@ -277,7 +277,7 @@ public class ContactWalker extends ContactBaseListener {
     @Override
     public void exitFetch(FetchContext ctx) {
         FetchCommand fetch = new FetchCommand();
-        fetch.params.key = stripQuotes(ctx.key.getText());
+        fetch.params.key = ParseUtils.stripQuotes(ctx.key.getText());
         setValue(ctx, fetch);
     }
 
@@ -286,7 +286,7 @@ public class ContactWalker extends ContactBaseListener {
     @Override
     public void exitStore(StoreContext ctx) {
         StoreCommand store = new StoreCommand();
-        store.params.key = stripQuotes(ctx.key.getText());
+        store.params.key = ParseUtils.stripQuotes(ctx.key.getText());
         store.params.content = (Content) getValue(ctx.content_string());
         if (ctx.store_indexes() != null) {
             List<PairContext> pctxs = (List<PairContext>) getValue(ctx.store_indexes());
@@ -306,7 +306,7 @@ public class ContactWalker extends ContactBaseListener {
         String value = "";
 
         if (ctx.STRING() != null) {
-            value = stripQuotes(ctx.STRING().getText());
+            value = ParseUtils.stripQuotes(ctx.STRING().getText());
         } else if (ctx.DATA_CONTENT() != null) {
             value = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         }
@@ -326,25 +326,25 @@ public class ContactWalker extends ContactBaseListener {
     @Override
     public void exitUser_content(User_contentContext ctx) {
         //user_content: CONTENTTYPE content_type=STRING AND
-        setValue(ctx, stripQuotes(ctx.content_type.getText()));
+        setValue(ctx, ParseUtils.stripQuotes(ctx.content_type.getText()));
     }
 
     @Override
     public void exitDelete(DeleteContext ctx) {
         DeleteCommand cmd = new DeleteCommand();
-        cmd.params.key = stripQuotes(ctx.key.getText());
+        cmd.params.key = ParseUtils.stripQuotes(ctx.key.getText());
         setValue(ctx, cmd);
     }
 
     @Override
     public void exitQuery2i(Query2iContext ctx) {
         Query2iCommand query = new Query2iCommand();
-        query.params.indexName = stripQuotes(ctx.index.getText());
+        query.params.indexName = ParseUtils.stripQuotes(ctx.index.getText());
         if (ctx.exact != null) {
-            query.params.indexVal = stripQuotes(ctx.exact.getText());
+            query.params.indexVal = ParseUtils.stripQuotes(ctx.exact.getText());
         } else {
-            query.params.min = stripQuotes(ctx.vmin.getText());
-            query.params.max = stripQuotes(ctx.vmax.getText());
+            query.params.min = ParseUtils.stripQuotes(ctx.vmin.getText());
+            query.params.max = ParseUtils.stripQuotes(ctx.vmax.getText());
         }
         if(ctx.FETCH() != null) {
             query.params.doFetch = true;
@@ -374,7 +374,7 @@ public class ContactWalker extends ContactBaseListener {
     public void exitPair(PairContext ctx) {
         String s = (String)getValue(ctx.pairValue());
         if (ctx.name != null) {
-            String name = stripQuotes(ctx.name.getText());
+            String name = ParseUtils.stripQuotes(ctx.name.getText());
             Pair p = new Pair(name, s);
             setValue(ctx, p);
         } else {
@@ -386,7 +386,7 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitPairStringValue(PairStringValueContext ctx) {
-        setValue(ctx, stripQuotes(ctx.stringValue.getText()));
+        setValue(ctx, ParseUtils.stripQuotes(ctx.stringValue.getText()));
     }
 
     @Override
@@ -402,7 +402,7 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitConnect(ConnectContext ctx) {
-        String host = stripQuotes(ctx.host.getText());
+        String host = ParseUtils.stripQuotes(ctx.host.getText());
         // don't worry about the port # here, 
         // Antlr already made sure it was a valid int
         int pbPort = Integer.parseInt(ctx.pbport.getText());
@@ -414,20 +414,6 @@ public class ContactWalker extends ContactBaseListener {
             command.params.conn_id = ctx.connname.getText();
         }
         setValue(ctx, command);
-    }
-
-
-
-
-    public String stripQuotes(String rawVal) {
-        // should probably check if it's an empty string and all that..
-        if (rawVal.length() == 2) {
-            return "";
-        } else if (rawVal.length() == 3) {
-            return rawVal.substring(1, 2);
-        } else {
-            return rawVal.substring(1, rawVal.length() - 1);
-        }
     }
 
 
@@ -460,7 +446,7 @@ public class ContactWalker extends ContactBaseListener {
     @Override
     public void exitUse(UseContext ctx) {
         if (ctx.BUCKET() != null) {
-            String bucket = stripQuotes(ctx.name.getText());
+            String bucket = ParseUtils.stripQuotes(ctx.name.getText());
             runtimeCtx.setCurrentBucket(bucket);
             if(ctx.useBucketOptions() != null && getValue(ctx.useBucketOptions()) != null) {
                 String scriptBody = (String)getValue(ctx.useBucketOptions());
@@ -522,7 +508,7 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitLoadscript(LoadscriptContext ctx) {
-        String filename = stripQuotes(ctx.filename.getText());
+        String filename = ParseUtils.stripQuotes(ctx.filename.getText());
         runtimeCtx.getActionListener().loadScript(filename);
     }
 
@@ -532,7 +518,7 @@ public class ContactWalker extends ContactBaseListener {
         if(ctx.DATA_CONTENT() != null) {
             content = ParseUtils.getDataContent(ctx.DATA_CONTENT().getText());
         } else {
-            content = stripQuotes(ctx.STRING().getText());
+            content = ParseUtils.stripQuotes(ctx.STRING().getText());
         }
         runtimeCtx.getActionListener().evalScript(content);
     }

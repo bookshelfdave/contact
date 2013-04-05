@@ -45,6 +45,27 @@ public class ParseUtils {
         return content;
     }
 
+    public static String stripQuotes(String rawVal) {
+        // should probably check if it's an empty string and all that..
+        if (rawVal.length() == 2) {
+            return "";
+        } else if (rawVal.length() == 3) {
+            return rawVal.substring(1, 2);
+        } else {
+            String v = rawVal.substring(1, rawVal.length() - 1);
+            if(v.contains("\\\"")) {
+                v = v.replaceAll("\\\"","\"");
+            }
+            return v;
+        }
+    }
+
+    @Test
+    public void testStripQuotes() {
+        // TODO: edge cases
+        assertEquals("this is \"a test\"", stripQuotes("\"this is \"a test\"\""));
+    }
+
     @Test
     public void testDataContent() {
         assertEquals("This is a test", getDataContent("~%~This is a test~%~"));
