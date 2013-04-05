@@ -54,7 +54,7 @@ public class ParseUtils {
         } else {
             String v = rawVal.substring(1, rawVal.length() - 1);
             if(v.contains("\\\"")) {
-                v = v.replaceAll("\\\"","\"");
+                v = v.replaceAll("\\\\\"","\"");
             }
             return v;
         }
@@ -63,7 +63,10 @@ public class ParseUtils {
     @Test
     public void testStripQuotes() {
         // TODO: edge cases
-        assertEquals("this is \"a test\"", stripQuotes("\"this is \"a test\"\""));
+        //assertEquals("this is \"a test\"", stripQuotes("\"this is \"a test\"\""));
+        String orig ="\"{\\\"Foo\\\":1}\"";
+        System.out.println(orig);
+        assertEquals("{\"Foo\":1}",stripQuotes(orig));
     }
 
     @Test
