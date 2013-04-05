@@ -244,7 +244,7 @@ using bucket "Foo"
 /* using "json" will set the content-type to application/xml */
 using bucket "Foo" 
     store "MyKey" 
-    with xml "This is text";
+    with xml "&lt;foo&gt;bar&lt;/foo&gt;";
 
 /* you can also define your own content type */
 store "MyKey" with content-type "text/csv" and "1,2,3,4";
@@ -373,9 +373,9 @@ query2i with index "range_int" from "1" to "2";
 
 <p>See <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> for an example 2i query with custom rendered JSON output.</p>
 
-<h2>Fetching Bucket Properties</h2>
+<h2>Bucket Properties</h2>
 
-<p>To fetch a map of bucket properties, use:</p>
+<p>To <strong>get</strong> a map of bucket properties, use:</p>
 
 <pre><code>using bucket "Foo" get properties;
 </code></pre>
@@ -390,6 +390,19 @@ get properties;
 
 {dw=null, basic_quorum=null, not_found_ok=null, small_vclock=null, young_vclock=null, w=null, backend=null, r=null, search=null, allow_siblings=false, name=Foo, last_write_wins=null, post_commit_hooks=[], n_val=3, pw=null, pre_commit_hooks=[], old_vclock=null, rw=null, pr=null}
 </code></pre>
+
+<p>To <strong>set</strong> bucket properties:</p>
+
+<pre><code>use bucket "Foo";
+set properties n_val=2, allow_siblings=false;
+</code></pre>
+
+<p>At the moment, there are only 2 properties available via the Protocol Buffers interface:</p>
+
+<ul>
+<li>allow_siblings (Boolean)</li>
+<li>n_val (Integer)</li>
+</ul><p>All other properties coming soon to a theater near you.</p>
 
 <h2>Listing Buckets</h2>
 
@@ -427,6 +440,30 @@ count keys;
 <pre><code>&gt; using bucket "Google" count keys;
 Counting keys for Google...
 Bucket Google contains 1438 keys
+</code></pre>
+
+<h2>Resolving conflicts</h2>
+
+<p>The default conflict resolver for Contact will pick a random sibling upon conflict detection. To change this behavior, you can specify you own resolver with Javascript:</p>
+
+<pre><code>use bucket "MyBucket" with resolver javascript ~%~
+function(siblings) {
+        if(siblings.size() &gt; 1) {
+          out.println("siblings");
+          return siblings.toArray()[0];
+        } else if(siblings.size() == 1) {
+          out.println("no siblings");
+          return siblings.iterator().next();
+        } else {
+           return null;
+        }
+    }
+~%~;
+
+set properties allow_siblings=true;
+
+store "Foo" with text "1000";
+store "Foo" with text "2000";
 </code></pre>
 
 <h2>Map/Reduce</h2>
@@ -1169,15 +1206,14 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 <h1>TODO</h1>
 
 <ul>
-<li>TESTING TESTING TESTING</li>
-<li>update</li>
-<li>set bucket properties via pb</li>
-<li>unescape ~%~</li>
-<li>implement Javascript resolvers + retiers</li>
+<li>TESTING</li>
+<li>update command</li>
+<li>retiers need some cleanup</li>
 <li>clean up mr syntax + implementation</li>
 <li>Riak Search (Yokozuna integration)</li>
 <li>link walking</li>
 <li>user meta for store</li>
+<li>general code cleanup</li>
 <li>Fix tab completion 
 
 <ul>
