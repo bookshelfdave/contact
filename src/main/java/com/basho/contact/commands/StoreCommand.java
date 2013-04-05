@@ -31,6 +31,7 @@ import com.basho.riak.client.RiakRetryFailedException;
 import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.bucket.DomainBucket;
 import com.basho.riak.client.builders.RiakObjectBuilder;
+import com.basho.riak.client.cap.ClobberMutation;
 import com.basho.riak.client.cap.ConflictResolver;
 import com.basho.riak.client.operations.StoreObject;
 
@@ -150,10 +151,18 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
             // TODO: cache this
             Bucket b = conn.fetchBucket(params.bucket).execute();
 
-            StoreObject<IRiakObject> so = processOptions(runtimeCtx,
-                    b.store(obj));
+            StoreObject<IRiakObject> so = processOptions(runtimeCtx, b.store(obj));
 
-            so = so.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
+            if(b.getAllowSiblings()) {
+                System.out.println("Siblings 1");
+                so = so.withMutator(new ClobberMutation<>(obj));
+                if(returnBody()) {
+                    System.out.println("Siblings 2");
+                    so = so.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
+                }
+                System.out.println("Siblings 3");
+
+            }
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preStoreAction(params);
             ResultSymbol result = new ResultSymbol(so.execute());
@@ -170,6 +179,14 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
         } catch (RiakRetryFailedException e) {
             runtimeCtx.appendError("Can't store object in bucket", e);
             return null;
+        }
+    }
+
+    private boolean returnBody() {
+        if(params.options.containsKey("return_body")) {
+            return CommandUtils.objectToBoolean(params.options.get("return_body"));
+        } else {
+            return false;
         }
     }
 }

@@ -31,4 +31,5 @@ import java.util.Collection;
 public interface ContactConflictResolverMill {
     public ConflictResolver<IRiakObject> getResolverForBucket(String bucket);
     public void defineResolver(String bucket, String body);
+    public void clearResolver(String bucket);
 }

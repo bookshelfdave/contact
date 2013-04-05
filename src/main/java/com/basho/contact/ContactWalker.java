@@ -417,18 +417,7 @@ public class ContactWalker extends ContactBaseListener {
     }
 
 
-    @Override
-    public void enterUse(UseContext ctx) {
-        System.out.println("CLEAR RESOLVER");
-    }
 
-    @Override
-    public void exitUse(UseContext ctx) {
-        if (ctx.BUCKET() != null) {
-            String bucket = stripQuotes(ctx.name.getText());
-            runtimeCtx.setCurrentBucket(bucket);
-        }
-    }
 
     public String stripQuotes(String rawVal) {
         // should probably check if it's an empty string and all that..
@@ -469,6 +458,18 @@ public class ContactWalker extends ContactBaseListener {
     }
 
     @Override
+    public void exitUse(UseContext ctx) {
+        if (ctx.BUCKET() != null) {
+            String bucket = stripQuotes(ctx.name.getText());
+            runtimeCtx.setCurrentBucket(bucket);
+            if(ctx.useBucketOptions() != null && getValue(ctx.useBucketOptions()) != null) {
+                String scriptBody = (String)getValue(ctx.useBucketOptions());
+                runtimeCtx.getActionListener().getResolverMill().defineResolver(bucket, scriptBody);
+            }
+        }
+    }
+
+    @Override
     public void exitUseBucketOptions(UseBucketOptionsContext ctx) {
         if(ctx.FETCH() != null) {
             @SuppressWarnings("unchecked")
@@ -506,9 +507,10 @@ public class ContactWalker extends ContactBaseListener {
             runtimeCtx.setCurrentQuery2iOptions(new HashMap<String, String>());
         }
         if(ctx.RESOLVER() != null) {
-
+            setValue(ctx, getValue(ctx.code_string()));
         } else {
-            // set current resolver to null
+            // TODO: clear resolver!
+            //runtimeCtx.getActionListener().getResolverMill().clearResolver();
         }
     }
 

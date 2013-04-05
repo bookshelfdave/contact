@@ -118,7 +118,10 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
             // TODO: optimize this to skip fetch/create bucket every time
             Bucket b = conn.fetchBucket(this.params.bucket).execute();
             FetchObject<IRiakObject> fo = processOptions(runtimeCtx, b.fetch(params.key));
-            fo = fo.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
+            if(b.getAllowSiblings()) {
+                fo = fo.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
+
+            }
             params.fetchObj = fo;
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preFetchAction(params);

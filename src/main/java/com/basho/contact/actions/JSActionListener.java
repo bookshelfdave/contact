@@ -26,6 +26,7 @@ import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.params.*;
 import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.cap.ConflictResolver;
+import com.basho.riak.client.cap.UnresolvedConflictException;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -89,7 +90,7 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
         // Java client is using
         @Override
         public IRiakObject resolve(Collection<IRiakObject> siblings) {
-            System.out.println("Default resolver!");
+            System.out.println("SIBS = " + siblings);
             if(siblings != null) {
                 return siblings.iterator().next();
             } else {
@@ -410,14 +411,21 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
         ConflictResolver<IRiakObject> resolver = new ConflictResolver<IRiakObject>() {
             @Override
             public IRiakObject resolve(Collection<IRiakObject> siblings) {
-                return (IRiakObject)evalResolverScript(siblings, jsBody);
+                evalResolverScript(siblings, jsBody);
+                return siblings.iterator().next();
             }
         };
+
         resolversByBucket.put(bucket, resolver);
     }
 
     @Override
     public ContactConflictResolverMill getResolverMill() {
         return this;
+    }
+
+    @Override
+    public void clearResolver(String bucket) {
+         resolversByBucket.remove(bucket);
     }
 }
