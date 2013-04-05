@@ -28,6 +28,7 @@ import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.cap.ConflictResolver;
 import com.basho.riak.client.cap.UnresolvedConflictException;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -84,20 +85,9 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
     private RuntimeContext runtimeCtx = null;
     private Map<String, String> js = new HashMap<String, String>();
     private Map<String, ConflictResolver<IRiakObject>> resolversByBucket = new HashMap<String, ConflictResolver<IRiakObject>>();
+    static int resolverid = 0;
 
-    ConflictResolver<IRiakObject> defaultResolver = new ConflictResolver<IRiakObject>() {
-        // TODO: I should probably use whatever default resolver the
-        // Java client is using
-        @Override
-        public IRiakObject resolve(Collection<IRiakObject> siblings) {
-            System.out.println("SIBS = " + siblings);
-            if(siblings != null) {
-                return siblings.iterator().next();
-            } else {
-                return null;
-            }
-        }
-    };
+    ConflictResolver<IRiakObject> defaultResolver;
 
     public JSActionListener(RuntimeContext ctx, PrintStream out, PrintStream err) {
         this.runtimeCtx = ctx;
@@ -109,6 +99,19 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
 
         Object wrappedErr = Context.javaToJS(err, jsscope);
         ScriptableObject.putProperty(jsscope, "err", wrappedErr);
+        defaultResolver = new ConflictResolver<IRiakObject>() {
+            @Override
+            public IRiakObject resolve(Collection<IRiakObject> siblings) {
+                if (siblings.size() > 1) {
+                    JSActionListener.this.runtimeCtx.appendError("Siblings detected, resolving with first sibling");
+                    return siblings.iterator().next();
+                } else if (siblings.size() == 1) {
+                    return siblings.iterator().next();
+                } else {
+                    return null;
+                }
+            }
+        };
 
         // setup some default objects
         evalScript("var print = function(s) { out.print(s); };");
@@ -331,25 +334,28 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
         Context cx = Context.enter();
 
         try {
-            cx.evaluateString(jsscope, script, "<script>", 1, null);
+            cx.evaluateString(jsscope, script, "<contact_script>", 1, null);
         } catch (Exception e) {
-            // TODO
-            e.printStackTrace();
+            runtimeCtx.appendError(e);
         } finally {
             Context.exit();
         }
     }
 
-    public Object evalResolverScript(Collection<IRiakObject> siblings, String script) {
+    public Object evalResolverScript(Collection<IRiakObject> siblings, String script, String fnname) {
         Context cx = Context.enter();
         Object wrappedObj = Context.javaToJS(siblings, jsscope);
         ScriptableObject.putProperty(jsscope, "siblings", wrappedObj);
         Object result = null;
         try {
-            result = cx.evaluateString(jsscope, script, "<js_resolver>", 1, null);
+            cx.evaluateString(jsscope, script, "<js_resolver>", 1, null);
+            Object fObj = jsscope.get(fnname, jsscope);
+            Object functionArgs[] = { wrappedObj };
+            Function f = (Function)fObj;
+            result = f.call(cx, jsscope, jsscope, functionArgs);
+            result = Context.jsToJava(result,IRiakObject.class);
         } catch (Exception e) {
-            // TODO
-            e.printStackTrace();
+            runtimeCtx.appendError(e);
         } finally {
             Context.exit();
         }
@@ -407,12 +413,19 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
 
     @Override
     public void defineResolver(String bucket, String body) {
-        final String jsBody = body;
+        final String fnname = "resolver_" + (resolverid++);
+        final String jsBody = "var " + fnname + " = " + body;
         ConflictResolver<IRiakObject> resolver = new ConflictResolver<IRiakObject>() {
             @Override
             public IRiakObject resolve(Collection<IRiakObject> siblings) {
-                evalResolverScript(siblings, jsBody);
-                return siblings.iterator().next();
+                Object result = null;
+                try {
+                    result = evalResolverScript(siblings, jsBody, fnname);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    JSActionListener.this.runtimeCtx.appendError(e);
+                }
+                return (IRiakObject)result;
             }
         };
 
