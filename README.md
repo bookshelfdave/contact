@@ -877,15 +877,14 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 	
 
 #TODO
-* TESTING TESTING TESTING
-* update
-* set bucket properties via pb
-* unescape ~%~
-* implement Javascript resolvers + retiers
+* TESTING
+* update command
+* retiers need some cleanup
 * clean up mr syntax + implementation
 * Riak Search (Yokozuna integration)
 * link walking
 * user meta for store
+* general code cleanup
 * Fix tab completion 
     * pasting text into the shell erroneously kicks off tab completion
 
