@@ -33,89 +33,125 @@ public class EmptyActionListener implements ContactActionListener {
     public void term() {
     }
 
+    @Override
     public void preConnectAction(ConnectParams.Pre params) {
     }
 
+    @Override
     public void postConnectAction(ConnectParams.Post params) {
     }
 
+    @Override
     public void preFetchAction(FetchParams.Pre params) {
     }
 
+    @Override
     public void postFetchAction(FetchParams.Post params) {
     }
 
+    @Override
     public void preStoreAction(StoreParams.Pre params) {
     }
 
+    @Override
     public void postStoreAction(StoreParams.Post params) {
     }
 
+    @Override
     public void preDeleteAction(DeleteParams.Pre params) {
     }
 
+    @Override
     public void postDeleteAction(DeleteParams.Post params) {
     }
 
+    @Override
     public void preQuery2iAction(Query2iParams.Pre params) {
     }
 
+    @Override
     public void postQuery2iAction(Query2iParams.Post params) {
     }
 
+    @Override
     public void preMapredAction(MapRedParams.Pre params) {
     }
 
+    @Override
     public void postMapredAction(MapRedParams.Post params) {
     }
 
+    @Override
     public void preListBucketsAction(ListBucketsParams.Pre params) {
     }
 
+    @Override
     public void postListBucketsAction(ListBucketsParams.Post params) {
     }
 
+    @Override
     public void preListKeysAction(ListKeysParams.Pre params) {
     }
 
+    @Override
     public void postListKeysAction(ListKeysParams.Post params) {
     }
 
+    @Override
     public void preGetBucketPropsAction(GetBucketPropsParams.Pre params) {
     }
 
+    @Override
     public void postGetBucketPropsAction(GetBucketPropsParams.Post params) {
     }
 
+    @Override
     public void loadScript(String filename) {
 
     }
 
+    @Override
     public void evalScript(String script) {
 
     }
 
+    @Override
     public void preConnections(ConnectionsParams.Pre params) {
 
     }
 
+    @Override
     public void postConnections(ConnectionsParams.Post params) {
 
     }
 
+    @Override
     public void preCountKeys(CountKeysParams.Pre params) {
 
     }
 
+    @Override
     public void postCountKeys(CountKeysParams.Post params) {
 
     }
 
+    @Override
     public void preGetBucket(GetBucketParams.Pre params) {
 
     }
 
+    @Override
     public void postGetBucket(GetBucketParams.Post params) {
+
+    }
+
+    @Override
+    public void preSetBucketPropsAction(SetBucketPropsParams.Pre params) {
+
+    }
+
+    @Override
+    public void postSetBucketPropsAction(SetBucketPropsParams.Post params) {
 
     }
 }

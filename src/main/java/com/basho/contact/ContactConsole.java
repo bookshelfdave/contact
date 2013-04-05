@@ -116,6 +116,15 @@ public class ContactConsole {
                 }
             }
         };
+
+        ConsoleCommand source = new ConsoleCommand() {
+            @Override
+            public void run(String line, ConsoleReader reader) {
+
+
+                //processOutput(ctx, out, !commandLine.hasOption("nocolor"));
+            }
+        };
         consoleOnlyCommands.put("exit", exit);
         consoleOnlyCommands.put("quit", exit);
         consoleOnlyCommands.put("clear", clear);

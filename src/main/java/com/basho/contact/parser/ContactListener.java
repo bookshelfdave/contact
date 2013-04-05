@@ -7,20 +7,23 @@ public interface ContactListener extends ParseTreeListener {
 	void enterListkeys(ContactParser.ListkeysContext ctx);
 	void exitListkeys(ContactParser.ListkeysContext ctx);
 
+	void enterUpdate(ContactParser.UpdateContext ctx);
+	void exitUpdate(ContactParser.UpdateContext ctx);
+
 	void enterStore_indexes(ContactParser.Store_indexesContext ctx);
 	void exitStore_indexes(ContactParser.Store_indexesContext ctx);
 
 	void enterUsing(ContactParser.UsingContext ctx);
 	void exitUsing(ContactParser.UsingContext ctx);
 
+	void enterConnect(ContactParser.ConnectContext ctx);
+	void exitConnect(ContactParser.ConnectContext ctx);
+
 	void enterConnection_selector(ContactParser.Connection_selectorContext ctx);
 	void exitConnection_selector(ContactParser.Connection_selectorContext ctx);
 
 	void enterStore(ContactParser.StoreContext ctx);
 	void exitStore(ContactParser.StoreContext ctx);
-
-	void enterConnect(ContactParser.ConnectContext ctx);
-	void exitConnect(ContactParser.ConnectContext ctx);
 
 	void enterPair(ContactParser.PairContext ctx);
 	void exitPair(ContactParser.PairContext ctx);
@@ -91,6 +94,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterSet_action(ContactParser.Set_actionContext ctx);
 	void exitSet_action(ContactParser.Set_actionContext ctx);
 
+	void enterBucketprops(ContactParser.BucketpropsContext ctx);
+	void exitBucketprops(ContactParser.BucketpropsContext ctx);
+
 	void enterGet_bucketprops(ContactParser.Get_bucketpropsContext ctx);
 	void exitGet_bucketprops(ContactParser.Get_bucketpropsContext ctx);
 
@@ -105,6 +111,9 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterAssignment(ContactParser.AssignmentContext ctx);
 	void exitAssignment(ContactParser.AssignmentContext ctx);
+
+	void enterSet_bucketprops(ContactParser.Set_bucketpropsContext ctx);
+	void exitSet_bucketprops(ContactParser.Set_bucketpropsContext ctx);
 
 	void enterPairIntValue(ContactParser.PairIntValueContext ctx);
 	void exitPairIntValue(ContactParser.PairIntValueContext ctx);

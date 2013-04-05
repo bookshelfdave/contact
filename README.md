@@ -330,9 +330,9 @@ query2i and fetch with index "year_int" and value "2010";
 		
 See [Contact Sample Data](https://github.com/metadave/contact_sample_data) for an example 2i query with custom rendered JSON output.
 
-## Fetching Bucket Properties
+## Bucket Properties
 
-To fetch a map of bucket properties, use:
+To **get** a map of bucket properties, use:
 
 	using bucket "Foo" get properties;
 
@@ -348,6 +348,21 @@ or
 {dw=null, basic_quorum=null, not_found_ok=null, small_vclock=null, young_vclock=null, w=null, backend=null, r=null, search=null, allow_siblings=false, name=Foo, last_write_wins=null, post_commit_hooks=[], n_val=3, pw=null, pre_commit_hooks=[], old_vclock=null, rw=null, pr=null}
 ```
 
+To **set** bucket properties:
+
+
+
+```
+use bucket "Foo";
+set properties n_val=2, allow_siblings=false;
+```
+
+At the moment, there are only 2 properties available via the Protocol Buffers interface:
+
+- allow_siblings (Boolean)
+- n_val (Integer)
+
+All other properties coming soon to a theater near you.
 
 ## Listing Buckets
 
@@ -382,7 +397,32 @@ Example:
 Counting keys for Google...
 Bucket Google contains 1438 keys
 ```
-		
+
+## Resolving conflicts
+
+The default conflict resolver for Contact will pick a random sibling upon conflict detection. To change this behavior, you can specify you own resolver with Javascript:
+
+```
+use bucket "MyBucket" with resolver javascript ~%~
+function(siblings) {
+        if(siblings.size() > 1) {
+          out.println("siblings");
+          return siblings.toArray()[0];
+        } else if(siblings.size() == 1) {
+          out.println("no siblings");
+          return siblings.iterator().next();
+        } else {
+           return null;
+        }
+    }
+~%~;
+
+set properties allow_siblings=true;
+
+store "Foo" with text "1000";
+store "Foo" with text "2000";
+```
+
 	
 ## Map/Reduce
 

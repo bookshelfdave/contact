@@ -32,7 +32,7 @@ op_with_options: (  fetch           |
                     query2i         |
                     listkeys        |
                     countkeys       |
-                    get_bucketprops |
+                    bucketprops |
                     update
                   ) options?;
 
@@ -73,9 +73,13 @@ useBucketOptions:
         (with STORE OPTIONS storeOptions=optionslist)?
         (with DELETE OPTIONS deleteOptions=optionslist)?
         (with QUERY2I OPTIONS query2iOptions=optionslist)?
+        (with RESOLVER code_string)?
         ;
 
+bucketprops: (get_bucketprops | set_bucketprops);
+
 get_bucketprops: GET PROPERTIES;
+set_bucketprops: SET PROPERTIES optionslist;
 
 connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?) (AS connname=ID)?;
 
@@ -128,6 +132,7 @@ INDEX       :    'index';
 TO          :    'to';
 JAVASCRIPT  :    'javascript';
 PROPERTIES  :    'properties';
+RESOLVER    :    'resolver';
 LOAD        :    'load';
 SCRIPT      :    'script';
 LIST        :    'list';
@@ -152,7 +157,7 @@ RPAREN      :    ')';
 EQUALS      :    '=';
 DOT         :    '.';
 SEMI        :    ';';
-ID          :       LOWER (UPPER | LOWER)*;
+ID          :       LOWER (UPPER | LOWER | '_')*;
 
 fragment LOWER : 'a' .. 'z';
 fragment UPPER : 'A' .. 'Z';

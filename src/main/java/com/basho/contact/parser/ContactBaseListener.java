@@ -10,20 +10,23 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterListkeys(ContactParser.ListkeysContext ctx) { }
 	@Override public void exitListkeys(ContactParser.ListkeysContext ctx) { }
 
+	@Override public void enterUpdate(ContactParser.UpdateContext ctx) { }
+	@Override public void exitUpdate(ContactParser.UpdateContext ctx) { }
+
 	@Override public void enterStore_indexes(ContactParser.Store_indexesContext ctx) { }
 	@Override public void exitStore_indexes(ContactParser.Store_indexesContext ctx) { }
 
 	@Override public void enterUsing(ContactParser.UsingContext ctx) { }
 	@Override public void exitUsing(ContactParser.UsingContext ctx) { }
 
+	@Override public void enterConnect(ContactParser.ConnectContext ctx) { }
+	@Override public void exitConnect(ContactParser.ConnectContext ctx) { }
+
 	@Override public void enterConnection_selector(ContactParser.Connection_selectorContext ctx) { }
 	@Override public void exitConnection_selector(ContactParser.Connection_selectorContext ctx) { }
 
 	@Override public void enterStore(ContactParser.StoreContext ctx) { }
 	@Override public void exitStore(ContactParser.StoreContext ctx) { }
-
-	@Override public void enterConnect(ContactParser.ConnectContext ctx) { }
-	@Override public void exitConnect(ContactParser.ConnectContext ctx) { }
 
 	@Override public void enterPair(ContactParser.PairContext ctx) { }
 	@Override public void exitPair(ContactParser.PairContext ctx) { }
@@ -94,6 +97,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterSet_action(ContactParser.Set_actionContext ctx) { }
 	@Override public void exitSet_action(ContactParser.Set_actionContext ctx) { }
 
+	@Override public void enterBucketprops(ContactParser.BucketpropsContext ctx) { }
+	@Override public void exitBucketprops(ContactParser.BucketpropsContext ctx) { }
+
 	@Override public void enterGet_bucketprops(ContactParser.Get_bucketpropsContext ctx) { }
 	@Override public void exitGet_bucketprops(ContactParser.Get_bucketpropsContext ctx) { }
 
@@ -108,6 +114,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterAssignment(ContactParser.AssignmentContext ctx) { }
 	@Override public void exitAssignment(ContactParser.AssignmentContext ctx) { }
+
+	@Override public void enterSet_bucketprops(ContactParser.Set_bucketpropsContext ctx) { }
+	@Override public void exitSet_bucketprops(ContactParser.Set_bucketpropsContext ctx) { }
 
 	@Override public void enterPairIntValue(ContactParser.PairIntValueContext ctx) { }
 	@Override public void exitPairIntValue(ContactParser.PairIntValueContext ctx) { }

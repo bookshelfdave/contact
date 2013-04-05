@@ -65,6 +65,10 @@ public interface ContactActionListener {
 
     public void postGetBucketPropsAction(GetBucketPropsParams.Post params);
 
+    public void preSetBucketPropsAction(SetBucketPropsParams.Pre params);
+
+    public void postSetBucketPropsAction(SetBucketPropsParams.Post params);
+
     public void loadScript(String filename);
 
     public void evalScript(String script);
@@ -80,4 +84,6 @@ public interface ContactActionListener {
     public void preGetBucket(GetBucketParams.Pre params);
 
     public void postGetBucket(GetBucketParams.Post params);
+
+    public ContactConflictResolverMill getResolverMill();
 }

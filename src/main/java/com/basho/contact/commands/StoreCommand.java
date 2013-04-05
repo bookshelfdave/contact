@@ -29,9 +29,14 @@ import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.RiakRetryFailedException;
 import com.basho.riak.client.bucket.Bucket;
+import com.basho.riak.client.bucket.DomainBucket;
 import com.basho.riak.client.builders.RiakObjectBuilder;
+import com.basho.riak.client.cap.*;
+import com.basho.riak.client.convert.ConversionException;
+import com.basho.riak.client.convert.Converter;
 import com.basho.riak.client.operations.StoreObject;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,12 +147,41 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
 
             builder = builder.withValue(params.content.getValue());
             builder = addIndexes(builder);
+
             IRiakObject obj = builder.build();
 
             // TODO: cache this
             Bucket b = conn.fetchBucket(params.bucket).execute();
-            StoreObject<IRiakObject> so = processOptions(runtimeCtx,
-                    b.store(obj));
+
+            StoreObject<IRiakObject> so = processOptions(runtimeCtx, b.store(obj));
+
+            if(b.getAllowSiblings()) {
+//                so.withResolver(new ConflictResolver<IRiakObject>() {
+//                    @Override
+//                    public IRiakObject resolve(Collection<IRiakObject> siblings) {
+//                        if (siblings.size() > 1) {
+//                            return siblings.iterator().next();
+//                        } else if (siblings.size() == 1) {
+//                            return siblings.iterator().next();
+//                        } else {
+//                            return null;
+//                        }
+//
+//                    }
+//                });
+                so.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
+                so.withConverter(new Converter<IRiakObject>() {
+                    @Override
+                    public IRiakObject fromDomain(IRiakObject domainObject, VClock vclock) throws ConversionException {
+                        return domainObject;
+                    }
+
+                    @Override
+                    public IRiakObject toDomain(IRiakObject riakObject) throws ConversionException {
+                        return riakObject;
+                    }
+                });
+            }
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preStoreAction(params);
             ResultSymbol result = new ResultSymbol(so.execute());
@@ -164,6 +198,14 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
         } catch (RiakRetryFailedException e) {
             runtimeCtx.appendError("Can't store object in bucket", e);
             return null;
+        }
+    }
+
+    private boolean returnBody() {
+        if(params.options.containsKey("return_body")) {
+            return CommandUtils.objectToBoolean(params.options.get("return_body"));
+        } else {
+            return false;
         }
     }
 }
