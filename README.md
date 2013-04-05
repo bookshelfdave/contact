@@ -328,7 +328,7 @@ To fetch the results of all keys as the result of a 2i query, use the `query2i a
 query2i and fetch with index "year_int" and value "2010";
 ```
 		
-See [Contact Sample Data](https://github.com/metadave/contact_sample_data) for an example 2i query with custom rendered JSON output.
+See [Contact Sample Data](http://metadave.github.com/contact_sample_data) for an example 2i query with custom rendered JSON output.
 
 ## Bucket Properties
 
