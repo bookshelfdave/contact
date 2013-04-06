@@ -90,7 +90,7 @@ To see a list of connections, use the `connections` commands:
 	> connect "127.0.0.1" pb 10027 as bar;
 	Connecting to Riak @ 127.0.0.1:10027
 	> connections;
-	<connection:boo:127.0.0.1:10027>
+	<connection:foo:127.0.0.1:10027>
 	<connection:bar:127.0.0.1:10017>
 
 If multiple connections are made, the default connection is undefined at the moment.
