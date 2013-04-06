@@ -135,37 +135,6 @@ public class ContactWalker extends ContactBaseListener {
         }
     }
 
-//    @Override
-//    public void exitShow(ShowContext ctx) {
-//        ContactSymbol<?> obj = null;
-//        if (ctx.ID() != null) {
-//            // TODO: make getBinding allow more more than one SymbolType
-//            obj = runtimeCtx.getBinding(ctx.ID().getText(), SymbolType.RESULT);
-//        } else {
-//            obj = runtimeCtx.lastResult;
-//        }
-//
-//        if (ctx.DETAIL() != null) {
-//            if (obj.type == ContactSymbol.SymbolType.RESULT) {
-//                IRiakObject result = (IRiakObject) obj.value;
-//                StringBuilder sb = new StringBuilder();
-//                sb.append("Key:" + result.getKey() + "\n");
-//                sb.append("Bucket:" + result.getBucket() + "\n");
-//                sb.append("VClock:" + result.getVClockAsString() + "\n");
-//                // TODO: add more detail!
-//                sb.append("Value: " + result.getValueAsString() + "\n");
-//                NonSymbolOutput nsym = new NonSymbolOutput(sb.toString());
-//                runtimeCtx.lastOutput = nsym;
-//            }
-//        } else {
-//            if (obj.type == ContactSymbol.SymbolType.RESULT) {
-//                IRiakObject result = (IRiakObject) obj.value;
-//                NonSymbolOutput nsym = new NonSymbolOutput(result.getValueAsString());
-//                runtimeCtx.lastOutput = nsym;
-//            }
-//        }
-//    }
-
     @Override
     public void exitCode_string(Code_stringContext ctx) {
         String value;
@@ -301,8 +270,6 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitContent_string(Content_stringContext ctx) {
-        // content_string: (TEXT | JSON | XML | user_content) (STRING | DATA_CONTENT);
-
         String value = "";
 
         if (ctx.STRING() != null) {
@@ -325,7 +292,6 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitUser_content(User_contentContext ctx) {
-        //user_content: CONTENTTYPE content_type=STRING AND
         setValue(ctx, ParseUtils.stripQuotes(ctx.content_type.getText()));
     }
 

@@ -22,7 +22,6 @@
 
 package com.basho.contact.mr;
 
-import com.basho.contact.Constants;
 
 public class MRPhase {
 

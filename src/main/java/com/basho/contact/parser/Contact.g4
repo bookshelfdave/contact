@@ -157,7 +157,7 @@ RPAREN      :    ')';
 EQUALS      :    '=';
 DOT         :    '.';
 SEMI        :    ';';
-ID          :       LOWER (UPPER | LOWER | '_')*;
+ID          :       LOWER (UPPER | LOWER | DIGIT | '_')*;
 
 fragment LOWER : 'a' .. 'z';
 fragment UPPER : 'A' .. 'Z';
