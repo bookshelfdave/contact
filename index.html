@@ -251,7 +251,7 @@ store "MyKey" with content-type "text/csv" and "1,2,3,4";
 </code></pre>
 
 <p>Note, any double quotes appearing in the content string will need to be escaped. To store larger 
-chunks of text, use a here doc:</p>
+chunks of text, use the scissors delimeter:</p>
 
 <pre><code>// no escaping required!
 using bucket "Foo" store "MyKey" with text 
