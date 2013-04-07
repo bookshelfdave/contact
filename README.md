@@ -210,7 +210,7 @@ To store plain text, json, or xml, you can use the following commands:
 
 
 Note, any double quotes appearing in the content string will need to be escaped. To store larger 
-chunks of text, use a here doc:
+chunks of text, use the scissors delimeter:
 
 ```
 // no escaping required!
