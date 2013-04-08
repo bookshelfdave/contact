@@ -72,6 +72,7 @@ public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionPa
                 ctx.getExecutor().cleanCurrentFuture();
             }
         } else {
+            ctx.appendError("The current Contact security policy has denied access to this command.");
             return null;
         }
     }

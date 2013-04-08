@@ -74,6 +74,11 @@ public class RuntimeContext {
         this.listener = jsActionListener;
     }
 
+    public void resetIO(PrintStream out, PrintStream err) {
+        this.jsActionListener = new JSActionListener(this, out, err);
+        this.listener = jsActionListener;
+    }
+
     public AccessPolicy getAccessPolicy() {
         return accessPolicy;
     }
