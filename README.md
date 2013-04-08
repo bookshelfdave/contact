@@ -4,6 +4,10 @@
 
 Contact is a language and interactive shell for [Riak](http://basho.com/riak/).
 
+## Screencast
+
+[Intro to Contact Screencast](https://vimeo.com/63488515)
+
 ## Status
 
 This is a prototype and ***SHOULD NOT BE USED IN PRODUCTION. I'm actively working on this project, and the language is very likely to change. Many things probably don't work right now.***
@@ -879,8 +883,9 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 #TODO
 * TESTING
 * update command
-* retiers need some cleanup
-* clean up mr syntax + implementation
+* connection pooling/grouping
+* conflict resolution need some cleanup
+* mr syntax + implementation
 * Riak Search (Yokozuna integration)
 * link walking
 * user meta for store
