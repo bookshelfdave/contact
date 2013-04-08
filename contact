@@ -1,3 +1,3 @@
 #!/bin/sh
 #java -classpath ./lib/antlr-4.0-complete.jar:./lib/jline-1.0.jar:./lib/riak-client-1.1.0-SNAPSHOT-jar-with-dependencies-and-tests.jar:./lib/js.jar:./lib/commons-cli-1.2.jar:./lib/commons-io-2.4.jar:./dist/lib/contact.jar com.basho.contact.ContactConsole $@
-java -classpath ./target/contact-0.2-jar-with-dependencies.jar com.basho.contact.ContactConsole $@
+java -classpath ./target/contact-0.3-jar-with-dependencies.jar com.basho.contact.ContactConsole $@
