@@ -883,6 +883,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 #TODO
 * TESTING
 * update command
+* Riak admin commands
 * connection pooling/grouping
 * conflict resolution need some cleanup
 * mr syntax + implementation
