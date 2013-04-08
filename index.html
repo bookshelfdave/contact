@@ -1161,22 +1161,6 @@ var println = function(s) { out.println(s); };
     ~%~;
 </code></pre>
 
-<h2>Customizable Conflict Resolvers and Retriers</h2>
-
-<p><strong>TODO</strong></p>
-
-<p>These will also be customizable with Javascript.</p>
-
-<h2>Command Line Parameters</h2>
-
-<pre><code>./contact --help
-    usage: contact
-        --help                Print this list of commands
-        --infile &lt;filename&gt;   Read input from file and exit
-        --nocolor             Don't use color output
-        --noconfig            Don't read ~/.contact.config
-</code></pre>
-
 <h3>Batch mode</h3>
 
 <p>Pass in the <code>--infile &lt;filename&gt;</code> parameter to contact to process a file containing Contact commands. Contact will exit upon completion. </p>
@@ -1201,9 +1185,9 @@ any Contact code you want.</p>
 <li>Boolean: false, true</li>
 <li>Here documents</li>
 </ul><pre><code>~%~
-Any text between the "scissor operators" most likely won't need to be escaped. 
+Any text between the "scissor delimeters" most likely won't need to be escaped. 
 This means you can paste a full XML or JSON document here, and you don't 
-have to worry about escaping quotes! Of course, you'll need to escape the scissor operator with: \~%~
+have to worry about escaping quotes! Of course, you'll need to escape the scissor delimiter with: \~%~
 ~%~
 </code></pre>
 
@@ -1213,6 +1197,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 <li>TESTING</li>
 <li>update command</li>
 <li>Riak admin commands</li>
+<li>platform support/testing on Linux + Windows</li>
 <li>connection pooling/grouping</li>
 <li>conflict resolution need some cleanup</li>
 <li>mr syntax + implementation</li>
