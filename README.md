@@ -832,24 +832,6 @@ To execute arbitrary Javascript:
 ```
 
 
-
-## Customizable Conflict Resolvers and Retriers
-
-**TODO**
-
-These will also be customizable with Javascript.
-
-
-
-## Command Line Parameters
-
-	./contact --help
-		usage: contact
-		    --help                Print this list of commands
-		    --infile <filename>   Read input from file and exit
-		    --nocolor             Don't use color output
-		    --noconfig            Don't read ~/.contact.config
-
 ### Batch mode
 
 Pass in the `--infile <filename>` parameter to contact to process a file containing Contact commands. Contact will exit upon completion. 
@@ -873,9 +855,9 @@ For example, if you always connect to the same host, you can add this to the .co
 
 ```
 ~%~
-Any text between the "scissor operators" most likely won't need to be escaped. 
+Any text between the "scissor delimeters" most likely won't need to be escaped. 
 This means you can paste a full XML or JSON document here, and you don't 
-have to worry about escaping quotes! Of course, you'll need to escape the scissor operator with: \~%~
+have to worry about escaping quotes! Of course, you'll need to escape the scissor delimiter with: \~%~
 ~%~
 ```
 	
