@@ -24,6 +24,7 @@ package com.basho.contact;
 
 // NOTE: source for the JLine v1 ANSIBuffer is in this project
 
+import com.basho.contact.parser.ContactBaseListener;
 import com.basho.contact.parser.ContactLexer;
 import com.basho.contact.parser.ContactParser;
 import jline.ANSIBuffer;
@@ -35,6 +36,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.*;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,7 +133,7 @@ public class ContactConsole {
     }
 
     // TODO: this is a waste... reuse objects!
-    private static void processInput(String line, ContactWalker cw, RuntimeContext runtimeCtx) {
+    private static void processInput(String line,  List<ContactBaseListener> walkers, RuntimeContext runtimeCtx) {
         ANTLRInputStream input = new ANTLRInputStream(line);
         ContactLexer lexer = new ContactLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -142,7 +144,10 @@ public class ContactConsole {
 
         ParseTreeWalker walker = new ParseTreeWalker();
         try {
-            walker.walk(cw, parser.prog());
+            ContactParser.ProgContext prog = parser.prog();
+            for(ContactBaseListener w: walkers) {
+                walker.walk(w, prog);
+            }
         } catch (Throwable t) {
             // catch parse errors. ANTLR will display a message for me.
         }
@@ -236,7 +241,7 @@ public class ContactConsole {
         return null;
     }
 
-    private static void readInputFile(String filename, ContactWalker walker, RuntimeContext runtimeCtx) {
+    private static void readInputFile(String filename,  List<ContactBaseListener> walkers, RuntimeContext runtimeCtx) {
         String input = null;
         try {
             File f = new File(filename);
@@ -246,7 +251,7 @@ public class ContactConsole {
             System.exit(-1);
         }
         if (input != null && !input.trim().isEmpty()) {
-            processInput(input, walker, runtimeCtx);
+            processInput(input, walkers, runtimeCtx);
         }
     }
 
@@ -267,6 +272,10 @@ public class ContactConsole {
             ConsoleSignalHander.install("INT", ctx);
         }
         ContactWalker walker = new ContactWalker(ctx);
+        ContactAdminWalker adminWalker = new ContactAdminWalker(ctx);
+        List<ContactBaseListener> walkers = new ArrayList<ContactBaseListener>();
+        walkers.add(walker);
+        walkers.add(adminWalker);
 
         boolean nextLinePrompt = false;
 
@@ -284,14 +293,14 @@ public class ContactConsole {
                 e.printStackTrace();
             }
             if (config != null && !config.trim().isEmpty()) {
-                processInput(config, walker, ctx);
+                processInput(config, walkers, ctx);
                 processOutput(ctx, out, !commandLine.hasOption("nocolor"));
             }
         }
 
         if (commandLine.hasOption("infile")) {
             String filename = commandLine.getOptionValue("infile");
-            readInputFile(filename, walker, ctx);
+            readInputFile(filename, walkers, ctx);
             ctx.getActionListener().term();
             System.exit(0);
         }
@@ -303,6 +312,8 @@ public class ContactConsole {
         ansiprompt.green("> ");
         String prompt = ansiprompt.toString(!commandLine.hasOption("nocolor"));
         boolean inHereDoc = false;
+
+
 
         while ((line = reader.readLine(nextLinePrompt ? "" : prompt)) != null) {
             out.flush();
@@ -325,7 +336,7 @@ public class ContactConsole {
                 lines.append(line);
                 String input = lines.toString();
                 nextLinePrompt = false;
-                processInput(input, walker, ctx);
+                processInput(input, walkers, ctx);
                 processOutput(ctx, out, !commandLine.hasOption("nocolor"));
                 lines = new StringBuffer();
             } else if (inHereDoc) {

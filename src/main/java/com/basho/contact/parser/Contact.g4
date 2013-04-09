@@ -11,7 +11,9 @@ stat        :  assignment? (connect |
                             op_with_options |
                             listbuckets |
                             console_op |
-                            connections) connection_selector? SEMI;
+                            connections |
+                            admin
+                            ) connection_selector? SEMI;
 
 connection_selector:
     AT connname=ID;
@@ -81,7 +83,7 @@ bucketprops: (get_bucketprops | set_bucketprops);
 get_bucketprops: GET PROPERTIES;
 set_bucketprops: SET PROPERTIES optionslist;
 
-connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?) (AS connname=ID)?;
+connect: CONNECT host=STRING PB pbport=INT (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
@@ -89,6 +91,27 @@ set_action: ACTION actionname=ID WITH code_string;
 get: GET (get_action | BUCKET);
 
 get_action: ACTION actionname=ID;
+
+admin:
+    ADMIN
+    (connid = ID)
+    (admin_join          |
+    admin_leave          |
+    admin_force_remove   |
+    admin_replace        |
+    admin_force_replace  |
+    admin_plan           |
+    admin_commit         |
+    admin_clear);
+
+admin_join:  JOIN nodeid=STRING;
+admin_leave: LEAVE nodeid=STRING;
+admin_force_remove: FORCE REMOVE nodeid=STRING;
+admin_replace: REPLACE nodeida=STRING WITH nodeidb=STRING;
+admin_force_replace: FORCE REPLACE nodeida=STRING WITH nodeidb=STRING;
+admin_plan: PLAN;
+admin_commit: COMMIT;
+admin_clear: CLEAR;
 
 
 loadscript: LOAD SCRIPT filename=STRING;
@@ -148,6 +171,19 @@ AS          :    'as';
 JSON        :    'json';
 TEXT        :    'text';
 XML         :    'xml';
+NODE        :    'node';
+
+// admin stuff
+ADMIN       :    'admin';
+JOIN        :    'join';
+LEAVE       :    'leave';
+FORCE       :    'force';
+REMOVE      :    'remove';
+REPLACE     :    'replace';
+PLAN        :    'plan';
+COMMIT      :    'commit';
+CLEAR       :    'clear';
+
 AT          :    '@';
 COMMA       :    ',';
 LSQUARE     :    '[';
