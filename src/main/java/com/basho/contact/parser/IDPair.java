@@ -20,17 +20,11 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.parser;
 
-
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
-
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+public class IDPair extends Pair {
+    public IDPair(String id, String value) {
+        super(id, value);
     }
+
 }

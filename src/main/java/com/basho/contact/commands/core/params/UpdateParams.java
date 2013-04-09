@@ -20,17 +20,30 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.core.params;
 
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+import com.basho.contact.parser.Content;
+import com.basho.contact.parser.Pair;
+import com.basho.contact.actions.ActionParams;
+import com.basho.contact.actions.Binding;
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+import java.util.List;
+
+public class UpdateParams {
+    public static class Pre extends ActionParams {
+        @Binding(name = "key")
+        public String key;
+
+        @Binding(name = "indexes")
+        public List<Pair> indexes = null;
+
+        @Binding(name = "content")
+        public Content content;
+
+    }
+
+    public static class Post extends ActionParams {
+
     }
 }

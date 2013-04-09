@@ -23,10 +23,9 @@
 package com.basho.contact.actions;
 
 import com.basho.contact.RuntimeContext;
-import com.basho.contact.commands.params.*;
+import com.basho.contact.commands.core.params.*;
 import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.cap.ConflictResolver;
-import com.basho.riak.client.cap.UnresolvedConflictException;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;

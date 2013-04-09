@@ -28,6 +28,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterCode_string(ContactParser.Code_stringContext ctx) { }
 	@Override public void exitCode_string(ContactParser.Code_stringContext ctx) { }
 
+	@Override public void enterAdmin_status(ContactParser.Admin_statusContext ctx) { }
+	@Override public void exitAdmin_status(ContactParser.Admin_statusContext ctx) { }
+
 	@Override public void enterOp_with_options(ContactParser.Op_with_optionsContext ctx) { }
 	@Override public void exitOp_with_options(ContactParser.Op_with_optionsContext ctx) { }
 
@@ -105,6 +108,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterUser_content(ContactParser.User_contentContext ctx) { }
 	@Override public void exitUser_content(ContactParser.User_contentContext ctx) { }
+
+	@Override public void enterNoderef(ContactParser.NoderefContext ctx) { }
+	@Override public void exitNoderef(ContactParser.NoderefContext ctx) { }
 
 	@Override public void enterCountkeys(ContactParser.CountkeysContext ctx) { }
 	@Override public void exitCountkeys(ContactParser.CountkeysContext ctx) { }

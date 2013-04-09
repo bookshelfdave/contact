@@ -20,17 +20,30 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.core;
 
+import com.basho.contact.RiakCommand;
+import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.core.params.MapRedParams;
+import com.basho.contact.symbols.ResultsSymbol;
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+public class MapredCommand extends RiakCommand<ResultsSymbol, MapRedParams.Pre> {
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+    public MapredCommand() {
+        super(MapRedParams.Pre.class);
     }
+
+    @Override
+    protected boolean requiresConnection() {
+        return true;
+    }
+
+    @Override
+    protected ResultsSymbol exec(RuntimeContext ctx) {
+        //ctx.getNextPBClient().mapReduce()
+
+        return null;
+    }
+
+
 }

@@ -1,4 +1,5 @@
 grammar Contact;
+import CommonLexerRules;
 
 prog        :  (stat)+ EOF;
 
@@ -95,24 +96,29 @@ get_action: ACTION actionname=ID;
 admin:
     ADMIN
     (connid = ID)
-    (admin_join          |
-    admin_leave          |
-    admin_force_remove   |
-    admin_replace        |
-    admin_force_replace  |
-    admin_plan           |
-    admin_commit         |
-    admin_clear);
+    (
+      admin_join          |
+      admin_leave          |
+      admin_force_remove   |
+      admin_replace        |
+      admin_force_replace  |
+      admin_plan           |
+      admin_commit         |
+      admin_clear          |
+      admin_status
+    );
 
-admin_join:  JOIN nodeid=STRING;
-admin_leave: LEAVE nodeid=STRING;
-admin_force_remove: FORCE REMOVE nodeid=STRING;
-admin_replace: REPLACE nodeida=STRING WITH nodeidb=STRING;
-admin_force_replace: FORCE REPLACE nodeida=STRING WITH nodeidb=STRING;
+admin_status: STATUS;
+admin_join:  JOIN noderef;
+admin_leave: LEAVE noderef;
+admin_force_remove: FORCE REMOVE noderef;
+admin_replace: REPLACE nodea=noderef WITH nodeb=noderef;
+admin_force_replace: FORCE REPLACE nodea=noderef WITH nodeb=noderef;
 admin_plan: PLAN;
 admin_commit: COMMIT;
 admin_clear: CLEAR;
 
+noderef: (nodename=STRING | nodeid=ID);
 
 loadscript: LOAD SCRIPT filename=STRING;
 script: SCRIPT content=(STRING | DATA_CONTENT);
@@ -130,90 +136,3 @@ code_string: JAVASCRIPT (STRING | DATA_CONTENT);
 
 bool : TRUE | FALSE;
 
-LET         :    'let';
-PB          :    'pb';
-HTTP        :    'http';
-FETCH       :    'fetch';
-STORE       :    'store';
-UPDATE      :    'update';
-DELETE      :    'delete';
-VALUE       :    'value';
-CONTENTTYPE :    'content-type';
-CONN        :    'connection';
-CONNS       :    'connections';
-CONNECT     :    'connect';
-USE         :    'use';
-USING       :    'using';
-WITH        :    'with';
-AND         :    'and';
-BUCKET      :    'bucket';
-OPTIONS     :    'options';
-QUERY2I     :    'query2i';
-COUNT       :    'count';
-FROM        :    'from';
-INDEX       :    'index';
-TO          :    'to';
-JAVASCRIPT  :    'javascript';
-PROPERTIES  :    'properties';
-RESOLVER    :    'resolver';
-LOAD        :    'load';
-SCRIPT      :    'script';
-LIST        :    'list';
-BUCKETS     :    'buckets';
-KEYS        :    'keys';
-TRUE        :    'true';
-FALSE       :    'false';
-DEFAULT     :    'default';
-SET         :    'set';
-GET         :    'get';
-ACTION      :    'action';
-AS          :    'as';
-JSON        :    'json';
-TEXT        :    'text';
-XML         :    'xml';
-NODE        :    'node';
-
-// admin stuff
-ADMIN       :    'admin';
-JOIN        :    'join';
-LEAVE       :    'leave';
-FORCE       :    'force';
-REMOVE      :    'remove';
-REPLACE     :    'replace';
-PLAN        :    'plan';
-COMMIT      :    'commit';
-CLEAR       :    'clear';
-
-AT          :    '@';
-COMMA       :    ',';
-LSQUARE     :    '[';
-RSQUARE     :    ']';
-LPAREN      :    '(';
-RPAREN      :    ')';
-EQUALS      :    '=';
-DOT         :    '.';
-SEMI        :    ';';
-ID          :       LOWER (UPPER | LOWER | DIGIT | '_')*;
-
-fragment LOWER : 'a' .. 'z';
-fragment UPPER : 'A' .. 'Z';
-
-INT             :   DIGIT+;
-fragment DIGIT  : '0' .. '9';
-
-FLOAT       :       DIGIT+ DOT DIGIT*
-                    | DOT DIGIT+
-                       ;
-
-STRING  :  '"' (ESC|.)*? '"';
-fragment ESC : '\\"' | '\\\\' ;
-
-// scissors op, dude riding a pterodactyl, drunken bird
-DATA_CONTENT: '~%~' (DATA_ESC|.)*? '~%~';
-fragment DATA_ESC: '\\~%~' | '\\~%~';
-
-
-LINE_COMMENT  : '//' .*? '\r'? '\n' -> skip ;
-COMMENT       : '/*' .*? '*/'       -> skip ;
-
-WS      :       [ \t\r\n]+ -> skip;

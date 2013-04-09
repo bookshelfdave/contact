@@ -20,17 +20,12 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.admin131;
 
+import com.basho.contact.RuntimeContext;
+import com.ericsson.otp.erlang.OtpErlangList;
+import com.ericsson.otp.erlang.OtpErlangObject;
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+public class AdminClearCommand  {
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
-    }
 }

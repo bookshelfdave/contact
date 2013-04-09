@@ -20,17 +20,25 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.admin131;
 
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+import com.basho.contact.RuntimeContext;
+import com.ericsson.otp.erlang.OtpErlangList;
+import com.ericsson.otp.erlang.OtpErlangObject;
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+public class AdminCommitCommand extends AdminCommand {
+    public AdminCommitCommand() {
+        super("riak_core_console", "commit_staged");
+    }
+
+    @Override
+    public OtpErlangList preprocess(RuntimeContext ctx, String connid) {
+        return new OtpErlangList(new OtpErlangList());
+    }
+
+    @Override
+    public void postprocess(RuntimeContext ctx, OtpErlangObject result) {
+        System.out.println(result);
     }
 }

@@ -20,17 +20,28 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.core.params;
 
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+import com.basho.contact.actions.ActionParams;
+import com.basho.contact.actions.Binding;
+import com.basho.riak.client.IRiakObject;
+import com.basho.riak.client.operations.FetchObject;
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+public class FetchParams {
+    public static class Pre extends ActionParams {
+        @Binding(name = "key")
+        public String key;
+
+        @Binding(name = "fetchObj")
+        public FetchObject<IRiakObject> fetchObj;
+    }
+
+    public static class Post extends ActionParams {
+        @Binding(name = "key")
+        public String key;
+
+        @Binding(name = "riak_object")
+        public IRiakObject object;
     }
 }

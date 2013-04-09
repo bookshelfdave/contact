@@ -20,17 +20,24 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.core.params;
 
+import com.basho.contact.actions.ActionParams;
+import com.basho.contact.actions.Binding;
+import com.basho.riak.client.operations.DeleteObject;
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+public class DeleteParams {
+    public static class Pre extends ActionParams {
+        @Binding(name = "key")
+        public String key;
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+        @Binding(name = "deleteObject")
+        public DeleteObject deleteObject;
+    }
+
+    public static class Post extends ActionParams {
+        @Binding(name = "key")
+        public String key;
+
     }
 }

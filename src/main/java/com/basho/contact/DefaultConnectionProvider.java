@@ -32,8 +32,9 @@ import java.util.Map;
 public class DefaultConnectionProvider implements ContactConnectionProvider {
     public static String DEFAULT_CONNECTION_NAME = "default";
 
-    private Map<String, IRiakClient> pbclients = new HashMap<String, IRiakClient>();
+    private Map<String, IRiakClient>    pbclients = new HashMap<String, IRiakClient>();
     private Map<String, ConnectionInfo> clientInfo = new HashMap<String, ConnectionInfo>();
+    private Map<String, String>         clientToNodeMap = new HashMap<String, String>();
 
     public IRiakClient getDefaultClient(RuntimeContext ctx) {
         if(pbclients.containsKey(DEFAULT_CONNECTION_NAME)) {
@@ -84,5 +85,16 @@ public class DefaultConnectionProvider implements ContactConnectionProvider {
 
     public Map<String, ConnectionInfo> getAllConnections() {
         return clientInfo;
+    }
+
+    @Override
+    public void registerClientWithErlangNode(String clientname, String erlnode) {
+        clientInfo.get(clientname).erlnode = erlnode;
+        clientToNodeMap.put(clientname, erlnode);
+    }
+
+    @Override
+    public String getNodeNameForClient(String clientname) {
+        return clientToNodeMap.get(clientname);
     }
 }

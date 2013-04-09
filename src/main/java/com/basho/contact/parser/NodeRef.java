@@ -20,17 +20,35 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.parser;
 
+public class NodeRef {
+    private String value;
+    private NodeRefType reftype;
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+    public enum NodeRefType {
+        ID,
+        NAME
+    }
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+    public NodeRef(String s, NodeRefType t) {
+        value = s;
+        reftype = t;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public NodeRefType getReftype() {
+        return reftype;
+    }
+
+    public void setReftype(NodeRefType reftype) {
+        this.reftype = reftype;
     }
 }

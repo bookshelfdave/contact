@@ -25,7 +25,8 @@ package com.basho.contact.commands;
 import com.basho.contact.ContactConnectionProvider;
 import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
-import com.basho.contact.commands.params.FetchParams;
+import com.basho.contact.commands.core.FetchCommand;
+import com.basho.contact.commands.core.params.FetchParams;
 import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.testing.EmptyConnectionProvider;
 import com.basho.riak.client.IRiakClient;
@@ -33,8 +34,6 @@ import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.bucket.FetchBucket;
 import com.basho.riak.client.operations.FetchObject;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 
 import java.util.HashMap;
 import java.util.Map;

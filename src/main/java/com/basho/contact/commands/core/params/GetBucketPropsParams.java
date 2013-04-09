@@ -20,17 +20,20 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.core.params;
 
+import com.basho.contact.actions.ActionParams;
+import com.basho.contact.actions.Binding;
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+import java.util.Map;
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+public class GetBucketPropsParams {
+    public static class Pre extends ActionParams {
+
+    }
+
+    public static class Post extends ActionParams {
+        @Binding(name="bucket_props")
+        public Map<String, Object> bucket_props;
     }
 }

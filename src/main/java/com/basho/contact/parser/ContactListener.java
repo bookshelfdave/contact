@@ -25,6 +25,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterCode_string(ContactParser.Code_stringContext ctx);
 	void exitCode_string(ContactParser.Code_stringContext ctx);
 
+	void enterAdmin_status(ContactParser.Admin_statusContext ctx);
+	void exitAdmin_status(ContactParser.Admin_statusContext ctx);
+
 	void enterOp_with_options(ContactParser.Op_with_optionsContext ctx);
 	void exitOp_with_options(ContactParser.Op_with_optionsContext ctx);
 
@@ -102,6 +105,9 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterUser_content(ContactParser.User_contentContext ctx);
 	void exitUser_content(ContactParser.User_contentContext ctx);
+
+	void enterNoderef(ContactParser.NoderefContext ctx);
+	void exitNoderef(ContactParser.NoderefContext ctx);
 
 	void enterCountkeys(ContactParser.CountkeysContext ctx);
 	void exitCountkeys(ContactParser.CountkeysContext ctx);

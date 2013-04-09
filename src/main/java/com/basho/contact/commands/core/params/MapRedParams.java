@@ -20,17 +20,14 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands.core.params;
 
+import com.basho.contact.actions.ActionParams;
 
-public class ConnectionInfo {
-    public String host;
-    public int pbport;
-    public int httpport;
-    public String erlnode;
-    public String id;
+public class MapRedParams {
+    public static class Pre extends ActionParams {
+    }
 
-    public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
+    public static class Post extends ActionParams {
     }
 }
