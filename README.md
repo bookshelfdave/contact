@@ -866,6 +866,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * TESTING
 * update command
 * Riak admin commands
+* runtime config changes of a Riak node
 * platform support/testing on Linux + Windows
 * connection pooling/grouping
 * conflict resolution need some cleanup
