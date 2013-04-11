@@ -368,11 +368,14 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitConnect(ConnectContext ctx) {
-        String host = ParseUtils.stripQuotes(ctx.host.getText());
+        String hostAndPort = ParseUtils.stripQuotes(ctx.host.getText());
         // don't worry about the port # here, 
         // Antlr already made sure it was a valid int
-        int pbPort = Integer.parseInt(ctx.pbport.getText());
-
+        String chunks[] = hostAndPort.split(":");
+        String host = chunks[0];
+        String port = chunks[1];
+        // TODO: check for invalid IP:PORT combos
+        int pbPort = Integer.parseInt(chunks[1]);
         ConnectCommand command = new ConnectCommand();
         command.params.host = host;
         command.params.pbPort = pbPort;

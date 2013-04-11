@@ -48,12 +48,21 @@ public class ContactAdminWalker extends ContactBaseListener{
         return values.get(node);
     }
 
+
     @Override
     public void exitAdmin(ContactParser.AdminContext ctx) {
-        String connid = ctx.connid.getText();
+
+        String connid = null;
+        String clusterid = null;
+
+        if(ctx.clusterid() != null) {
+            clusterid = "*" + ctx.clusterid().getText();
+        }
+        if(ctx.connid != null) {
+            connid = ctx.connid.getText();
+        }
 
         AdminCommand cmd = null;
-
         if(ctx.admin_clear() != null) {
             cmd = (AdminCommand)getValue(ctx.admin_clear());
         } else if(ctx.admin_commit() != null) {
@@ -78,10 +87,12 @@ public class ContactAdminWalker extends ContactBaseListener{
             cmd = (AdminCommand)getValue(ctx.admin_get());
         } else if(ctx.admin_set() != null) {
             cmd = (AdminCommand)getValue(ctx.admin_set());
+        } else if(ctx.admin_discover() != null) {
+            cmd = (AdminCommand)getValue(ctx.admin_discover());
         }
 
         if(cmd != null) {
-            cmd.doExec(runtimeCtx, connid);
+            cmd.doExec(runtimeCtx, connid, clusterid);
         }
     }
 
@@ -170,6 +181,13 @@ public class ContactAdminWalker extends ContactBaseListener{
         String param = ctx.param.getText();
 
         AdminSetCommand cmd = new AdminSetCommand(app, param, v);
+        setValue(ctx, cmd);
+    }
+
+    @Override
+    public void exitAdmin_discover(ContactParser.Admin_discoverContext ctx) {
+        String clusterid = "*" + ctx.clusterid().getText();
+        AdminDiscoverCommand cmd = new AdminDiscoverCommand(clusterid);
         setValue(ctx, cmd);
     }
 }

@@ -1,7 +1,6 @@
 lexer grammar CommonLexerRules;
 
 LET         :    'let';
-PB          :    'pb';
 HTTP        :    'http';
 FETCH       :    'fetch';
 STORE       :    'store';
@@ -43,6 +42,8 @@ TEXT        :    'text';
 XML         :    'xml';
 NODE        :    'node';
 VERSIONS    :    'versions';
+DISCOVER    :    'discover';
+CLUSTER     :    'cluster';
 
 // admin stuff
 ADMIN       :    'admin';
@@ -57,6 +58,7 @@ CLEAR       :    'clear';
 STATUS      :    'status';
 
 AT          :    '@';
+SPLAT       :    '*';
 COMMA       :    ',';
 LSQUARE     :    '[';
 RSQUARE     :    ']';
@@ -66,6 +68,9 @@ EQUALS      :    '=';
 DOT         :    '.';
 SEMI        :    ';';
 ID          :       LOWER (UPPER | LOWER | DIGIT | '_')*;
+
+
+
 
 fragment LOWER : 'a' .. 'z';
 fragment UPPER : 'A' .. 'Z';

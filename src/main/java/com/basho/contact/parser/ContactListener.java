@@ -7,6 +7,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterAdmin_get(ContactParser.Admin_getContext ctx);
 	void exitAdmin_get(ContactParser.Admin_getContext ctx);
 
+	void enterAdmin_discover(ContactParser.Admin_discoverContext ctx);
+	void exitAdmin_discover(ContactParser.Admin_discoverContext ctx);
+
 	void enterStore_indexes(ContactParser.Store_indexesContext ctx);
 	void exitStore_indexes(ContactParser.Store_indexesContext ctx);
 
@@ -21,6 +24,9 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterConnection_selector(ContactParser.Connection_selectorContext ctx);
 	void exitConnection_selector(ContactParser.Connection_selectorContext ctx);
+
+	void enterClusterid(ContactParser.ClusteridContext ctx);
+	void exitClusterid(ContactParser.ClusteridContext ctx);
 
 	void enterQuery2i(ContactParser.Query2iContext ctx);
 	void exitQuery2i(ContactParser.Query2iContext ctx);

@@ -84,7 +84,7 @@ bucketprops: (get_bucketprops | set_bucketprops);
 get_bucketprops: GET PROPERTIES;
 set_bucketprops: SET PROPERTIES optionslist;
 
-connect: CONNECT host=STRING PB pbport=INT (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
+connect: CONNECT host=STRING (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
@@ -95,9 +95,9 @@ get_action: ACTION actionname=ID;
 
 admin:
     ADMIN
-    (connid = ID)
+    (connid = ID | clusterid)
     (
-      admin_join          |
+      admin_join           |
       admin_leave          |
       admin_force_remove   |
       admin_replace        |
@@ -108,7 +108,8 @@ admin:
       admin_status         |
       admin_versions       |
       admin_set            |
-      admin_get
+      admin_get            |
+      admin_discover
     );
 
 admin_status: STATUS;
@@ -123,6 +124,10 @@ admin_clear: CLEAR;
 admin_versions: VERSIONS;
 admin_set: SET app=ID DOT param=ID EQUALS (bool | STRING | INT);
 admin_get: GET app=ID DOT param=ID;
+admin_discover: DISCOVER CLUSTER clusterid;
+
+clusterid: SPLAT ID;
+
 
 noderef: (nodename=STRING | nodeid=ID);
 

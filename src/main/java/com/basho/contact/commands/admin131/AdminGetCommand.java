@@ -49,6 +49,6 @@ public class AdminGetCommand extends AdminCommand {
 
     @Override
     public void postprocess(RuntimeContext ctx, OtpErlangObject result) {
-        System.out.println(result);
+        System.out.println("   " + result);
     }
 }

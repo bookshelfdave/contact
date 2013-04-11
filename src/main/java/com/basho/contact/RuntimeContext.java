@@ -68,6 +68,8 @@ public class RuntimeContext {
 
     private Map<String, ConflictResolver<IRiakObject>> bucketResolvers = new HashMap<String, ConflictResolver<IRiakObject>>();
 
+    private Map<String, List<String>> definedClusters = new HashMap<String, List<String>>();
+
     public RuntimeContext(ContactConnectionProvider connections, PrintStream out, PrintStream err) {
         this.connections = connections;
         this.jsActionListener = new JSActionListener(this, out, err);
@@ -210,5 +212,13 @@ public class RuntimeContext {
 
     public void setBucketResolver(String bucket, ConflictResolver<IRiakObject> resolver) {
         bucketResolvers.put(bucket, resolver);
+    }
+
+    public void defineCluster(String clusterid, List<String> nodes) {
+        definedClusters.put(clusterid, nodes);
+    }
+
+    public List<String> getDefinedClusterNodes(String clusterid) {
+        return definedClusters.get(clusterid);
     }
 }

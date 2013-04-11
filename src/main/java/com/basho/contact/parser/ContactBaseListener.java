@@ -10,6 +10,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterAdmin_get(ContactParser.Admin_getContext ctx) { }
 	@Override public void exitAdmin_get(ContactParser.Admin_getContext ctx) { }
 
+	@Override public void enterAdmin_discover(ContactParser.Admin_discoverContext ctx) { }
+	@Override public void exitAdmin_discover(ContactParser.Admin_discoverContext ctx) { }
+
 	@Override public void enterStore_indexes(ContactParser.Store_indexesContext ctx) { }
 	@Override public void exitStore_indexes(ContactParser.Store_indexesContext ctx) { }
 
@@ -24,6 +27,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterConnection_selector(ContactParser.Connection_selectorContext ctx) { }
 	@Override public void exitConnection_selector(ContactParser.Connection_selectorContext ctx) { }
+
+	@Override public void enterClusterid(ContactParser.ClusteridContext ctx) { }
+	@Override public void exitClusterid(ContactParser.ClusteridContext ctx) { }
 
 	@Override public void enterQuery2i(ContactParser.Query2iContext ctx) { }
 	@Override public void exitQuery2i(ContactParser.Query2iContext ctx) { }
