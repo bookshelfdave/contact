@@ -50,4 +50,14 @@ public class EmptyConnectionProvider implements ContactConnectionProvider {
     public Map<String, ConnectionInfo> getAllConnections() {
         return null;
     }
+
+    @Override
+    public void registerClientWithErlangNode(String clientname, String erlnode) {
+
+    }
+
+    @Override
+    public String getNodeNameForClient(String clientname) {
+        return null;
+    }
 }

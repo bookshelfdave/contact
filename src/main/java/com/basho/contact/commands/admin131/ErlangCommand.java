@@ -50,6 +50,7 @@ public abstract class ErlangCommand {
             connection.sendRPC(module,function,params);
             OtpErlangObject result = connection.receiveRPC();
             postprocess(ctx, result);
+            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
             ctx.appendError(e);

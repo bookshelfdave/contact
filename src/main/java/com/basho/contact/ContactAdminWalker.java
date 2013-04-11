@@ -74,6 +74,10 @@ public class ContactAdminWalker extends ContactBaseListener{
             cmd = (AdminCommand)getValue(ctx.admin_status());
         } else if(ctx.admin_versions() != null) {
             cmd = (AdminCommand)getValue(ctx.admin_versions());
+        } else if(ctx.admin_get() != null) {
+            cmd = (AdminCommand)getValue(ctx.admin_get());
+        } else if(ctx.admin_set() != null) {
+            cmd = (AdminCommand)getValue(ctx.admin_set());
         }
 
         if(cmd != null) {
@@ -140,6 +144,32 @@ public class ContactAdminWalker extends ContactBaseListener{
     @Override
     public void exitAdmin_versions(ContactParser.Admin_versionsContext ctx) {
         AdminVersionCommand cmd = new AdminVersionCommand();
+        setValue(ctx, cmd);
+    }
+
+    @Override
+    public void exitAdmin_get(ContactParser.Admin_getContext ctx) {
+        String app = ctx.app.getText();
+        String param = ctx.param.getText();
+        AdminGetCommand cmd = new AdminGetCommand(app, param);
+        setValue(ctx, cmd);
+    }
+
+    @Override
+    public void exitAdmin_set(ContactParser.Admin_setContext ctx) {
+        Object v = null;
+        if(ctx.bool() != null) {
+            v = new Boolean(ctx.bool().getText());
+        } else if(ctx.STRING() != null) {
+            v = ParseUtils.stripQuotes(ctx.STRING().getText());
+        } else if(ctx.INT() != null) {
+            v = Integer.parseInt(ctx.INT().getText());
+        }
+
+        String app = ctx.app.getText();
+        String param = ctx.param.getText();
+
+        AdminSetCommand cmd = new AdminSetCommand(app, param, v);
         setValue(ctx, cmd);
     }
 }

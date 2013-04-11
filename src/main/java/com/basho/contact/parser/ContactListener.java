@@ -4,6 +4,9 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface ContactListener extends ParseTreeListener {
+	void enterAdmin_get(ContactParser.Admin_getContext ctx);
+	void exitAdmin_get(ContactParser.Admin_getContext ctx);
+
 	void enterStore_indexes(ContactParser.Store_indexesContext ctx);
 	void exitStore_indexes(ContactParser.Store_indexesContext ctx);
 
@@ -43,6 +46,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterLoadscript(ContactParser.LoadscriptContext ctx);
 	void exitLoadscript(ContactParser.LoadscriptContext ctx);
 
+	void enterAdmin_set(ContactParser.Admin_setContext ctx);
+	void exitAdmin_set(ContactParser.Admin_setContext ctx);
+
 	void enterFetch(ContactParser.FetchContext ctx);
 	void exitFetch(ContactParser.FetchContext ctx);
 
@@ -73,6 +79,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterPair(ContactParser.PairContext ctx);
 	void exitPair(ContactParser.PairContext ctx);
 
+	void enterPairStringValue(ContactParser.PairStringValueContext ctx);
+	void exitPairStringValue(ContactParser.PairStringValueContext ctx);
+
 	void enterOptionslist(ContactParser.OptionslistContext ctx);
 	void exitOptionslist(ContactParser.OptionslistContext ctx);
 
@@ -81,9 +90,6 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterAdmin_force_remove(ContactParser.Admin_force_removeContext ctx);
 	void exitAdmin_force_remove(ContactParser.Admin_force_removeContext ctx);
-
-	void enterPairStringValue(ContactParser.PairStringValueContext ctx);
-	void exitPairStringValue(ContactParser.PairStringValueContext ctx);
 
 	void enterUse(ContactParser.UseContext ctx);
 	void exitUse(ContactParser.UseContext ctx);

@@ -106,7 +106,9 @@ admin:
       admin_commit         |
       admin_clear          |
       admin_status         |
-      admin_versions
+      admin_versions       |
+      admin_set            |
+      admin_get
     );
 
 admin_status: STATUS;
@@ -119,6 +121,8 @@ admin_plan: PLAN;
 admin_commit: COMMIT;
 admin_clear: CLEAR;
 admin_versions: VERSIONS;
+admin_set: SET app=ID DOT param=ID EQUALS (bool | STRING | INT);
+admin_get: GET app=ID DOT param=ID;
 
 noderef: (nodename=STRING | nodeid=ID);
 

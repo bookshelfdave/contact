@@ -7,6 +7,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class ContactBaseListener implements ContactListener {
+	@Override public void enterAdmin_get(ContactParser.Admin_getContext ctx) { }
+	@Override public void exitAdmin_get(ContactParser.Admin_getContext ctx) { }
+
 	@Override public void enterStore_indexes(ContactParser.Store_indexesContext ctx) { }
 	@Override public void exitStore_indexes(ContactParser.Store_indexesContext ctx) { }
 
@@ -46,6 +49,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterLoadscript(ContactParser.LoadscriptContext ctx) { }
 	@Override public void exitLoadscript(ContactParser.LoadscriptContext ctx) { }
 
+	@Override public void enterAdmin_set(ContactParser.Admin_setContext ctx) { }
+	@Override public void exitAdmin_set(ContactParser.Admin_setContext ctx) { }
+
 	@Override public void enterFetch(ContactParser.FetchContext ctx) { }
 	@Override public void exitFetch(ContactParser.FetchContext ctx) { }
 
@@ -76,6 +82,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterPair(ContactParser.PairContext ctx) { }
 	@Override public void exitPair(ContactParser.PairContext ctx) { }
 
+	@Override public void enterPairStringValue(ContactParser.PairStringValueContext ctx) { }
+	@Override public void exitPairStringValue(ContactParser.PairStringValueContext ctx) { }
+
 	@Override public void enterOptionslist(ContactParser.OptionslistContext ctx) { }
 	@Override public void exitOptionslist(ContactParser.OptionslistContext ctx) { }
 
@@ -84,9 +93,6 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterAdmin_force_remove(ContactParser.Admin_force_removeContext ctx) { }
 	@Override public void exitAdmin_force_remove(ContactParser.Admin_force_removeContext ctx) { }
-
-	@Override public void enterPairStringValue(ContactParser.PairStringValueContext ctx) { }
-	@Override public void exitPairStringValue(ContactParser.PairStringValueContext ctx) { }
 
 	@Override public void enterUse(ContactParser.UseContext ctx) { }
 	@Override public void exitUse(ContactParser.UseContext ctx) { }
