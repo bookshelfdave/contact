@@ -88,6 +88,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterUse(ContactParser.UseContext ctx);
 	void exitUse(ContactParser.UseContext ctx);
 
+	void enterAdmin_versions(ContactParser.Admin_versionsContext ctx);
+	void exitAdmin_versions(ContactParser.Admin_versionsContext ctx);
+
 	void enterAdmin_force_replace(ContactParser.Admin_force_replaceContext ctx);
 	void exitAdmin_force_replace(ContactParser.Admin_force_replaceContext ctx);
 

@@ -91,6 +91,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterUse(ContactParser.UseContext ctx) { }
 	@Override public void exitUse(ContactParser.UseContext ctx) { }
 
+	@Override public void enterAdmin_versions(ContactParser.Admin_versionsContext ctx) { }
+	@Override public void exitAdmin_versions(ContactParser.Admin_versionsContext ctx) { }
+
 	@Override public void enterAdmin_force_replace(ContactParser.Admin_force_replaceContext ctx) { }
 	@Override public void exitAdmin_force_replace(ContactParser.Admin_force_replaceContext ctx) { }
 

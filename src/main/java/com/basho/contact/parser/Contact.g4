@@ -105,7 +105,8 @@ admin:
       admin_plan           |
       admin_commit         |
       admin_clear          |
-      admin_status
+      admin_status         |
+      admin_versions
     );
 
 admin_status: STATUS;
@@ -117,6 +118,7 @@ admin_force_replace: FORCE REPLACE nodea=noderef WITH nodeb=noderef;
 admin_plan: PLAN;
 admin_commit: COMMIT;
 admin_clear: CLEAR;
+admin_versions: VERSIONS;
 
 noderef: (nodename=STRING | nodeid=ID);
 

@@ -41,12 +41,12 @@ public abstract class ErlangCommand {
         try {
             OtpSelf self = new OtpSelf("riak_jmx@127.0.0.1", "riak");
             String erlnode = ctx.getConnectionProvider().getNodeNameForClient(connid);
-            System.out.println("ERLNODE = " + erlnode);
+            //System.out.println("ERLNODE = " + erlnode);
             OtpPeer riak = new OtpPeer(erlnode);
             OtpConnection connection = self.connect(riak);
             //connection.setTraceLevel(5);
             OtpErlangList params = preprocess(ctx, connid);
-            System.out.println(params);
+            //System.out.println(params);
             connection.sendRPC(module,function,params);
             OtpErlangObject result = connection.receiveRPC();
             postprocess(ctx, result);

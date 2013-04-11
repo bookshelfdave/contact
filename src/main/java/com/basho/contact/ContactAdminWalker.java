@@ -72,6 +72,8 @@ public class ContactAdminWalker extends ContactBaseListener{
             cmd = (AdminCommand)getValue(ctx.admin_replace());
         } else if(ctx.admin_status() != null) {
             cmd = (AdminCommand)getValue(ctx.admin_status());
+        } else if(ctx.admin_versions() != null) {
+            cmd = (AdminCommand)getValue(ctx.admin_versions());
         }
 
         if(cmd != null) {
@@ -132,6 +134,12 @@ public class ContactAdminWalker extends ContactBaseListener{
     @Override
     public void exitAdmin_status(ContactParser.Admin_statusContext ctx) {
         AdminStatusCommand cmd = new AdminStatusCommand();
+        setValue(ctx, cmd);
+    }
+
+    @Override
+    public void exitAdmin_versions(ContactParser.Admin_versionsContext ctx) {
+        AdminVersionCommand cmd = new AdminVersionCommand();
         setValue(ctx, cmd);
     }
 }

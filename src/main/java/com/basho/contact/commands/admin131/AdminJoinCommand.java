@@ -39,8 +39,9 @@ public class AdminJoinCommand extends AdminCommand {
     @Override
     public OtpErlangList preprocess(RuntimeContext ctx, String connid) {
         if(joinToNode.getReftype() == NodeRef.NodeRefType.NAME) {
-            System.out.println("JOIN COMMAND " + joinToNode.getValue());
-            return new OtpErlangList(new OtpErlangList(new OtpErlangString(joinToNode.getValue())));
+            return new OtpErlangList(
+                    new OtpErlangList(
+                            new OtpErlangString(joinToNode.getValue())));
         } else {
             ctx.appendError("Not implemented");
             return null;

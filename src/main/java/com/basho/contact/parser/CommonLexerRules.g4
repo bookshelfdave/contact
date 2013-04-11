@@ -42,6 +42,7 @@ JSON        :    'json';
 TEXT        :    'text';
 XML         :    'xml';
 NODE        :    'node';
+VERSIONS    :    'versions';
 
 // admin stuff
 ADMIN       :    'admin';
