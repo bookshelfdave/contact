@@ -187,7 +187,7 @@ Once you have a binding ("myKey" in the example above), you can refer to it from
 * basic_quorum (Boolean)
 * notfound_ok (Boolean)
 * deletedvclock (Boolean)
-
+* head (Boolean)
 
 
 ## Storing Data

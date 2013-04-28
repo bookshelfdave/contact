@@ -52,7 +52,6 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
 
     static {
 //	    optional bytes if_modified = 7;
-//	    optional bool head = 8;
 //	    optional bool deletedvclock = 9;
 
         // TODO: I don't need objectToInt anymore if everything passed in is a string
@@ -81,12 +80,16 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
             }
         });
 
-//		optionsMap.put("head", new FetchOpt() {
-//			public FetchObject<IRiakObject> setOption(
-//					FetchObject<IRiakObject> o, Object value) {
-//				return o.(objectToBoolean(value));
-//			}
-//		});
+		optionsMap.put("head", new FetchOpt() {
+			public FetchObject<IRiakObject> setOption(
+					FetchObject<IRiakObject> o, Object value) {
+				if(CommandUtils.objectToBoolean(value)) {
+                    return o.headOnly();
+                } else {
+                    return o;
+                }
+			}
+		});
 
         optionsMap.put("deletedvclock", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
