@@ -111,6 +111,11 @@
               <artifactId>maven-assembly-plugin</artifactId>
               <version>2.2.1</version>
               <configuration>
+                <archive>
+                  <manifest>
+                    <mainClass>com.basho.contact.ContactConsole</mainClass>
+                  </manifest>
+                </archive>
                 <descriptorRefs>
                   <descriptorRef>jar-with-dependencies</descriptorRef>
                 </descriptorRefs>
