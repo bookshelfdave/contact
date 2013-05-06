@@ -12,6 +12,8 @@ Contact is a language and interactive shell for [Riak](http://basho.com/riak/).
 
 This is a prototype and ***SHOULD NOT BE USED IN PRODUCTION. I'm actively working on this project, and the language is very likely to change. Many things probably don't work right now.***
 
+**Expect more update mid-May 2013.**
+
 See the TODO section below.
 
 ## Goals
