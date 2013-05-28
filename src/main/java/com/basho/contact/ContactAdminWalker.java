@@ -49,6 +49,9 @@ public class ContactAdminWalker extends ContactBaseListener{
     }
 
 
+
+
+    /*
     @Override
     public void exitAdmin(ContactParser.AdminContext ctx) {
 
@@ -190,4 +193,5 @@ public class ContactAdminWalker extends ContactBaseListener{
         AdminDiscoverCommand cmd = new AdminDiscoverCommand(clusterid);
         setValue(ctx, cmd);
     }
+    */
 }

@@ -74,15 +74,16 @@ usage: contact
 
 To connect to a Riak instance, use the `connect` command:
 
-	connect "127.0.0.1" pb 10017;
+	connect "host:port";
 	
-`pb` refers to the procol buffers port that Riak is configured to use. Check the `pb_port` 
+
+where `host` is the host or IP address where an instsance of Riak is running, and `port` is the protocol buffers port # that Riak is listening on. Check the `pb_port` 
 setting in **app.config** for the exact port to use.
 
 To connect to multiple sources:
 
-	connect "127.0.0.1" pb 10017 as foo;
-	connect "192.168.1.5" pb 10017 as bar;
+	connect "127.0.0.1:10017" as foo;
+	connect "192.168.1.5:10017" as bar;
 
 To use a given connection, you can supply an `@` suffix on most commands:
 
@@ -91,9 +92,9 @@ To use a given connection, you can supply an `@` suffix on most commands:
 
 To see a list of connections, use the `connections` commands:
 
-	> connect "127.0.0.1" pb 10017 as foo;
+	> connect "127.0.0.1:10017" as foo;
 	Connecting to Riak @ 127.0.0.1:10017
-	> connect "127.0.0.1" pb 10027 as bar;
+	> connect "127.0.0.1:10027" as bar;
 	Connecting to Riak @ 127.0.0.1:10027
 	> connections;
 	<connection:foo:127.0.0.1:10027>
