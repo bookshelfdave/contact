@@ -369,16 +369,25 @@ public class ContactWalker extends ContactBaseListener {
     @Override
     public void exitConnect(ConnectContext ctx) {
         String hostAndPort = ParseUtils.stripQuotes(ctx.host.getText());
-        // don't worry about the port # here, 
-        // Antlr already made sure it was a valid int
-        String chunks[] = hostAndPort.split(":");
-        String host = chunks[0];
-        String port = chunks[1];
-        // TODO: check for invalid IP:PORT combos
-        int pbPort = Integer.parseInt(chunks[1]);
         ConnectCommand command = new ConnectCommand();
-        command.params.host = host;
-        command.params.pbPort = pbPort;
+        if(ctx.pbport != null) {
+            // for backwards compat
+            int pbPort = Integer.parseInt(ctx.pbport.getText());
+            command.params.host = hostAndPort;
+            command.params.pbPort = pbPort;
+            runtimeCtx.appendError("'connect \"host\" pb port' has been deprecated in favor of 'connect \"host:port\"'");
+        } else {
+           // don't worry about the port # here,
+           // Antlr already made sure it was a valid int
+           String chunks[] = hostAndPort.split(":");
+           String host = chunks[0];
+           String port = chunks[1];
+            // TODO: check for invalid IP:PORT combos
+            int pbPort = Integer.parseInt(chunks[1]);
+           command.params.host = host;
+           command.params.pbPort = pbPort;
+        }
+
         if(ctx.connname != null) {
             command.params.conn_id = ctx.connname.getText();
 

@@ -20,40 +20,24 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.admin131;
-
+package com.basho.contact.commands.admin;
 
 import com.basho.contact.RuntimeContext;
-import com.ericsson.otp.erlang.*;
+import com.ericsson.otp.erlang.OtpErlangList;
+import com.ericsson.otp.erlang.OtpErlangObject;
 
-import java.util.Iterator;
-
-public class AdminStatusCommand extends AdminCommand {
-    public AdminStatusCommand() {
-        super("riak_kv_status", "statistics");
+public class AdminPlanCommand extends AdminCommand {
+    public AdminPlanCommand() {
+        super("riak_core_console", "print_staged");
     }
 
     @Override
     public OtpErlangList preprocess(RuntimeContext ctx, String connid) {
-        return new OtpErlangList();
+        return new OtpErlangList(new OtpErlangList());
     }
 
     @Override
     public void postprocess(RuntimeContext ctx, OtpErlangObject result) {
-        OtpErlangList l = (OtpErlangList)result;
-        Iterator<OtpErlangObject> it = l.iterator();
-        while(it.hasNext()) {
-            OtpErlangTuple o = (OtpErlangTuple)it.next();
-            OtpErlangAtom k = (OtpErlangAtom)o.elementAt(0);
-            OtpErlangObject obj = o.elementAt(1);
-
-            String val;
-            if(obj instanceof OtpErlangBinary) {
-                val = new String(((OtpErlangBinary) obj).binaryValue());
-            } else {
-                val = obj.toString();
-            }
-            System.out.println(k + ": " + val);
-        }
+        System.out.println(result);
     }
 }

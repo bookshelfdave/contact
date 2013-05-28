@@ -23,7 +23,7 @@
 package com.basho.contact;
 
 
-import com.basho.contact.commands.admin131.*;
+import com.basho.contact.commands.admin.*;
 import com.basho.contact.parser.ContactBaseListener;
 import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.NodeRef;

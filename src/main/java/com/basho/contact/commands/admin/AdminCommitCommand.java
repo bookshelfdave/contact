@@ -20,35 +20,25 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.admin131;
+package com.basho.contact.commands.admin;
+
 
 import com.basho.contact.RuntimeContext;
-import com.ericsson.otp.erlang.OtpErlangAtom;
 import com.ericsson.otp.erlang.OtpErlangList;
 import com.ericsson.otp.erlang.OtpErlangObject;
-import com.ericsson.otp.erlang.OtpErlangString;
 
-public class AdminGetCommand extends AdminCommand {
-    String app;
-    String param;
-
-    public AdminGetCommand(String app, String param) {
-        super("app_helper", "get_env");
-        this.app = app;
-        this.param = param;
+public class AdminCommitCommand extends AdminCommand {
+    public AdminCommitCommand() {
+        super("riak_core_console", "commit_staged");
     }
 
     @Override
     public OtpErlangList preprocess(RuntimeContext ctx, String connid) {
-        OtpErlangObject[] objs = {
-                new OtpErlangAtom(app),
-                new OtpErlangAtom(param)
-        };
-        return new OtpErlangList(objs);
+        return new OtpErlangList(new OtpErlangList());
     }
 
     @Override
     public void postprocess(RuntimeContext ctx, OtpErlangObject result) {
-        System.out.println("   " + result);
+        System.out.println(result);
     }
 }

@@ -1,6 +1,7 @@
 lexer grammar CommonLexerRules;
 
 LET         :    'let';
+PB          :    'pb';
 HTTP        :    'http';
 FETCH       :    'fetch';
 STORE       :    'store';

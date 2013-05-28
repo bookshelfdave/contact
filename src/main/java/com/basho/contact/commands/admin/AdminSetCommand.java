@@ -20,7 +20,7 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.admin131;
+package com.basho.contact.commands.admin;
 
 
 import com.basho.contact.RuntimeContext;

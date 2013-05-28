@@ -12,8 +12,7 @@ stat        :  assignment? (connect |
                             op_with_options |
                             listbuckets |
                             console_op |
-                            connections |
-                            admin
+                            connections
                             ) connection_selector? SEMI;
 
 connection_selector:
@@ -84,7 +83,7 @@ bucketprops: (get_bucketprops | set_bucketprops);
 get_bucketprops: GET PROPERTIES;
 set_bucketprops: SET PROPERTIES optionslist;
 
-connect: CONNECT host=STRING (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
+connect: CONNECT host=STRING (PB pbport=INT)? (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
@@ -93,6 +92,7 @@ get: GET (get_action | BUCKET);
 
 get_action: ACTION actionname=ID;
 
+/*
 admin:
     ADMIN
     (connid = ID | clusterid)
@@ -125,6 +125,7 @@ admin_versions: VERSIONS;
 admin_set: SET app=ID DOT param=ID EQUALS (bool | STRING | INT);
 admin_get: GET app=ID DOT param=ID;
 admin_discover: DISCOVER CLUSTER clusterid;
+*/
 
 clusterid: SPLAT ID;
 

@@ -20,10 +20,7 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.admin131;
+package com.basho.contact.commands.admin;
 
-public abstract class AdminCommand extends ErlangCommand {
-    protected AdminCommand(String m, String f) {
-        super(m, f);
-    }
+public class AdminLeaveCommand {
 }

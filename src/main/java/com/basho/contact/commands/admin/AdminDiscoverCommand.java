@@ -20,12 +20,11 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact.commands.admin131;
+package com.basho.contact.commands.admin;
 
 import com.basho.contact.RuntimeContext;
 import com.ericsson.otp.erlang.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
