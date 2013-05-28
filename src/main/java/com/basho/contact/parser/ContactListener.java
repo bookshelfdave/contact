@@ -31,6 +31,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterPairStringValue(ContactParser.PairStringValueContext ctx);
 	void exitPairStringValue(ContactParser.PairStringValueContext ctx);
 
+	void enterClusterid(ContactParser.ClusteridContext ctx);
+	void exitClusterid(ContactParser.ClusteridContext ctx);
+
 	void enterSet(ContactParser.SetContext ctx);
 	void exitSet(ContactParser.SetContext ctx);
 
@@ -60,6 +63,9 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterDelete(ContactParser.DeleteContext ctx);
 	void exitDelete(ContactParser.DeleteContext ctx);
+
+	void enterNoderef(ContactParser.NoderefContext ctx);
+	void exitNoderef(ContactParser.NoderefContext ctx);
 
 	void enterListbuckets(ContactParser.ListbucketsContext ctx);
 	void exitListbuckets(ContactParser.ListbucketsContext ctx);

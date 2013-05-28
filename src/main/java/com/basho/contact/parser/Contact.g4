@@ -1,4 +1,5 @@
 grammar Contact;
+import CommonLexerRules;
 
 prog        :  (stat)+ EOF;
 
@@ -11,7 +12,8 @@ stat        :  assignment? (connect |
                             op_with_options |
                             listbuckets |
                             console_op |
-                            connections) connection_selector? SEMI;
+                            connections
+                            ) connection_selector? SEMI;
 
 connection_selector:
     AT connname=ID;
@@ -81,7 +83,7 @@ bucketprops: (get_bucketprops | set_bucketprops);
 get_bucketprops: GET PROPERTIES;
 set_bucketprops: SET PROPERTIES optionslist;
 
-connect: CONNECT (DEFAULT | host=STRING PB pbport=INT (HTTP httpport=INT)?) (AS connname=ID)?;
+connect: CONNECT host=STRING (PB pbport=INT)? (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
@@ -90,6 +92,45 @@ get: GET (get_action | BUCKET);
 
 get_action: ACTION actionname=ID;
 
+/*
+admin:
+    ADMIN
+    (connid = ID | clusterid)
+    (
+      admin_join           |
+      admin_leave          |
+      admin_force_remove   |
+      admin_replace        |
+      admin_force_replace  |
+      admin_plan           |
+      admin_commit         |
+      admin_clear          |
+      admin_status         |
+      admin_versions       |
+      admin_set            |
+      admin_get            |
+      admin_discover
+    );
+
+admin_status: STATUS;
+admin_join:  JOIN noderef;
+admin_leave: LEAVE noderef;
+admin_force_remove: FORCE REMOVE noderef;
+admin_replace: REPLACE nodea=noderef WITH nodeb=noderef;
+admin_force_replace: FORCE REPLACE nodea=noderef WITH nodeb=noderef;
+admin_plan: PLAN;
+admin_commit: COMMIT;
+admin_clear: CLEAR;
+admin_versions: VERSIONS;
+admin_set: SET app=ID DOT param=ID EQUALS (bool | STRING | INT);
+admin_get: GET app=ID DOT param=ID;
+admin_discover: DISCOVER CLUSTER clusterid;
+*/
+
+clusterid: SPLAT ID;
+
+
+noderef: (nodename=STRING | nodeid=ID);
 
 loadscript: LOAD SCRIPT filename=STRING;
 script: SCRIPT content=(STRING | DATA_CONTENT);
@@ -107,77 +148,3 @@ code_string: JAVASCRIPT (STRING | DATA_CONTENT);
 
 bool : TRUE | FALSE;
 
-LET         :    'let';
-PB          :    'pb';
-HTTP        :    'http';
-FETCH       :    'fetch';
-STORE       :    'store';
-UPDATE      :    'update';
-DELETE      :    'delete';
-VALUE       :    'value';
-CONTENTTYPE :    'content-type';
-CONN        :    'connection';
-CONNS       :    'connections';
-CONNECT     :    'connect';
-USE         :    'use';
-USING       :    'using';
-WITH        :    'with';
-AND         :    'and';
-BUCKET      :    'bucket';
-OPTIONS     :    'options';
-QUERY2I     :    'query2i';
-COUNT       :    'count';
-FROM        :    'from';
-INDEX       :    'index';
-TO          :    'to';
-JAVASCRIPT  :    'javascript';
-PROPERTIES  :    'properties';
-RESOLVER    :    'resolver';
-LOAD        :    'load';
-SCRIPT      :    'script';
-LIST        :    'list';
-BUCKETS     :    'buckets';
-KEYS        :    'keys';
-TRUE        :    'true';
-FALSE       :    'false';
-DEFAULT     :    'default';
-SET         :    'set';
-GET         :    'get';
-ACTION      :    'action';
-AS          :    'as';
-JSON        :    'json';
-TEXT        :    'text';
-XML         :    'xml';
-AT          :    '@';
-COMMA       :    ',';
-LSQUARE     :    '[';
-RSQUARE     :    ']';
-LPAREN      :    '(';
-RPAREN      :    ')';
-EQUALS      :    '=';
-DOT         :    '.';
-SEMI        :    ';';
-ID          :       LOWER (UPPER | LOWER | DIGIT | '_')*;
-
-fragment LOWER : 'a' .. 'z';
-fragment UPPER : 'A' .. 'Z';
-
-INT             :   DIGIT+;
-fragment DIGIT  : '0' .. '9';
-
-FLOAT       :       DIGIT+ DOT DIGIT*
-                    | DOT DIGIT+
-                       ;
-
-STRING  :  '"' (ESC|.)*? '"';
-fragment ESC : '\\"' | '\\\\' ;
-
-// scissors op, dude riding a pterodactyl, drunken bird
-DATA_CONTENT: '~%~' (DATA_ESC|.)*? '~%~';
-fragment DATA_ESC: '\\~%~' | '\\~%~';
-
-
-LINE_COMMENT  : '//' .*? '\r'? '\n' -> skip ;
-COMMENT       : '/*' .*? '*/'       -> skip ;
-
-WS      :       [ \t\r\n]+ -> skip;

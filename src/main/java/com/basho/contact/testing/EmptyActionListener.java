@@ -25,7 +25,7 @@ package com.basho.contact.testing;
 
 import com.basho.contact.actions.ContactActionListener;
 import com.basho.contact.actions.ContactConflictResolverMill;
-import com.basho.contact.commands.params.*;
+import com.basho.contact.commands.core.params.*;
 
 public class EmptyActionListener implements ContactActionListener {
     public void init() {

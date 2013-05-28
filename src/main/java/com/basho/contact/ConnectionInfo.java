@@ -27,9 +27,10 @@ public class ConnectionInfo {
     public String host;
     public int pbport;
     public int httpport;
+    public String erlnode;
     public String id;
 
     public String toString() {
-        return "<connection:" + id + ":" + host + ":" + pbport + ">";
+        return "<connection:" + id + ":" + host + ":" + pbport + ":" + erlnode + ">";
     }
 }

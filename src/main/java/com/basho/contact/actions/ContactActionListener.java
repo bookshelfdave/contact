@@ -22,7 +22,7 @@
 
 package com.basho.contact.actions;
 
-import com.basho.contact.commands.params.*;
+import com.basho.contact.commands.core.params.*;
 
 public interface ContactActionListener {
     public void init();

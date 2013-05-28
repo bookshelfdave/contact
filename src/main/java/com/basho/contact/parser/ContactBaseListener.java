@@ -34,6 +34,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterPairStringValue(ContactParser.PairStringValueContext ctx) { }
 	@Override public void exitPairStringValue(ContactParser.PairStringValueContext ctx) { }
 
+	@Override public void enterClusterid(ContactParser.ClusteridContext ctx) { }
+	@Override public void exitClusterid(ContactParser.ClusteridContext ctx) { }
+
 	@Override public void enterSet(ContactParser.SetContext ctx) { }
 	@Override public void exitSet(ContactParser.SetContext ctx) { }
 
@@ -63,6 +66,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterDelete(ContactParser.DeleteContext ctx) { }
 	@Override public void exitDelete(ContactParser.DeleteContext ctx) { }
+
+	@Override public void enterNoderef(ContactParser.NoderefContext ctx) { }
+	@Override public void exitNoderef(ContactParser.NoderefContext ctx) { }
 
 	@Override public void enterListbuckets(ContactParser.ListbucketsContext ctx) { }
 	@Override public void exitListbuckets(ContactParser.ListbucketsContext ctx) { }

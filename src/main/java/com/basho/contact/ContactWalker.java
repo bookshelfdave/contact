@@ -22,13 +22,13 @@
 
 package com.basho.contact;
 
-import com.basho.contact.commands.*;
+import com.basho.contact.commands.core.*;
 import com.basho.contact.parser.ContactBaseListener;
-import com.basho.contact.parser.ContactParser;
 import com.basho.contact.parser.ContactParser.*;
+import com.basho.contact.parser.Content;
+import com.basho.contact.parser.Pair;
 import com.basho.contact.parser.ParseUtils;
 import com.basho.contact.symbols.ContactSymbol;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
@@ -368,17 +368,35 @@ public class ContactWalker extends ContactBaseListener {
 
     @Override
     public void exitConnect(ConnectContext ctx) {
-        String host = ParseUtils.stripQuotes(ctx.host.getText());
-        // don't worry about the port # here, 
-        // Antlr already made sure it was a valid int
-        int pbPort = Integer.parseInt(ctx.pbport.getText());
-
+        String hostAndPort = ParseUtils.stripQuotes(ctx.host.getText());
         ConnectCommand command = new ConnectCommand();
-        command.params.host = host;
-        command.params.pbPort = pbPort;
+        if(ctx.pbport != null) {
+            // for backwards compat
+            int pbPort = Integer.parseInt(ctx.pbport.getText());
+            command.params.host = hostAndPort;
+            command.params.pbPort = pbPort;
+            runtimeCtx.appendError("'connect \"host\" pb port' has been deprecated in favor of 'connect \"host:port\"'");
+        } else {
+           // don't worry about the port # here,
+           // Antlr already made sure it was a valid int
+           String chunks[] = hostAndPort.split(":");
+           String host = chunks[0];
+           String port = chunks[1];
+            // TODO: check for invalid IP:PORT combos
+            int pbPort = Integer.parseInt(chunks[1]);
+           command.params.host = host;
+           command.params.pbPort = pbPort;
+        }
+
         if(ctx.connname != null) {
             command.params.conn_id = ctx.connname.getText();
+
         }
+        if(ctx.erlnode != null) {
+            String erlnode = ParseUtils.stripQuotes(ctx.erlnode.getText());
+            command.params.node_name = erlnode;
+        }
+
         setValue(ctx, command);
     }
 

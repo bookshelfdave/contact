@@ -32,9 +32,13 @@ public interface ContactConnectionProvider {
 
     public IRiakClient getClientByName(String name, RuntimeContext ctx);
 
+    public void registerClientWithErlangNode(String clientname, String erlnode);
+
+    public String getNodeNameForClient(String clientname);
+
     public IRiakClient createDefaultConnection(String host, int port, RuntimeContext ctx);
 
-    public IRiakClient createNamedConnection(String host, int port, String name, RuntimeContext ctx);
+    public IRiakClient createNamedConnection(String host, int port, String clientname, RuntimeContext ctx);
 
     public Map<String, ConnectionInfo> getAllConnections();
 }
