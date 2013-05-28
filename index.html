@@ -108,16 +108,16 @@ usage: contact
 
 <p>To connect to a Riak instance, use the <code>connect</code> command:</p>
 
-<pre><code>connect "127.0.0.1" pb 10017;
+<pre><code>connect "host:port";
 </code></pre>
 
-<p><code>pb</code> refers to the procol buffers port that Riak is configured to use. Check the <code>pb_port</code> 
+<p>where <code>host</code> is the host or IP address where an instsance of Riak is running, and <code>port</code> is the protocol buffers port # that Riak is listening on. Check the <code>pb_port</code> 
 setting in <strong>app.config</strong> for the exact port to use.</p>
 
 <p>To connect to multiple sources:</p>
 
-<pre><code>connect "127.0.0.1" pb 10017 as foo;
-connect "192.168.1.5" pb 10017 as bar;
+<pre><code>connect "127.0.0.1:10017" as foo;
+connect "192.168.1.5:10017" as bar;
 </code></pre>
 
 <p>To use a given connection, you can supply an <code>@</code> suffix on most commands:</p>
@@ -127,9 +127,9 @@ connect "192.168.1.5" pb 10017 as bar;
 
 <p>To see a list of connections, use the <code>connections</code> commands:</p>
 
-<pre><code>&gt; connect "127.0.0.1" pb 10017 as foo;
+<pre><code>&gt; connect "127.0.0.1:10017" as foo;
 Connecting to Riak @ 127.0.0.1:10017
-&gt; connect "127.0.0.1" pb 10027 as bar;
+&gt; connect "127.0.0.1:10027" as bar;
 Connecting to Riak @ 127.0.0.1:10027
 &gt; connections;
 &lt;connection:foo:127.0.0.1:10027&gt;
