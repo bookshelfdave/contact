@@ -430,43 +430,6 @@ store "Foo" with text "1000";
 store "Foo" with text "2000";
 ```
 
-	
-## Map/Reduce
-
-**NOT IMPLEMENTED** at the moment
-
-see [Tease](https://github.com/metadave/tease)
-
-```
-query 
-  bucket "user" and index "userid_int" from 100 to 200
-  extract 
-     $count = 1 and
-     $balance = value.balance and
-     $group = value.group_name 
-  aggregate 
-     group = $group
-     count = $count.@sum
-     balance = $balance.@sum;
-
-
-query 
-     bucket "invoices"
-     with key filters (ends_with "0") and (key.as_int < 10000);
-
-
-query with
-  bucket "invoices" 
-  filter object (invoice.lines.@sum > 1000)
-  extract 
-     $sum = invoice.lines.@sum
-  aggregate
-     total = $sum.@sum;
-     
-
-
-```
-
 
 ## Sample Data
 
@@ -875,7 +838,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * link walking
 * user meta for store
 * general code cleanup
-* MR -> probably not going to address
+* MR -> probably not going to address, as whatever I come up with will probably kill your cluster.
 * Riak Search (Yokozuna integration)
 * Fix tab completion 
     * pasting text into the shell erroneously kicks off tab completion
