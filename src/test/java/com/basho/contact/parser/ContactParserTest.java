@@ -35,16 +35,38 @@ import java.net.URL;
 public class ContactParserTest {
 
     @Test
-    public void testConnectionGrammar() {
+    public void testConnections() {
         try {
             String script = ContactParserTest.loadResource("connection.test");
-            System.out.println(script);
             testScript(script);
         } catch (Throwable e) {
             e.printStackTrace();
             Assert.fail();
         }
     }
+
+    @Test
+    public void testFetch() {
+        try {
+            String script = ContactParserTest.loadResource("fetch.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testStore() {
+        try {
+            String script = ContactParserTest.loadResource("store.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
 
     private void testScript(String script) throws Throwable {
         RuntimeContext ctx = new RuntimeContext(null, System.out, System.err);

@@ -3,7 +3,6 @@ import CommonLexerRules;
 
 prog        :  (stat)+ EOF;
 
-// this should really be expr
 /*  connection_selector might be better off somewhere else, as some commands
     don't make sense with it */
 stat        :  assignment? (connect |

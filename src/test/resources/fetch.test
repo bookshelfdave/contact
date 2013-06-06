@@ -1,0 +1,25 @@
+/*
+multi
+line
+comment
+*/
+
+using bucket "Foo" fetch "MyKey" @ foo;
+
+using bucket "Foo" fetch "MyKey";
+
+fetch "MyKey";
+
+fetch "MyKey"
+    with options
+        r = 1,
+        pr = 1;
+
+fetch "MyKey"
+    with options
+        r = 2,
+        pr = 2,
+        basic_quorum = true,
+        notfound_ok = false,
+        deletedvclock = true,
+        head = true;

@@ -1,0 +1,71 @@
+/* using "text" will set the content-type to text/plain */
+using bucket "Foo"
+    store "MyKey"
+    with text "This is text";
+
+/* using "json" will set the content-type to application/json */
+using bucket "Foo"
+    store "MyKey"
+    with json "{foo:bar}";
+
+/* using "json" will set the content-type to application/xml */
+using bucket "Foo"
+    store "MyKey"
+    with xml "<foo>bar</foo>";
+
+/* you can also define your own content type */
+store "MyKey" with content-type "text/csv" and "1,2,3,4";
+
+
+using bucket "Foo" store "MyKey" with text
+~%~
+This is "Free form text" and doesn't need any escaping!
+~%~;
+
+
+using bucket "Foo" store "MyKey" with json
+~%~
+{
+    "person": {
+        "name": "Dave Parfitt",
+        "city": "Buffalo",
+        "state": "NY"
+        }
+}
+~%~;
+
+using bucket "Foo" store "MyKey" with xml
+~%~
+<email>
+    <to>foo@example.com</to>
+    <from>bar@example.com</from>
+    <subject>This is a reminder</subject>
+    <body>Go to the dentist!</body>
+</email>
+~%~;
+
+
+using bucket "Foo" store "MyKey" with xml
+~%~
+<email>
+    <to>foo@example.com</to>
+    <from>bar@example.com</from>
+    <subject>This is a reminder</subject>
+    <body>Go to the dentist!</body>
+</email>
+~%~
+    with options
+        w = 1,
+        pw = 2,
+        dw = 1000,
+        return_body = true,
+        if_not_modified = false,
+        if_none_match = true;
+
+using bucket "Foo"
+    store "MyKey"
+        with text "This is text"
+        with options w = 1, pw = 2;
+
+
+
