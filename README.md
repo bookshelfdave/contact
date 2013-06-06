@@ -12,7 +12,7 @@ Contact is a language and interactive shell for [Riak](http://basho.com/riak/).
 
 This is a prototype and ***SHOULD NOT BE USED IN PRODUCTION. I'm actively working on this project, and the language is very likely to change. Many things probably don't work right now.***
 
-**Expect more updates mid-May 2013.**
+**Expect more updates June 2013.**
 
 See the TODO section below.
 
@@ -867,17 +867,16 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 #TODO
 * TESTING
-* update command
-* Riak admin commands (dip_admin branch)
-* runtime config changes of a Riak node (dip_admin branch)
+* Riak admin commands
+* runtime config changes of a Riak node
 * platform support/testing on Linux + Windows
-* connection pooling/grouping
-* conflict resolution need some cleanup
-* mr syntax + implementation
-* Riak Search (Yokozuna integration)
+* connection settings/pooling/grouping
+* conflict resolution needs some cleanup
 * link walking
 * user meta for store
 * general code cleanup
+* MR -> probably not going to address
+* Riak Search (Yokozuna integration)
 * Fix tab completion 
     * pasting text into the shell erroneously kicks off tab completion
 
@@ -893,9 +892,7 @@ and submit a pull request.
 
 Please send me an email (dparfitt at basho dot com) and let me know if you want to work on any features.
 
-Only friendly pull requests accepted:
-[Assholes are Ruining Your Project by Donnie Berkholz](http://www.youtube.com/watch?v=-ZSli7QW4rg)
-	
+Only friendly pull requests accepted.
 
 #License
 
