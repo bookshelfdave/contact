@@ -22,20 +22,39 @@
 
 package com.basho.contact.parser;
 
+import com.basho.contact.ContactErrorListener;
+import com.basho.contact.RuntimeContext;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
 
-public class ContactParserTests {
+public class ContactParserTest {
 
     @Test
-    public void testResources() {
+    public void testConnectionGrammar() {
         try {
-            System.out.println(ContactParserTests.loadResource("connection.test"));
-        } catch (Exception e) {
+            String script = ContactParserTest.loadResource("connection.test");
+            System.out.println(script);
+            testScript(script);
+        } catch (Throwable e) {
             e.printStackTrace();
+            Assert.fail();
         }
+    }
+
+    private void testScript(String script) throws Throwable {
+        RuntimeContext ctx = new RuntimeContext(null, System.out, System.err);
+        ANTLRInputStream input = new ANTLRInputStream(script);
+        ContactLexer lexer = new ContactLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ContactParser parser = new ContactParser(tokens);
+        // combine these two into one
+        parser.addErrorListener(new ContactErrorListener(ctx));
+        parser.prog();
     }
 
     public static String loadResource(String name) throws Exception {

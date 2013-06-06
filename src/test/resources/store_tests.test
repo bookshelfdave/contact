@@ -1,4 +1,3 @@
-connect "127.0.0.1" pb 10017;
 using bucket "Foo1" store "bar" with json "{\"foo\":\"bar\"}";
 using bucket "Foo2" store "bar" with text "this is a test";
 using bucket "Foo3" store "bar" with xml "<xml><foo>test</foo></xml>";

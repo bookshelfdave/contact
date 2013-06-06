@@ -1,5 +1,0 @@
-~%~
-System.out.println("Hello world!");
-System.exit(-1);
-~%~
-
