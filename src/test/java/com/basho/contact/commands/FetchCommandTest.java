@@ -44,9 +44,6 @@ import static org.mockito.Mockito.*;
 
 public class FetchCommandTest {
 
-    FetchParams.Pre  preParams;
-    FetchParams.Post postParams;
-
     @Test
     public void testNoConnections() {
         FetchCommand command = new FetchCommand();
@@ -136,6 +133,12 @@ public class FetchCommandTest {
                 results.put("notfound_ok", notFoundOK);
                 return this;
             }
+
+            @Override
+            public FetchObject<IRiakObject> headOnly() {
+                results.put("head", true);
+                return this;
+            }
         };
 
         command.params.bucket = "Foo";
@@ -147,6 +150,7 @@ public class FetchCommandTest {
         options.put("basic_quorum", "true");
         options.put("notfound_ok", "false");
         options.put("deletedvclock", "true");
+        options.put("head", "true");
 
         command.params.options = options;
         command.processOptions(ctx, fetchObject);
@@ -156,6 +160,7 @@ public class FetchCommandTest {
         assertEquals(true, results.get("basic_quorum"));
         assertEquals(false, results.get("notfound_ok"));
         assertEquals(true, results.get("deletedvclock"));
+        assertEquals(true, results.get("head"));
 
     }
 }

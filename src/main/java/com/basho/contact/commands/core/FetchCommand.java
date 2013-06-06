@@ -78,7 +78,6 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
                 return o.notFoundOK(CommandUtils.objectToBoolean(value));
             }
         });
-
 		optionsMap.put("head", new FetchOpt() {
 			public FetchObject<IRiakObject> setOption(
 					FetchObject<IRiakObject> o, Object value) {
@@ -89,7 +88,6 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
                 }
 			}
 		});
-
         optionsMap.put("deletedvclock", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
                     FetchObject<IRiakObject> o, Object value) {
