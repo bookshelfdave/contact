@@ -31,38 +31,45 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>Contact</h1>
+        <h1>
+<a name="contact" class="anchor" href="#contact"><span class="octicon octicon-link"></span></a>Contact</h1>
 
-<h2>What is it?</h2>
+<h2>
+<a name="what-is-it" class="anchor" href="#what-is-it"><span class="octicon octicon-link"></span></a>What is it?</h2>
 
 <p>Contact is a language and interactive shell for <a href="http://basho.com/riak/">Riak</a>.</p>
 
-<h2>Screencast</h2>
+<h2>
+<a name="screencast" class="anchor" href="#screencast"><span class="octicon octicon-link"></span></a>Screencast</h2>
 
 <p><a href="https://vimeo.com/63488515">Intro to Contact Screencast</a></p>
 
-<h2>Status</h2>
+<h2>
+<a name="status" class="anchor" href="#status"><span class="octicon octicon-link"></span></a>Status</h2>
 
 <p>This is a prototype and <strong><em>SHOULD NOT BE USED IN PRODUCTION. I'm actively working on this project, and the language is very likely to change. Many things probably don't work right now.</em></strong></p>
 
-<p><strong>Expect more updates mid-May 2013.</strong></p>
+<p><strong>Expect more updates June 2013.</strong></p>
 
 <p>See the TODO section below.</p>
 
-<h2>Goals</h2>
+<h2>
+<a name="goals" class="anchor" href="#goals"><span class="octicon octicon-link"></span></a>Goals</h2>
 
 <ol>
 <li>An easy syntax for all Riak operations</li>
 <li>An easy way to incorporate text, JSON, XML, Javascript into a Contact script file without escape-character madness.</li>
 <li>A console that supports simple command completion and history.</li>
 <li>Extensible object output, conflict resolution and retrier with Javascript (via Mozilla Rhino)</li>
-</ol><h2>Language Grammar</h2>
+</ol><h2>
+<a name="language-grammar" class="anchor" href="#language-grammar"><span class="octicon octicon-link"></span></a>Language Grammar</h2>
 
 <p>See: <a href="https://github.com/metadave/contact/blob/master/src/main/java/com/basho/contact/parser/Contact.g4">Contact.g4</a></p>
 
 <p>Contact uses an Antlr 4 grammar under the hood for all lexical + semantic goodness.</p>
 
-<h2>Building</h2>
+<h2>
+<a name="building" class="anchor" href="#building"><span class="octicon octicon-link"></span></a>Building</h2>
 
 <p>Be sure you <code>JAVA_HOME</code> is set. You'll need at least JDK 1.6 and Apache Maven to build Contact.</p>
 
@@ -71,14 +78,16 @@
 <pre><code>mvn package
 </code></pre>
 
-<h2>Hello world</h2>
+<h2>
+<a name="hello-world" class="anchor" href="#hello-world"><span class="octicon octicon-link"></span></a>Hello world</h2>
 
 <p>After you've built Contact, just type:</p>
 
 <pre><code>./contact
 </code></pre>
 
-<h2>Help</h2>
+<h2>
+<a name="help" class="anchor" href="#help"><span class="octicon octicon-link"></span></a>Help</h2>
 
 <p>At a Contact console prompt, try one of:</p>
 
@@ -91,7 +100,8 @@ help &lt;commandname&gt; ## TODO
 
 <p><strong><em>(3/17/2013 - Only <code>help commands</code> is supported at the moment.)</em></strong></p>
 
-<h3>Command line parameters</h3>
+<h3>
+<a name="command-line-parameters" class="anchor" href="#command-line-parameters"><span class="octicon octicon-link"></span></a>Command line parameters</h3>
 
 <p>You can pass --help to contact for command line parameters.</p>
 
@@ -104,7 +114,8 @@ usage: contact
     --nosignals           Don't catch the Ctrl-C (INT) signal
 </code></pre>
 
-<h2>Connecting</h2>
+<h2>
+<a name="connecting" class="anchor" href="#connecting"><span class="octicon octicon-link"></span></a>Connecting</h2>
 
 <p>To connect to a Riak instance, use the <code>connect</code> command:</p>
 
@@ -138,15 +149,18 @@ Connecting to Riak @ 127.0.0.1:10027
 
 <p>If multiple connections are made, the default connection is undefined at the moment.</p>
 
-<h2>Exiting</h2>
+<h2>
+<a name="exiting" class="anchor" href="#exiting"><span class="octicon octicon-link"></span></a>Exiting</h2>
 
 <p>To exit the shell, type <code>exit</code>.</p>
 
-<h2>Canceling a command</h2>
+<h2>
+<a name="canceling-a-command" class="anchor" href="#canceling-a-command"><span class="octicon octicon-link"></span></a>Canceling a command</h2>
 
 <p>Unless the <code>--nosignals</code> command line paramter is passed to <code>contact</code>, typing Control-C <em>while a command is running</em> will cancel the command. Otherwise, a Control-C will exit the shell normally. </p>
 
-<h2>Comments</h2>
+<h2>
+<a name="comments" class="anchor" href="#comments"><span class="octicon octicon-link"></span></a>Comments</h2>
 
 <p>Comments in a script can either be:</p>
 
@@ -158,7 +172,8 @@ Connecting to Riak @ 127.0.0.1:10027
 <pre><code>// like this
 </code></pre>
 
-<h2>Use</h2>
+<h2>
+<a name="use" class="anchor" href="#use"><span class="octicon octicon-link"></span></a>Use</h2>
 
 <p>To fetch many objects from a single bucket, you can select a bucket with the <code>use</code> command:</p>
 
@@ -175,7 +190,8 @@ Connecting to Riak @ 127.0.0.1:10027
 <pre><code>get bucket;
 </code></pre>
 
-<h3>Use with default options</h3>
+<h3>
+<a name="use-with-default-options" class="anchor" href="#use-with-default-options"><span class="octicon octicon-link"></span></a>Use with default options</h3>
 
 <p>You can specify default options to use for <code>fetch</code>, <code>store</code>, <code>delete</code> and <code>query2i</code>. Any
 options you specify in a fetch, store, delete or query2i command will override these defaults.
@@ -192,7 +208,8 @@ use bucket "Foo"
     and query2i options foo = "bar";
 </code></pre>
 
-<h2>Fetching Data</h2>
+<h2>
+<a name="fetching-data" class="anchor" href="#fetching-data"><span class="octicon octicon-link"></span></a>Fetching Data</h2>
 
 <p>To fetch a key named "MyKey" from bucket "Foo", use the following:</p>
 
@@ -216,7 +233,8 @@ fetch "MyOtherKey";
 <p>Once you have a binding ("myKey" in the example above), you can refer to it from other Contact operations. 
 (TODO: not much of a use right now)</p>
 
-<h3>Fetching with options</h3>
+<h3>
+<a name="fetching-with-options" class="anchor" href="#fetching-with-options"><span class="octicon octicon-link"></span></a>Fetching with options</h3>
 
 <pre><code>fetch "MyKey" 
     with options 
@@ -224,7 +242,8 @@ fetch "MyOtherKey";
         pr = 1;
 </code></pre>
 
-<h3>Available fetch options:</h3>
+<h3>
+<a name="available-fetch-options" class="anchor" href="#available-fetch-options"><span class="octicon octicon-link"></span></a>Available fetch options:</h3>
 
 <ul>
 <li>r (Integer)<br>
@@ -234,7 +253,8 @@ fetch "MyOtherKey";
 <li>notfound_ok (Boolean)</li>
 <li>deletedvclock (Boolean)</li>
 <li>head (Boolean)</li>
-</ul><h2>Storing Data</h2>
+</ul><h2>
+<a name="storing-data" class="anchor" href="#storing-data"><span class="octicon octicon-link"></span></a>Storing Data</h2>
 
 <p>To store plain text, json, or xml, you can use the following commands:</p>
 
@@ -292,7 +312,8 @@ using bucket "Foo" store "MyKey" with xml
 ~%~;    
 </code></pre>
 
-<h3>Storing with options</h3>
+<h3>
+<a name="storing-with-options" class="anchor" href="#storing-with-options"><span class="octicon octicon-link"></span></a>Storing with options</h3>
 
 <pre><code>using bucket "Foo" 
     store "MyKey" 
@@ -300,7 +321,8 @@ using bucket "Foo" store "MyKey" with xml
         with options w = 1, pw = 2;
 </code></pre>
 
-<h3>Available store options:</h3>
+<h3>
+<a name="available-store-options" class="anchor" href="#available-store-options"><span class="octicon octicon-link"></span></a>Available store options:</h3>
 
 <ul>
 <li>w (Integer)</li>
@@ -309,7 +331,8 @@ using bucket "Foo" store "MyKey" with xml
 <li>return_body (Boolean)</li>
 <li>if_not_modified (Boolean)</li>
 <li>if_none_match (Boolean)</li>
-</ul><h2>Storing data with secondary indexes</h2>
+</ul><h2>
+<a name="storing-data-with-secondary-indexes" class="anchor" href="#storing-data-with-secondary-indexes"><span class="octicon octicon-link"></span></a>Storing data with secondary indexes</h2>
 
 <pre><code>using bucket "Foo" 
     store "MyKey" 
@@ -323,7 +346,8 @@ store "MyKey"
         and text "This is text";
 </code></pre>
 
-<h2>Deleting objects</h2>
+<h2>
+<a name="deleting-objects" class="anchor" href="#deleting-objects"><span class="octicon octicon-link"></span></a>Deleting objects</h2>
 
 <pre><code>using bucket "Foo" delete "MyKey";
 
@@ -332,7 +356,8 @@ delete "MyKey";
 delete "MyKey" and options w="1";
 </code></pre>
 
-<h3>Available delete options:</h3>
+<h3>
+<a name="available-delete-options" class="anchor" href="#available-delete-options"><span class="octicon octicon-link"></span></a>Available delete options:</h3>
 
 <ul>
 <li>r (Integer)</li>
@@ -342,7 +367,8 @@ delete "MyKey" and options w="1";
 <li>dw (Integer)</li>
 <li>
 <em>**vclock</em>* not implemented at the moment*</li>
-</ul><h2>Secondary Index Query</h2>
+</ul><h2>
+<a name="secondary-index-query" class="anchor" href="#secondary-index-query"><span class="octicon octicon-link"></span></a>Secondary Index Query</h2>
 
 <p><strong>Query names and parameters must always appear in double quotes.</strong></p>
 
@@ -371,7 +397,8 @@ query2i with index "range_int" and value "2";
 query2i with index "range_int" from "1" to "2";
 </code></pre>
 
-<h3>Secondary Index Query with Fetch</h3>
+<h3>
+<a name="secondary-index-query-with-fetch" class="anchor" href="#secondary-index-query-with-fetch"><span class="octicon octicon-link"></span></a>Secondary Index Query with Fetch</h3>
 
 <p>To fetch the results of all keys as the result of a 2i query, use the <code>query2i and fetch</code> command:</p>
 
@@ -380,7 +407,8 @@ query2i with index "range_int" from "1" to "2";
 
 <p>See <a href="http://metadave.github.com/contact_sample_data">Contact Sample Data</a> for an example 2i query with custom rendered JSON output.</p>
 
-<h2>Bucket Properties</h2>
+<h2>
+<a name="bucket-properties" class="anchor" href="#bucket-properties"><span class="octicon octicon-link"></span></a>Bucket Properties</h2>
 
 <p>To <strong>get</strong> a map of bucket properties, use:</p>
 
@@ -411,14 +439,16 @@ set properties n_val=2, allow_siblings=false;
 <li>n_val (Integer)</li>
 </ul><p>All other properties coming soon to a theater near you.</p>
 
-<h2>Listing Buckets</h2>
+<h2>
+<a name="listing-buckets" class="anchor" href="#listing-buckets"><span class="octicon octicon-link"></span></a>Listing Buckets</h2>
 
 <p><em>Listing buckets should NOT be used on any production system</em></p>
 
 <pre><code>list buckets;
 </code></pre>
 
-<h2>Listing Keys</h2>
+<h2>
+<a name="listing-keys" class="anchor" href="#listing-keys"><span class="octicon octicon-link"></span></a>Listing Keys</h2>
 
 <p><em>Listing keys should NOT be used on any production system</em></p>
 
@@ -431,7 +461,8 @@ set properties n_val=2, allow_siblings=false;
 list keys;
 </code></pre>
 
-<h2>Counting Keys in a Bucket</h2>
+<h2>
+<a name="counting-keys-in-a-bucket" class="anchor" href="#counting-keys-in-a-bucket"><span class="octicon octicon-link"></span></a>Counting Keys in a Bucket</h2>
 
 <pre><code>using bucket "Foo" count keys;
 </code></pre>
@@ -449,7 +480,8 @@ Counting keys for Google...
 Bucket Google contains 1438 keys
 </code></pre>
 
-<h2>Resolving conflicts</h2>
+<h2>
+<a name="resolving-conflicts" class="anchor" href="#resolving-conflicts"><span class="octicon octicon-link"></span></a>Resolving conflicts</h2>
 
 <p>The default conflict resolver for Contact will pick a random sibling upon conflict detection. To change this behavior, you can specify you own resolver with Javascript:</p>
 
@@ -473,46 +505,13 @@ store "Foo" with text "1000";
 store "Foo" with text "2000";
 </code></pre>
 
-<h2>Map/Reduce</h2>
-
-<p><strong>NOT IMPLEMENTED</strong> at the moment</p>
-
-<p>see <a href="https://github.com/metadave/tease">Tease</a></p>
-
-<pre><code>query 
-  bucket "user" and index "userid_int" from 100 to 200
-  extract 
-     $count = 1 and
-     $balance = value.balance and
-     $group = value.group_name 
-  aggregate 
-     group = $group
-     count = $count.@sum
-     balance = $balance.@sum;
-
-
-query 
-     bucket "invoices"
-     with key filters (ends_with "0") and (key.as_int &lt; 10000);
-
-
-query with
-  bucket "invoices" 
-  filter object (invoice.lines.@sum &gt; 1000)
-  extract 
-     $sum = invoice.lines.@sum
-  aggregate
-     total = $sum.@sum;
-
-
-
-</code></pre>
-
-<h2>Sample Data</h2>
+<h2>
+<a name="sample-data" class="anchor" href="#sample-data"><span class="octicon octicon-link"></span></a>Sample Data</h2>
 
 <p>See the <a href="https://github.com/metadave/contact_sample_data">Contact Sample Data</a> repository for sample data that can be easily imported.</p>
 
-<h2>Customizable Actions and Output</h2>
+<h2>
+<a name="customizable-actions-and-output" class="anchor" href="#customizable-actions-and-output"><span class="octicon octicon-link"></span></a>Customizable Actions and Output</h2>
 
 <p>Contact actions and output are customizable via the embedded <a href="https://developer.mozilla.org/en-US/docs/Rhino">Mozilla Rhino Javascript interpreter</a>. Java objects are exposed as Javascript objects, and you have the ability to modify command parameters and output on the fly.  Most actions come in pairs of pre/postcommand. </p>
 
@@ -537,7 +536,8 @@ query with
 ~%~;
 </code></pre>
 
-<h4>Processing JSON</h4>
+<h4>
+<a name="processing-json" class="anchor" href="#processing-json"><span class="octicon octicon-link"></span></a>Processing JSON</h4>
 
 <p>Here's a more in depth example that renderes sections of a JSON doc:</p>
 
@@ -607,7 +607,8 @@ Address:
 
 <p>The key function in the postfetch action above is <code>JSON.parse(v)</code>, which turns evaluates a string and returns a Javascript object.</p>
 
-<h4>Processing XML</h4>
+<h4>
+<a name="processing-xml" class="anchor" href="#processing-xml"><span class="octicon octicon-link"></span></a>Processing XML</h4>
 
 <p>Mozilla Rhino comes with E4X embedded, so you can make scripts such as:</p>
 
@@ -655,7 +656,8 @@ if(riak_object != undefined) {
 fetch "XMLTest1";
 </code></pre>
 
-<h4>Available actions</h4>
+<h4>
+<a name="available-actions" class="anchor" href="#available-actions"><span class="octicon octicon-link"></span></a>Available actions</h4>
 
 <p>All scripts have <code>out</code> and <code>err</code> available to them for writing.</p>
 
@@ -1146,7 +1148,8 @@ var println = function(s) { out.println(s); };
 </li>
 </ul>
 </li>
-</ul><h3>Loading Scripts</h3>
+</ul><h3>
+<a name="loading-scripts" class="anchor" href="#loading-scripts"><span class="octicon octicon-link"></span></a>Loading Scripts</h3>
 
 <p>To load an entire script file, simply execute the <code>load script</code> command:</p>
 
@@ -1155,7 +1158,7 @@ var println = function(s) { out.println(s); };
 
 <p>To execute arbitrary Javascript:</p>
 
-<pre><code>    script "println('hello world');"
+<pre><code>    script "println('hello world');";
 
     // OR
 
@@ -1164,21 +1167,24 @@ var println = function(s) { out.println(s); };
     ~%~;
 </code></pre>
 
-<h3>Batch mode</h3>
+<h3>
+<a name="batch-mode" class="anchor" href="#batch-mode"><span class="octicon octicon-link"></span></a>Batch mode</h3>
 
 <p>Pass in the <code>--infile &lt;filename&gt;</code> parameter to contact to process a file containing Contact commands. Contact will exit upon completion. </p>
 
-<h2>Configuration</h2>
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
 <p>If you want to run some code upon startup, you can create a file called <code>~/.contact.config</code> with 
 any Contact code you want.</p>
 
 <p>For example, if you always connect to the same host, you can add this to the .contact.config file:</p>
 
-<pre><code>connect "127.0.0.1" pb 10017;
+<pre><code>connect "127.0.0.1:10017";
 </code></pre>
 
-<h2>Basic Types</h2>
+<h2>
+<a name="basic-types" class="anchor" href="#basic-types"><span class="octicon octicon-link"></span></a>Basic Types</h2>
 
 <ul>
 <li>Strings: "This is a string"<br>
@@ -1194,28 +1200,36 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 ~%~
 </code></pre>
 
-<h1>TODO</h1>
+<h1>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h1>
 
 <ul>
 <li>TESTING</li>
-<li>update command</li>
-<li>Riak admin commands (dip_admin branch)</li>
-<li>runtime config changes of a Riak node (dip_admin branch)</li>
+<li>Riak admin commands</li>
+<li>runtime config changes of a Riak node</li>
+<li>per bucket actions, action cleanup</li>
 <li>platform support/testing on Linux + Windows</li>
-<li>connection pooling/grouping</li>
-<li>conflict resolution need some cleanup</li>
-<li>mr syntax + implementation</li>
-<li>Riak Search (Yokozuna integration)</li>
+<li>connection settings/pooling/grouping</li>
+<li>conflict resolution needs some cleanup</li>
 <li>link walking</li>
 <li>user meta for store</li>
 <li>general code cleanup</li>
+<li>MR -&gt; probably not going to address, as whatever I come up with will probably kill your cluster.</li>
+<li>Riak Search (Yokozuna integration)</li>
 <li>Fix tab completion 
 
 <ul>
 <li>pasting text into the shell erroneously kicks off tab completion</li>
 </ul>
 </li>
-</ul><h1>Contributing</h1>
+</ul><h1>
+<a name="roadmap" class="anchor" href="#roadmap"><span class="octicon octicon-link"></span></a>Roadmap</h1>
+
+<ul>
+<li><p>v1: data io, basic admin, maybe search</p></li>
+<li><p>v1.x: expressions</p></li>
+</ul><h1>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h1>
 
 <p>If you are a Riak + Java fan, I'm looking for devs to help out.</p>
 
@@ -1228,10 +1242,10 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 
 <p>Please send me an email (dparfitt at basho dot com) and let me know if you want to work on any features.</p>
 
-<p>Only friendly pull requests accepted:
-<a href="http://www.youtube.com/watch?v=-ZSli7QW4rg">Assholes are Ruining Your Project by Donnie Berkholz</a></p>
+<p>Only friendly pull requests accepted.</p>
 
-<h1>License</h1>
+<h1>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
 
 <p><a href="http://www.apache.org/licenses/LICENSE-2.0.html">http://www.apache.org/licenses/LICENSE-2.0.html</a></p>
 
