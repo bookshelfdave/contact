@@ -22,6 +22,7 @@
 
 package com.basho.contact.commands;
 
+import com.basho.contact.BucketCommand;
 import com.basho.contact.ContactConnectionProvider;
 import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
@@ -42,45 +43,15 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class FetchCommandTest {
-
-    @Test
-    public void testNoConnections() {
-        FetchCommand command = new FetchCommand();
-        ContactConnectionProvider connProvider = new EmptyConnectionProvider();
-
-        RuntimeContext ctx = new RuntimeContext(connProvider, null, null);
-        command.doExec(ctx);
-        assertEquals(1, ctx.getErrors().size());
-        assertEquals("Not connected to Riak", ctx.getErrors().get(0).getMessage());
+public class FetchCommandTest extends AbstractBucketCommandTest {
+    @Override
+    public BucketCommand<?, ?> getCommand() {
+        return new FetchCommand();
     }
 
-    @Test
-    public void testNoBucket() {
-        FetchCommand command = new FetchCommand();
-        ContactConnectionProvider connProvider = new EmptyConnectionProvider() {
-            @Override
-            public IRiakClient getDefaultClient(RuntimeContext ctx) {
-                IRiakClient client = mock(IRiakClient.class);
-                FetchBucket fb = mock(FetchBucket.class);
-                when(client.fetchBucket(anyString())).thenReturn(fb);
-                return client;
-            }
-        };
-        command.params.bucket = null;
-        RuntimeContext ctx = mock(RuntimeContext.class);
-        doCallRealMethod().when(ctx).reset();
-        doCallRealMethod().when(ctx).appendError(anyString());
-        doCallRealMethod().when(ctx).getErrors();
-        ContactExecutor exec = new ContactExecutor();
-        when(ctx.getExecutor()).thenReturn(exec);
-        when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
-        when(ctx.getConnectionProvider()).thenReturn(connProvider);
-        ctx.reset(); // instantiate the error list
-
-        command.doExec(ctx);
-        assertEquals(1,ctx.getErrors().size());
-        assertEquals("Bucket not selected for fetch op.", ctx.getErrors().get(0).getMessage());
+    @Override
+    public String getCommandName() {
+        return "fetch";
     }
 
     @Test

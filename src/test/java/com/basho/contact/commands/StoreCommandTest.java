@@ -22,5 +22,32 @@
 
 package com.basho.contact.commands;
 
-public class StoreCommandTest {
+import com.basho.contact.BucketCommand;
+import com.basho.contact.ContactConnectionProvider;
+import com.basho.contact.ContactExecutor;
+import com.basho.contact.RuntimeContext;
+import com.basho.contact.commands.core.FetchCommand;
+import com.basho.contact.commands.core.StoreCommand;
+import com.basho.contact.security.DefaultAccessPolicy;
+import com.basho.contact.testing.EmptyConnectionProvider;
+import com.basho.riak.client.IRiakClient;
+import com.basho.riak.client.bucket.FetchBucket;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class StoreCommandTest extends AbstractBucketCommandTest {
+    @Override
+    public BucketCommand<?, ?> getCommand() {
+        return new StoreCommand();
+    }
+
+    @Override
+    public String getCommandName() {
+        return "store";
+    }
 }
