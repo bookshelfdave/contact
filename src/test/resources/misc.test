@@ -1,0 +1,32 @@
+use bucket "xyz";
+
+use bucket "Foo"
+    with fetch options  r = "1"
+    and  store options  w = "1", dw="1"
+    and  delete options foo = "baz"
+    and query2i options foo = "bar";
+
+use bucket "Foo"
+        with fetch options r = "1"
+        ;
+
+using bucket "Foo" get properties;
+
+get properties;
+set properties n_val=2, allow_siblings=false;
+
+
+list buckets;
+
+list keys;
+
+count keys;
+
+load script "filename.js";
+
+script "println('hello world');";
+
+script ~%~
+        println("hello world!");
+    ~%~;
+

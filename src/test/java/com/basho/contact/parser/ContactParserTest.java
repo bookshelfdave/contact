@@ -68,6 +68,63 @@ public class ContactParserTest {
     }
 
 
+    @Test
+    public void testHereDoc() {
+        try {
+            String script = ContactParserTest.loadResource("here_doc.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testDelete() {
+        try {
+            String script = ContactParserTest.loadResource("delete.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testQuery() {
+        try {
+            String script = ContactParserTest.loadResource("query.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testResolver() {
+        try {
+            String script = ContactParserTest.loadResource("resolver.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+
+    @Test
+    public void testMisc() {
+        try {
+            String script = ContactParserTest.loadResource("misc.test");
+            testScript(script);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+
     private void testScript(String script) throws Throwable {
         RuntimeContext ctx = new RuntimeContext(null, System.out, System.err);
         ANTLRInputStream input = new ANTLRInputStream(script);

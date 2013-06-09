@@ -788,7 +788,7 @@ To load an entire script file, simply execute the `load script` command:
 To execute arbitrary Javascript:
 
 ```
-	script "println('hello world');"
+	script "println('hello world');";
 
 	// OR
 	
@@ -809,7 +809,7 @@ any Contact code you want.
 
 For example, if you always connect to the same host, you can add this to the .contact.config file:
 
-	connect "127.0.0.1" pb 10017;
+	connect "127.0.0.1:10017";
 	
 ## Basic Types
 

@@ -1,0 +1,12 @@
+using bucket "Foo" delete "MyKey";
+
+delete "MyKey";
+
+delete "MyKey" and options w="1";
+
+delete "MyKey" and options w=1,
+                           r=2,
+                           w = 3,
+                           pr=4,
+                           pw =  5,
+                           dw =6;

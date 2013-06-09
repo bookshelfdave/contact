@@ -1,0 +1,19 @@
+use bucket "MyBucket" with resolver javascript ~%~
+function(siblings) {
+        if(siblings.size() > 1) {
+          out.println("siblings");
+          return siblings.toArray()[0];
+        } else if(siblings.size() == 1) {
+          out.println("no siblings");
+          return siblings.iterator().next();
+        } else {
+           return null;
+        }
+    }
+~%~;
+
+set properties allow_siblings=true;
+
+store "Foo" with text "1000";
+store "Foo" with text "2000";
+

@@ -1,0 +1,6 @@
+using bucket "Foo" query2i with index "range_int" and value "1";
+
+query2i with index "range_int" and value "2";
+query2i with index "range_int" from "1" to "2";
+
+query2i and fetch with index "year_int" and value "2010";

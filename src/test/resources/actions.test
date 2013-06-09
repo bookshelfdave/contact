@@ -1,0 +1,36 @@
+set action postfetch with javascript
+~%~
+  if(riak_object != undefined) { println(riak_object.getValueAsString()); }
+~%~;
+
+get action postfetch;
+
+set action postfetch with javascript
+~%~
+  if(riak_object != undefined) { println(riak_object.getLastModified()); }
+~%~;
+
+set action postfetch with javascript
+~%~
+if(riak_object != undefined) {
+    var v = riak_object.getValueAsString();
+    var j = JSON.parse(v);
+    println(j.firstName + " " + j.lastName);
+    println("Address:");
+    println("   " + j.address.streetAddress);
+    println("   " + j.address.city +
+                    ", " + j.address.state +
+                    " " + j.address.postalCode);
+}
+~%~;
+
+set action postfetch with javascript
+~%~
+if(riak_object != undefined) {
+    var v = riak_object.getValueAsString();
+    var users = new XML(v)
+    println(users.user[0].firstname);
+}
+~%~;
+
+
