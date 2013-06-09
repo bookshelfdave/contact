@@ -832,6 +832,7 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * TESTING
 * Riak admin commands
 * runtime config changes of a Riak node
+* per bucket actions, action cleanup
 * platform support/testing on Linux + Windows
 * connection settings/pooling/grouping
 * conflict resolution needs some cleanup
@@ -842,6 +843,12 @@ have to worry about escaping quotes! Of course, you'll need to escape the scisso
 * Riak Search (Yokozuna integration)
 * Fix tab completion 
     * pasting text into the shell erroneously kicks off tab completion
+
+# Roadmap
+
+* v1: data io, basic admin, maybe search
+
+* v1.x: expressions
 
 #Contributing
 
