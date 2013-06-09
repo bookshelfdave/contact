@@ -55,7 +55,6 @@ public class ListBucketsCommandTest {
         final Set<String> buckets = new HashSet<String>();
 
         ContactActionListener listener = new EmptyActionListener() {
-
             @Override
             public void preListBucketsAction(ListBucketsParams.Pre params) {
             }

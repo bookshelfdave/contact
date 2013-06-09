@@ -22,5 +22,17 @@
 
 package com.basho.contact.commands;
 
-public class CountKeysCommandTest {
+import com.basho.contact.BucketCommand;
+import com.basho.contact.commands.core.CountKeysCommand;
+
+public class CountKeysCommandTest extends AbstractBucketCommandTest {
+    @Override
+    public BucketCommand<?, ?> getCommand() {
+        return new CountKeysCommand();
+    }
+
+    @Override
+    public String getCommandName() {
+        return "count keys";
+    }
 }
