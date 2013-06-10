@@ -82,23 +82,22 @@ setting in **app.config** for the exact port to use.
 
 To connect to multiple sources:
 
-	connect "127.0.0.1:10017" as foo;
-	connect "192.168.1.5:10017" as bar;
+	connect "127.0.0.1:10017" as $foo;
+	connect "192.168.1.5:10017" as $bar;
 
 To use a given connection, you can supply an `@` suffix on most commands:
 
-	using bucket "Foo" fetch "MyKey" @ foo;
-
-
+	using bucket "Foo" fetch "MyKey" @ $foo;
+	
 To see a list of connections, use the `connections` commands:
 
-	> connect "127.0.0.1:10017" as foo;
+	> connect "127.0.0.1:10017" as $foo;
 	Connecting to Riak @ 127.0.0.1:10017
-	> connect "127.0.0.1:10027" as bar;
+	> connect "127.0.0.1:10027" as $bar;
 	Connecting to Riak @ 127.0.0.1:10027
 	> connections;
-	<connection:foo:127.0.0.1:10027>
-	<connection:bar:127.0.0.1:10017>
+	<connection:$foo:127.0.0.1:10027>
+	<connection:$bar:127.0.0.1:10017>
 
 If multiple connections are made, the default connection is undefined at the moment.
 

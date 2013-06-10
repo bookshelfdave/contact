@@ -76,7 +76,7 @@ use bucket "Foo";
 store "Bar1" with json "{\"foo\":\"bar\"}";
 store "Bar3" with xml "<xml><foo>test</foo></xml>";
 store "Bar2" with text "this is a test";
-store "Bar2" with text "this is a test" @ foo;
+store "Bar2" with text "this is a test" @ $foo;
 
 store "Bar3" with xml "<xml><foo>test</foo></xml>";
 
@@ -88,7 +88,7 @@ store "Bar1" with json "{\"foo\":\"bar\"}" and options return_body="true", w="1"
 
 using bucket "X" store "Bar1" with json "{\"foo\":\"bar\"}" and options return_body=true, w=1;
 
-using bucket "X" store "Bar1" with json "{\"foo\":\"bar\"}" and options return_body=true, w=1 @ foo;
+using bucket "X" store "Bar1" with json "{\"foo\":\"bar\"}" and options return_body=true, w=1 @ $foo;
 
 
 let myObj = fetch "Key1";

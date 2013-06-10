@@ -59,6 +59,7 @@ CLEAR       :    'clear';
 STATUS      :    'status';
 
 AT          :    '@';
+DOLLAR      :    '$';
 SPLAT       :    '*';
 COMMA       :    ',';
 LSQUARE     :    '[';

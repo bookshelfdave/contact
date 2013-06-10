@@ -9,11 +9,11 @@ connect "127.0.0.1:10017" node "dev1@127.0.0.1";
 
 connect "127.0.0.1:10017"
     node "dev1@127.0.0.1"
-    as foo;
+    as $foo;
 
 connect "127.0.0.1:10017"
     http 10018
     node "dev1@127.0.0.1"
-    as foo;
+    as $foo;
 
 

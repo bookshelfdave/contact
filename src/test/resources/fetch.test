@@ -4,7 +4,7 @@ line
 comment
 */
 
-using bucket "Foo" fetch "MyKey" @ foo;
+using bucket "Foo" fetch "MyKey" @ $foo;
 
 using bucket "Foo" fetch "MyKey";
 

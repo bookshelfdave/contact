@@ -10,3 +10,11 @@ delete "MyKey" and options w=1,
                            pr=4,
                            pw =  5,
                            dw =6;
+
+delete "MyKey" and options w=1,
+                           r=2,
+                           w = 3,
+                           pr=4,
+                           pw =  5,
+                           dw =6
+                           @ $foo;

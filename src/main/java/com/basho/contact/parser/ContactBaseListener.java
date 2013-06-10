@@ -130,6 +130,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterBool(ContactParser.BoolContext ctx) { }
 	@Override public void exitBool(ContactParser.BoolContext ctx) { }
 
+	@Override public void enterNode_name(ContactParser.Node_nameContext ctx) { }
+	@Override public void exitNode_name(ContactParser.Node_nameContext ctx) { }
+
 	@Override public void enterPairBoolValue(ContactParser.PairBoolValueContext ctx) { }
 	@Override public void exitPairBoolValue(ContactParser.PairBoolValueContext ctx) { }
 

@@ -15,7 +15,7 @@ stat        :  assignment? (connect |
                             ) connection_selector? SEMI;
 
 connection_selector:
-    AT connname=ID;
+    AT connname=node_name;
 
 console_op: get | set | loadscript | script;
 
@@ -82,7 +82,7 @@ bucketprops: (get_bucketprops | set_bucketprops);
 get_bucketprops: GET PROPERTIES;
 set_bucketprops: SET PROPERTIES optionslist;
 
-connect: CONNECT host=STRING (PB pbport=INT)? (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=ID)?;
+connect: CONNECT host=STRING (PB pbport=INT)? (HTTP httpport=INT)? (NODE erlnode=STRING)? (AS connname=node_name)?;
 
 set: SET set_action;
 set_action: ACTION actionname=ID WITH code_string;
@@ -90,6 +90,8 @@ set_action: ACTION actionname=ID WITH code_string;
 get: GET (get_action | BUCKET);
 
 get_action: ACTION actionname=ID;
+
+node_name: DOLLAR ID;
 
 /*
 admin:

@@ -127,6 +127,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterBool(ContactParser.BoolContext ctx);
 	void exitBool(ContactParser.BoolContext ctx);
 
+	void enterNode_name(ContactParser.Node_nameContext ctx);
+	void exitNode_name(ContactParser.Node_nameContext ctx);
+
 	void enterPairBoolValue(ContactParser.PairBoolValueContext ctx);
 	void exitPairBoolValue(ContactParser.PairBoolValueContext ctx);
 }
