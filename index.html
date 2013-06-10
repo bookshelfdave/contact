@@ -127,24 +127,24 @@ setting in <strong>app.config</strong> for the exact port to use.</p>
 
 <p>To connect to multiple sources:</p>
 
-<pre><code>connect "127.0.0.1:10017" as foo;
-connect "192.168.1.5:10017" as bar;
+<pre><code>connect "127.0.0.1:10017" as $foo;
+connect "192.168.1.5:10017" as $bar;
 </code></pre>
 
 <p>To use a given connection, you can supply an <code>@</code> suffix on most commands:</p>
 
-<pre><code>using bucket "Foo" fetch "MyKey" @ foo;
+<pre><code>using bucket "Foo" fetch "MyKey" @ $foo;
 </code></pre>
 
 <p>To see a list of connections, use the <code>connections</code> commands:</p>
 
-<pre><code>&gt; connect "127.0.0.1:10017" as foo;
+<pre><code>&gt; connect "127.0.0.1:10017" as $foo;
 Connecting to Riak @ 127.0.0.1:10017
-&gt; connect "127.0.0.1:10027" as bar;
+&gt; connect "127.0.0.1:10027" as $bar;
 Connecting to Riak @ 127.0.0.1:10027
 &gt; connections;
-&lt;connection:foo:127.0.0.1:10027&gt;
-&lt;connection:bar:127.0.0.1:10017&gt;
+&lt;connection:$foo:127.0.0.1:10027&gt;
+&lt;connection:$bar:127.0.0.1:10017&gt;
 </code></pre>
 
 <p>If multiple connections are made, the default connection is undefined at the moment.</p>
