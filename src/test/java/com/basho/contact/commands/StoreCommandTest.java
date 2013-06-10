@@ -31,8 +31,13 @@ import com.basho.contact.commands.core.StoreCommand;
 import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.testing.EmptyConnectionProvider;
 import com.basho.riak.client.IRiakClient;
+import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.bucket.FetchBucket;
+import com.basho.riak.client.operations.StoreObject;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
@@ -50,4 +55,84 @@ public class StoreCommandTest extends AbstractBucketCommandTest {
     public String getCommandName() {
         return "store";
     }
+
+    @Test
+    public void testParams() {
+        StoreCommand command = new StoreCommand();
+        ContactConnectionProvider connProvider = new EmptyConnectionProvider() {
+            @Override
+            public IRiakClient getDefaultClient(RuntimeContext ctx) {
+                IRiakClient client = mock(IRiakClient.class);
+                FetchBucket fb = mock(FetchBucket.class);
+                when(client.fetchBucket(anyString())).thenReturn(fb);
+                return client;
+            }
+        };
+        RuntimeContext ctx = mock(RuntimeContext.class);
+        doCallRealMethod().when(ctx).reset();
+        doCallRealMethod().when(ctx).appendError(anyString());
+        doCallRealMethod().when(ctx).getErrors();
+        when(ctx.getAccessPolicy()).thenReturn(new DefaultAccessPolicy());
+        final Map<String, Object> results = new HashMap<String, Object>();
+
+        StoreObject<IRiakObject> storeObject = new StoreObject<IRiakObject>(null, null, null, null) {
+            @Override
+            public StoreObject<IRiakObject> w(int w) {
+                results.put("w", w);
+                return this;
+            }
+
+            @Override
+            public StoreObject<IRiakObject> pw(int pw) {
+                results.put("pw", pw);
+                return this;
+            }
+
+            @Override
+            public StoreObject<IRiakObject> dw(int dw) {
+                results.put("dw", dw);
+                return this;
+            }
+
+            @Override
+            public StoreObject<IRiakObject> returnBody(boolean returnBody) {
+                results.put("return_body", returnBody);
+                return this;
+            }
+
+            @Override
+            public StoreObject<IRiakObject> ifNoneMatch(boolean ifNoneMatch) {
+                results.put("if_none_match", ifNoneMatch);
+                return this;
+            }
+
+            @Override
+            public StoreObject<IRiakObject> ifNotModified(boolean ifNotModified) {
+                results.put("if_not_modified", ifNotModified);
+                return this;
+            }
+        };
+
+        command.params.bucket = "Foo";
+        command.params.key    = "Bar";
+        Map<String, String> options = new HashMap<String, String>();
+
+        options.put("w", "10");
+        options.put("pw", "11");
+        options.put("dw", "12");
+        options.put("return_body", "true");
+        options.put("if_not_modified", "false");
+        options.put("if_none_match", "true");
+
+        command.params.options = options;
+        command.processOptions(ctx, storeObject);
+
+        assertEquals(10, results.get("w"));
+        assertEquals(11, results.get("pw"));
+        assertEquals(12, results.get("dw"));
+        assertEquals(true, results.get("return_body"));
+        assertEquals(false, results.get("if_not_modified"));
+        assertEquals(true, results.get("if_none_match"));
+    }
+
 }

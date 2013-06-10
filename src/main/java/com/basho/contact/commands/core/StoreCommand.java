@@ -92,7 +92,7 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
     }
 
 
-    private StoreObject<IRiakObject> processOptions(RuntimeContext runtimeCtx,
+    public StoreObject<IRiakObject> processOptions(RuntimeContext runtimeCtx,
                                                     StoreObject<IRiakObject> o) {
         if (params.options != null) {
             for (String key : params.options.keySet()) {
