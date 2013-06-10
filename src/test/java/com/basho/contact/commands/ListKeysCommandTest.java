@@ -22,7 +22,6 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.BucketCommand;
 import com.basho.contact.commands.core.ListKeysCommand;
 
 public class ListKeysCommandTest extends AbstractBucketCommandTest {

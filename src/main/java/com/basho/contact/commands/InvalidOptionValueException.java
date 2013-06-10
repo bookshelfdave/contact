@@ -22,16 +22,26 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.commands.core.CountKeysCommand;
-
-public class CountKeysCommandTest extends AbstractBucketCommandTest {
-    @Override
-    public BucketCommand<?, ?> getCommand() {
-        return new CountKeysCommand();
+public class InvalidOptionValueException extends Exception {
+    private String command;
+    private String option;
+    private String value;
+    public InvalidOptionValueException(String command, String option, String value) {
+        super("Invalid parameter for " + command + " command. Option '" + option + "' with value '" + value + "'");
+        this.command = command;
+        this.option = option;
+        this.value = value;
     }
 
-    @Override
-    public String getCommandName() {
-        return "count keys";
+    public String getCommand() {
+        return command;
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

@@ -20,29 +20,29 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands;
 
 public class CommandUtils {
 
     // TODO: don't throw a runtime exception here
-    public static int objectToInt(Object o) {
+    public static int objectToInt(Object o) throws Exception {
         if (o instanceof String) {
             return Integer.parseInt((String) o);
         } else if (o instanceof Integer) {
             return ((Integer) o).intValue();
         } else {
-            throw new RuntimeException("Invalid option value " + o);
+            throw new Exception("Invalid option value " + o);
         }
     }
 
     // TODO: don't throw a runtime exception here
-    public static boolean objectToBoolean(Object o) {
+    public static boolean objectToBoolean(Object o) throws Exception {
         if (o instanceof String) {
             return Boolean.parseBoolean((String) o);
         } else if (o instanceof Boolean) {
             return ((Boolean) o).booleanValue();
         } else {
-            throw new RuntimeException("Invalid option value " + o);
+            throw new Exception("Invalid option value " + o);
         }
     }
 

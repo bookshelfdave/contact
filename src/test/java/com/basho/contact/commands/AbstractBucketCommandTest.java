@@ -22,11 +22,9 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.BucketCommand;
 import com.basho.contact.ContactConnectionProvider;
 import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
-import com.basho.contact.commands.core.StoreCommand;
 import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.testing.EmptyConnectionProvider;
 import com.basho.riak.client.IRiakClient;

@@ -22,14 +22,15 @@
 
 package com.basho.contact.commands.core;
 
-import com.basho.contact.BucketCommand;
-import com.basho.contact.CommandUtils;
+import com.basho.contact.commands.*;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.DeleteParams;
 import com.basho.contact.symbols.VoidSymbol;
+import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.RiakException;
 import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.operations.DeleteObject;
+import com.basho.riak.client.operations.StoreObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,12 +42,10 @@ public class DeleteCommand extends BucketCommand<VoidSymbol, DeleteParams.Pre> {
     }
 
 
-    static abstract class DeleteOpt {
-        public abstract DeleteObject setOption(
-                DeleteObject o, Object value);
-    }
+    static abstract class DeleteOpt extends CommandOption<DeleteObject> {}
 
-    private static Map<String, DeleteOpt> optionsMap = new HashMap<String, DeleteOpt>();
+    private static CommandOptions<DeleteObject, DeleteOpt> commandOptions =
+            new CommandOptions<DeleteObject, DeleteOpt>();
 
     static {
 
@@ -60,75 +59,56 @@ public class DeleteCommand extends BucketCommand<VoidSymbol, DeleteParams.Pre> {
         optional uint32 dw = 9;
          */
 
-        optionsMap.put("rw", new DeleteOpt() {
+        commandOptions.addOption("rw", new DeleteOpt() {
             public DeleteObject setOption(
-                    DeleteObject o, Object value) {
+                    DeleteObject o, Object value) throws Exception {
                 return o.rw(CommandUtils.objectToInt(value));
             }
         });
 
-        // TODO: get vlock to work here
-//        optionsMap.put("vclock", new DeleteOpt() {
-//            public DeleteObject setOption(
-//                    DeleteObject o, Object value) {
-//                VClock
-//                return o.vclock(CommandUtils.objectToInt(value));
-//            }
-//        });
-
-        optionsMap.put("r", new DeleteOpt() {
+        commandOptions.addOption("r", new DeleteOpt() {
             public DeleteObject setOption(
-                    DeleteObject o, Object value) {
+                    DeleteObject o, Object value) throws Exception {
                 return o.r(CommandUtils.objectToInt(value));
             }
         });
 
-        optionsMap.put("w", new DeleteOpt() {
+        commandOptions.addOption("w", new DeleteOpt() {
             public DeleteObject setOption(
-                    DeleteObject o, Object value) {
+                    DeleteObject o, Object value) throws Exception {
                 return o.w(CommandUtils.objectToInt(value));
             }
         });
 
-        optionsMap.put("pr", new DeleteOpt() {
+        commandOptions.addOption("pr", new DeleteOpt() {
             public DeleteObject setOption(
-                    DeleteObject o, Object value) {
+                    DeleteObject o, Object value) throws Exception {
                 return o.pr(CommandUtils.objectToInt(value));
             }
         });
 
-        optionsMap.put("pw", new DeleteOpt() {
+        commandOptions.addOption("pw", new DeleteOpt() {
             public DeleteObject setOption(
-                    DeleteObject o, Object value) {
+                    DeleteObject o, Object value) throws Exception {
                 return o.pw(CommandUtils.objectToInt(value));
             }
         });
 
-        optionsMap.put("dw", new DeleteOpt() {
+        commandOptions.addOption("dw", new DeleteOpt() {
             public DeleteObject setOption(
-                    DeleteObject o, Object value) {
+                    DeleteObject o, Object value) throws Exception {
                 return o.dw(CommandUtils.objectToInt(value));
             }
         });
 
-
-    }
-
-    // todo: move this to utils
-    private DeleteObject processOptions(RuntimeContext runtimeCtx, DeleteObject o) {
-        if (params.options != null) {
-            for (String key : params.options.keySet()) {
-                Object val = params.options.get(key);
-                if (!optionsMap.containsKey(key)) {
-                    runtimeCtx.appendError("Unknown store option:" + key);
-                } else {
-                    o = optionsMap.get(key).setOption(o, val);
-                }
-            }
-            return o;
-        } else {
-            return o;
-        }
+        // TODO: get vlock to work here
+        //        optionsMap.put("vclock", new DeleteOpt() {
+        //            public DeleteObject setOption(
+        //                    DeleteObject o, Object value) {
+        //                VClock
+        //                return o.vclock(CommandUtils.objectToInt(value));
+        //            }
+        //        });
     }
 
     @Override
@@ -136,7 +116,7 @@ public class DeleteCommand extends BucketCommand<VoidSymbol, DeleteParams.Pre> {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             Bucket b = conn.fetchBucket(this.params.bucket).execute();
-            DeleteObject deleteObj = processOptions(runtimeCtx, b.delete(params.key));
+            DeleteObject deleteObj = commandOptions.processOptions(runtimeCtx, b.delete(params.key), params);
             params.deleteObject = deleteObj;
             params.ctx = runtimeCtx;
             runtimeCtx.getActionListener().preDeleteAction(params);
@@ -152,6 +132,8 @@ public class DeleteCommand extends BucketCommand<VoidSymbol, DeleteParams.Pre> {
             return sym;
         } catch (RiakException e) {
             runtimeCtx.appendError("Can't delete object", e);
+        } catch (InvalidOptionValueException e) {
+            runtimeCtx.appendError(e);
         }
 
         return null;

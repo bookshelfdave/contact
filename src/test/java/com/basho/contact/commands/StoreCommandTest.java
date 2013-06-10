@@ -22,11 +22,8 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.BucketCommand;
 import com.basho.contact.ContactConnectionProvider;
-import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
-import com.basho.contact.commands.core.FetchCommand;
 import com.basho.contact.commands.core.StoreCommand;
 import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.testing.EmptyConnectionProvider;
@@ -125,14 +122,18 @@ public class StoreCommandTest extends AbstractBucketCommandTest {
         options.put("if_none_match", "true");
 
         command.params.options = options;
-        command.processOptions(ctx, storeObject);
+        try {
+            StoreCommand.commandOptions.processOptions(ctx, storeObject, command.params);
+            assertEquals(10, results.get("w"));
+            assertEquals(11, results.get("pw"));
+            assertEquals(12, results.get("dw"));
+            assertEquals(true, results.get("return_body"));
+            assertEquals(false, results.get("if_not_modified"));
+            assertEquals(true, results.get("if_none_match"));
+        } catch (InvalidOptionValueException e) {
+            e.printStackTrace();
+        }
 
-        assertEquals(10, results.get("w"));
-        assertEquals(11, results.get("pw"));
-        assertEquals(12, results.get("dw"));
-        assertEquals(true, results.get("return_body"));
-        assertEquals(false, results.get("if_not_modified"));
-        assertEquals(true, results.get("if_none_match"));
     }
 
 }

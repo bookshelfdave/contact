@@ -22,7 +22,7 @@
 
 package com.basho.contact.commands.core;
 
-import com.basho.contact.RiakCommand;
+import com.basho.contact.commands.RiakCommand;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.ListBucketsParams;
 import com.basho.contact.symbols.StringSetSymbol;

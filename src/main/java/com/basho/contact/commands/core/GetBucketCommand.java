@@ -1,7 +1,7 @@
 package com.basho.contact.commands.core;
 
 
-import com.basho.contact.BucketCommand;
+import com.basho.contact.commands.BucketCommand;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.GetBucketParams;
 import com.basho.contact.symbols.VoidSymbol;

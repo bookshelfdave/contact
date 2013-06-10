@@ -20,12 +20,12 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands;
 
 
+import com.basho.contact.RuntimeContext;
 import com.basho.contact.actions.ActionParams;
 import com.basho.contact.symbols.ContactSymbol;
-import com.basho.riak.client.IRiakClient;
 
 public abstract class BucketCommand<K extends ContactSymbol<?>, O extends ActionParams> extends RiakCommand<K, O> {
     private String name = "";

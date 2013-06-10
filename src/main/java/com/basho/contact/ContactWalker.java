@@ -22,6 +22,7 @@
 
 package com.basho.contact;
 
+import com.basho.contact.commands.RiakCommand;
 import com.basho.contact.commands.core.*;
 import com.basho.contact.parser.ContactBaseListener;
 import com.basho.contact.parser.ContactParser.*;

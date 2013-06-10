@@ -22,8 +22,7 @@
 
 package com.basho.contact.commands.core;
 
-import com.basho.contact.BucketCommand;
-import com.basho.contact.CommandUtils;
+import com.basho.contact.commands.*;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.SetBucketPropsParams;
 import com.basho.contact.symbols.VoidSymbol;
@@ -39,43 +38,24 @@ public class SetBucketPropsCommand extends BucketCommand<VoidSymbol, SetBucketPr
         super("set bucket properties", SetBucketPropsParams.Pre.class);
     }
 
-    static abstract class SetBucketProp {
-        public abstract WriteBucket setProp(
-                WriteBucket o, Object value);
-    }
+    static abstract class SetBucketPropsOpt extends CommandOption<WriteBucket> {}
 
-
-    private static Map<String, SetBucketProp> propsMap = new HashMap<String, SetBucketProp>();
+    private static CommandOptions<WriteBucket, SetBucketPropsOpt> commandOptions =
+            new CommandOptions<WriteBucket, SetBucketPropsOpt>();
 
     static {
-        propsMap.put("n_val", new SetBucketProp() {
+        commandOptions.addOption("n_val", new SetBucketPropsOpt() {
             @Override
-            public WriteBucket setProp(WriteBucket o, Object value) {
+            public WriteBucket setOption(WriteBucket o, Object value) throws Exception {
                 return o.nVal(CommandUtils.objectToInt(value));
             }
         });
-        propsMap.put("allow_siblings", new SetBucketProp() {
+        commandOptions.addOption("allow_siblings", new SetBucketPropsOpt() {
             @Override
-            public WriteBucket setProp(WriteBucket o, Object value) {
+            public WriteBucket setOption(WriteBucket o, Object value) throws Exception {
                 return o.allowSiblings(CommandUtils.objectToBoolean(value));
             }
         });
-    }
-
-    private WriteBucket processOptions(RuntimeContext runtimeCtx, WriteBucket o) {
-        if (params.options != null) {
-            for (String key : params.options.keySet()) {
-                Object val = params.options.get(key);
-                if (!propsMap.containsKey(key)) {
-                    runtimeCtx.appendError("Unknown bucket property:" + key);
-                } else {
-                    o = propsMap.get(key).setProp(o, val);
-                }
-            }
-            return o;
-        } else {
-            return o;
-        }
     }
 
 
@@ -85,12 +65,13 @@ public class SetBucketPropsCommand extends BucketCommand<VoidSymbol, SetBucketPr
 
         if(params.options != null && params.options.size() > 0) {
             for(String key : params.options.keySet()) {
-                WriteBucket b = conn.createBucket(bucket);
-
-                b = processOptions(runtimeCtx, b);
                 try {
+                    WriteBucket b = conn.createBucket(bucket);
+                    b = commandOptions.processOptions(runtimeCtx, b, params);
                     b.execute();
                 } catch (RiakRetryFailedException e) {
+                    runtimeCtx.appendError(e);
+                } catch (InvalidOptionValueException e) {
                     runtimeCtx.appendError(e);
                 }
             }

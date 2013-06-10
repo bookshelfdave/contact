@@ -23,7 +23,7 @@
 package com.basho.contact.commands.core;
 
 import com.basho.contact.ContactConnectionProvider;
-import com.basho.contact.RiakCommand;
+import com.basho.contact.commands.RiakCommand;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.ConnectParams;
 import com.basho.contact.symbols.ConnectionSymbol;

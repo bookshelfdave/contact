@@ -22,8 +22,7 @@
 
 package com.basho.contact.commands.core;
 
-import com.basho.contact.BucketCommand;
-import com.basho.contact.CommandUtils;
+import com.basho.contact.commands.*;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.FetchParams;
 import com.basho.contact.symbols.ResultSymbol;
@@ -41,46 +40,41 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
         super("fetch", FetchParams.Pre.class);
     }
 
-    static abstract class FetchOpt {
-        public abstract FetchObject<IRiakObject> setOption(
-                FetchObject<IRiakObject> o, Object value);
-    }
-
-    private static Map<String, FetchOpt> optionsMap = new HashMap<String, FetchOpt>();
-
-
+    static abstract class FetchOpt extends CommandOption<FetchObject<IRiakObject>> {}
+    public static CommandOptions<FetchObject<IRiakObject>, FetchOpt> commandOptions =
+                                new CommandOptions<FetchObject<IRiakObject>, FetchOpt>();
     static {
 //	    optional bytes if_modified = 7;
 //	    optional bool deletedvclock = 9;
 
         // TODO: I don't need objectToInt anymore if everything passed in is a string
-        optionsMap.put("r", new FetchOpt() {
+        commandOptions.addOption("r", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
-                    FetchObject<IRiakObject> o, Object value) {
+                    FetchObject<IRiakObject> o, Object value) throws Exception {
                 return o.r(CommandUtils.objectToInt(value));
             }
         });
-        optionsMap.put("pr", new FetchOpt() {
+        commandOptions.addOption("pr", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
-                    FetchObject<IRiakObject> o, Object value) {
+                    FetchObject<IRiakObject> o, Object value) throws Exception {
                 return o.pr(CommandUtils.objectToInt(value));
             }
         });
-        optionsMap.put("basic_quorum", new FetchOpt() {
+        commandOptions.addOption("basic_quorum", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
-                    FetchObject<IRiakObject> o, Object value) {
+                    FetchObject<IRiakObject> o, Object value) throws Exception {
                 return o.basicQuorum(CommandUtils.objectToBoolean(value));
             }
         });
-        optionsMap.put("notfound_ok", new FetchOpt() {
+        commandOptions.addOption("notfound_ok", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
-                    FetchObject<IRiakObject> o, Object value) {
+                    FetchObject<IRiakObject> o, Object value) throws Exception {
                 return o.notFoundOK(CommandUtils.objectToBoolean(value));
             }
         });
-		optionsMap.put("head", new FetchOpt() {
+        commandOptions.addOption("head", new FetchOpt() {
 			public FetchObject<IRiakObject> setOption(
-					FetchObject<IRiakObject> o, Object value) {
+					FetchObject<IRiakObject> o, Object value) throws Exception {
 				if(CommandUtils.objectToBoolean(value)) {
                     return o.headOnly();
                 } else {
@@ -88,28 +82,12 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
                 }
 			}
 		});
-        optionsMap.put("deletedvclock", new FetchOpt() {
+        commandOptions.addOption("deletedvclock", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
-                    FetchObject<IRiakObject> o, Object value) {
+                    FetchObject<IRiakObject> o, Object value) throws Exception {
                 return o.returnDeletedVClock(CommandUtils.objectToBoolean(value));
             }
         });
-    }
-
-    public FetchObject<IRiakObject> processOptions(RuntimeContext runtimeCtx, FetchObject<IRiakObject> o) {
-        if (params.options != null) {
-            for (String key : params.options.keySet()) {
-                Object val = params.options.get(key);
-                if (!optionsMap.containsKey(key)) {
-                    runtimeCtx.appendError("Unknown store option:" + key);
-                } else {
-                    o = optionsMap.get(key).setOption(o, val);
-                }
-            }
-            return o;
-        } else {
-            return o;
-        }
     }
 
     @Override
@@ -117,7 +95,8 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
         try {
             // TODO: optimize this to skip fetch/create bucket every time
             Bucket b = conn.fetchBucket(this.params.bucket).execute();
-            FetchObject<IRiakObject> fo = processOptions(runtimeCtx, b.fetch(params.key));
+            FetchObject<IRiakObject> fo =
+                    commandOptions.processOptions(runtimeCtx, b.fetch(params.key), params);
             if(b.getAllowSiblings()) {
                 fo = fo.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
 
@@ -139,6 +118,8 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
 
         } catch (RiakRetryFailedException e) {
             runtimeCtx.appendError("Can't store object in bucket", e);
+        } catch (InvalidOptionValueException e) {
+            runtimeCtx.appendError(e.toString());
         }
         return null;
     }

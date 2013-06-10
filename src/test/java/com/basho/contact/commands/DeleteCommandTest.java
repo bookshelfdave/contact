@@ -22,7 +22,6 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.BucketCommand;
 import com.basho.contact.commands.core.DeleteCommand;
 
 public class DeleteCommandTest extends AbstractBucketCommandTest {

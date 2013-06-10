@@ -22,12 +22,9 @@
 
 package com.basho.contact.commands;
 
-import com.basho.contact.BucketCommand;
 import com.basho.contact.ContactConnectionProvider;
-import com.basho.contact.ContactExecutor;
 import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.FetchCommand;
-import com.basho.contact.commands.core.params.FetchParams;
 import com.basho.contact.security.DefaultAccessPolicy;
 import com.basho.contact.testing.EmptyConnectionProvider;
 import com.basho.riak.client.IRiakClient;
@@ -124,14 +121,18 @@ public class FetchCommandTest extends AbstractBucketCommandTest {
         options.put("head", "true");
 
         command.params.options = options;
-        command.processOptions(ctx, fetchObject);
+        try {
+            FetchCommand.commandOptions.processOptions(ctx, fetchObject, command.params);
 
-        assertEquals(10, results.get("r"));
-        assertEquals(2, results.get("pr"));
-        assertEquals(true, results.get("basic_quorum"));
-        assertEquals(false, results.get("notfound_ok"));
-        assertEquals(true, results.get("deletedvclock"));
-        assertEquals(true, results.get("head"));
+            assertEquals(10, results.get("r"));
+            assertEquals(2, results.get("pr"));
+            assertEquals(true, results.get("basic_quorum"));
+            assertEquals(false, results.get("notfound_ok"));
+            assertEquals(true, results.get("deletedvclock"));
+            assertEquals(true, results.get("head"));
+        } catch (InvalidOptionValueException e) {
+            e.printStackTrace();
+        }
 
     }
 }

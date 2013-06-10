@@ -23,6 +23,7 @@
 package com.basho.contact.commands.core;
 
 import com.basho.contact.*;
+import com.basho.contact.commands.*;
 import com.basho.contact.commands.core.params.StoreParams;
 import com.basho.contact.parser.Content;
 import com.basho.contact.parser.Pair;
@@ -45,75 +46,56 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
         super("store", StoreParams.Pre.class);
     }
 
-    static abstract class StoreOpt {
-        public abstract StoreObject<IRiakObject> setOption(
-                StoreObject<IRiakObject> o, Object value);
-    }
+    static abstract class StoreOpt extends CommandOption<StoreObject<IRiakObject>> {}
 
-    private static Map<String, StoreOpt> optionsMap = new HashMap<String, StoreOpt>();
+    public static CommandOptions<StoreObject<IRiakObject>, StoreOpt> commandOptions =
+            new CommandOptions<StoreObject<IRiakObject>, StoreOpt>();
 
     static {
-        optionsMap.put("w", new StoreOpt() {
+        commandOptions.addOption("w", new StoreOpt() {
             public StoreObject<IRiakObject> setOption(
-                    StoreObject<IRiakObject> o, Object value) {
+                    StoreObject<IRiakObject> o, Object value) throws Exception {
                 return o.w(CommandUtils.objectToInt(value));
             }
         });
-        optionsMap.put("dw", new StoreOpt() {
+        commandOptions.addOption("dw", new StoreOpt() {
             public StoreObject<IRiakObject> setOption(
-                    StoreObject<IRiakObject> o, Object value) {
+                    StoreObject<IRiakObject> o, Object value) throws Exception {
                 return o.dw(CommandUtils.objectToInt(value));
             }
         });
-        optionsMap.put("pw", new StoreOpt() {
+        commandOptions.addOption("pw", new StoreOpt() {
             public StoreObject<IRiakObject> setOption(
-                    StoreObject<IRiakObject> o, Object value) {
+                    StoreObject<IRiakObject> o, Object value) throws Exception {
                 return o.pw(CommandUtils.objectToInt(value));
             }
         });
-        optionsMap.put("return_body", new StoreOpt() {
+        commandOptions.addOption("return_body", new StoreOpt() {
             public StoreObject<IRiakObject> setOption(
-                    StoreObject<IRiakObject> o, Object value) {
+                    StoreObject<IRiakObject> o, Object value) throws Exception {
                 return o.returnBody(CommandUtils.objectToBoolean(value));
             }
         });
-        optionsMap.put("if_not_modified", new StoreOpt() {
+        commandOptions.addOption("if_not_modified", new StoreOpt() {
             public StoreObject<IRiakObject> setOption(
-                    StoreObject<IRiakObject> o, Object value) {
+                    StoreObject<IRiakObject> o, Object value) throws Exception {
                 return o.ifNotModified(CommandUtils.objectToBoolean(value));
             }
         });
-        optionsMap.put("if_none_match", new StoreOpt() {
+        commandOptions.addOption("if_none_match", new StoreOpt() {
             public StoreObject<IRiakObject> setOption(
-                    StoreObject<IRiakObject> o, Object value) {
+                    StoreObject<IRiakObject> o, Object value) throws Exception {
                 return o.ifNoneMatch(CommandUtils.objectToBoolean(value));
             }
         });
     }
 
-
-    public StoreObject<IRiakObject> processOptions(RuntimeContext runtimeCtx,
-                                                    StoreObject<IRiakObject> o) {
-        if (params.options != null) {
-            for (String key : params.options.keySet()) {
-                Object val = params.options.get(key);
-                if (!optionsMap.containsKey(key)) {
-                    runtimeCtx.appendError("Unknown store option:" + key);
-                } else {
-                    o = optionsMap.get(key).setOption(o, val);
-                }
-            }
-            return o;
-        } else {
-            return o;
-        }
-    }
-
     // // case "return_head" : I don't see a return_head option in the Java
     // client?
     /*
-	 * optional bytes key = 2; optional bytes vclock = 3; required RpbContent
-	 * content = 4;
+	 * optional bytes key = 2;
+	 * optional bytes vclock = 3;
+	 * required RpbContent content = 4;
 	 */
 
     // TODO: watch for errors here
@@ -152,22 +134,9 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
             // TODO: cache this
             Bucket b = conn.fetchBucket(params.bucket).execute();
 
-            StoreObject<IRiakObject> so = processOptions(runtimeCtx, b.store(obj));
+            StoreObject<IRiakObject> so = commandOptions.processOptions(runtimeCtx, b.store(obj), params);
 
             if(b.getAllowSiblings()) {
-//                so.withResolver(new ConflictResolver<IRiakObject>() {
-//                    @Override
-//                    public IRiakObject resolve(Collection<IRiakObject> siblings) {
-//                        if (siblings.size() > 1) {
-//                            return siblings.iterator().next();
-//                        } else if (siblings.size() == 1) {
-//                            return siblings.iterator().next();
-//                        } else {
-//                            return null;
-//                        }
-//
-//                    }
-//                });
                 so.withResolver(runtimeCtx.getActionListener().getResolverMill().getResolverForBucket(bucket));
                 so.withConverter(new Converter<IRiakObject>() {
                     @Override
@@ -197,14 +166,9 @@ public class StoreCommand extends BucketCommand<ResultSymbol, StoreParams.Pre> {
         } catch (RiakRetryFailedException e) {
             runtimeCtx.appendError("Can't store object in bucket", e);
             return null;
-        }
-    }
-
-    private boolean returnBody() {
-        if(params.options.containsKey("return_body")) {
-            return CommandUtils.objectToBoolean(params.options.get("return_body"));
-        } else {
-            return false;
+        } catch (InvalidOptionValueException e) {
+            runtimeCtx.appendError(e);
+            return null;
         }
     }
 }

@@ -1,0 +1,64 @@
+/*
+ * -------------------------------------------------------------------
+ * Contact: a language and interactive shell for Riak
+ *
+ * Copyright (c) 2013 Dave Parfitt
+ *
+ * This file is provided to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain
+ * a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * -------------------------------------------------------------------
+ */
+
+package com.basho.contact.commands;
+
+import com.basho.contact.RuntimeContext;
+import com.basho.contact.actions.ActionParams;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CommandOptions<T, U extends CommandOption<T>> {
+    public Map<String, U> optionsMap = new HashMap<String, U>();
+
+    public T processOptions(    RuntimeContext runtimeCtx,
+                                T o,
+                                ActionParams params)
+            throws InvalidOptionValueException {
+        if (params.options != null) {
+            for (String key : params.options.keySet()) {
+                Object val = params.options.get(key);
+                if (!optionsMap.containsKey(key)) {
+                    runtimeCtx.appendError("Unknown store option:" + key);
+                } else {
+                    try {
+                        o = optionsMap.get(key).setOption(o, val);
+                    } catch (Exception e) {
+                        throw new InvalidOptionValueException("fetch", key.toString(), val.toString());
+                    }
+                }
+            }
+            return o;
+        } else {
+            return o;
+        }
+    }
+
+    public Map<String, U> getOptionsMap() {
+        return optionsMap;
+    }
+
+    public void addOption(String key, U o) {
+        optionsMap.put(key, o);
+    }
+
+}

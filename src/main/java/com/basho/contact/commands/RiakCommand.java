@@ -20,13 +20,17 @@
  * -------------------------------------------------------------------
  */
 
-package com.basho.contact;
+package com.basho.contact.commands;
 
+import com.basho.contact.RuntimeContext;
 import com.basho.contact.actions.ActionParams;
 import com.basho.contact.symbols.ContactSymbol;
 import com.basho.riak.client.IRiakClient;
+import com.basho.riak.client.operations.DeleteObject;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 
 public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionParams> {
@@ -89,4 +93,8 @@ public abstract class RiakCommand<K extends ContactSymbol<?>, O extends ActionPa
             e.printStackTrace();
         }
     }
+
+    //private static Map<String, DeleteOpt> optionsMap = new HashMap<String, DeleteOpt>();
+
+
 }
