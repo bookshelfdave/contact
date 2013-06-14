@@ -120,7 +120,9 @@ public class JSActionListener implements ContactActionListener, ContactConflictR
 
     private void setupDefaults() {
         js.put(PREFETCH, "");
-        js.put(POSTFETCH, "if(riak_object != undefined) { println(riak_object.getValueAsString()); }");
+
+        js.put(POSTFETCH, "if(fetchMetadata != undefined) { println(fetchMetadata); }");
+
         js.put(PRESTORE, "");
         js.put(POSTSTORE, "if(riak_object != undefined) { println(riak_object.getValueAsString()); }");
         js.put(PREDELETE, "");

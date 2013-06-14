@@ -24,12 +24,10 @@ package com.basho.contact;
 
 import com.basho.contact.commands.RiakCommand;
 import com.basho.contact.commands.core.*;
-import com.basho.contact.parser.ContactBaseListener;
+import com.basho.contact.parser.*;
 import com.basho.contact.parser.ContactParser.*;
-import com.basho.contact.parser.Content;
-import com.basho.contact.parser.Pair;
-import com.basho.contact.parser.ParseUtils;
 import com.basho.contact.symbols.ContactSymbol;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
@@ -248,9 +246,25 @@ public class ContactWalker extends ContactBaseListener {
     public void exitFetch(FetchContext ctx) {
         FetchCommand fetch = new FetchCommand();
         fetch.params.key = ParseUtils.stripQuotes(ctx.key.getText());
+        fetch.params.fetchMetadataSelection = (List<String>)getValue(ctx.fetch_select());
         setValue(ctx, fetch);
     }
 
+
+    @Override
+    public void exitFetch_select(Fetch_selectContext ctx) {
+        setValue(ctx, getValue(ctx.id_list()));
+
+    }
+
+    @Override
+    public void exitId_list(Id_listContext ctx) {
+        List<String> str_ids = new ArrayList<String>();
+        for(Token t : ctx.ids) {
+             str_ids.add(t.getText());
+        }
+        setValue(ctx, str_ids);
+    }
 
     @SuppressWarnings("unchecked")
     @Override

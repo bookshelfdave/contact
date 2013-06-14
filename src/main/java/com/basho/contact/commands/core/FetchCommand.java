@@ -27,11 +27,13 @@ import com.basho.contact.RuntimeContext;
 import com.basho.contact.commands.core.params.FetchParams;
 import com.basho.contact.symbols.ResultSymbol;
 import com.basho.riak.client.IRiakObject;
-import com.basho.riak.client.RiakRetryFailedException;
+import com.basho.riak.client.RiakException;
 import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.operations.FetchObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
@@ -40,10 +42,23 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
         super("fetch", FetchParams.Pre.class);
     }
 
+    static abstract class FetchSelectionMapper {
+        public abstract String getValue(IRiakObject obj) throws RiakException;
+    }
+
     static abstract class FetchOpt extends CommandOption<FetchObject<IRiakObject>> {}
     public static CommandOptions<FetchObject<IRiakObject>, FetchOpt> commandOptions =
                                 new CommandOptions<FetchObject<IRiakObject>, FetchOpt>();
+
+    public static Map<String, FetchSelectionMapper> fetchSelectMap = new HashMap<String, FetchSelectionMapper>();
+
+
     static {
+        setupCommandOptions();
+        setupFetchSelectionMapping();
+    }
+
+    private static void setupCommandOptions() {
 //	    optional bytes if_modified = 7;
 //	    optional bool deletedvclock = 9;
 
@@ -73,21 +88,76 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
             }
         });
         commandOptions.addOption("head", new FetchOpt() {
-			public FetchObject<IRiakObject> setOption(
-					FetchObject<IRiakObject> o, Object value) throws Exception {
-				if(CommandUtils.objectToBoolean(value)) {
+            public FetchObject<IRiakObject> setOption(
+                    FetchObject<IRiakObject> o, Object value) throws Exception {
+                if(CommandUtils.objectToBoolean(value)) {
                     return o.headOnly();
                 } else {
                     return o;
                 }
-			}
-		});
+            }
+        });
         commandOptions.addOption("deletedvclock", new FetchOpt() {
             public FetchObject<IRiakObject> setOption(
                     FetchObject<IRiakObject> o, Object value) throws Exception {
                 return o.returnDeletedVClock(CommandUtils.objectToBoolean(value));
             }
         });
+    }
+
+    private static void setupFetchSelectionMapping() {
+        fetchSelectMap.put("content", new FetchSelectionMapper() {
+            @Override
+            public String getValue(IRiakObject obj) throws RiakException {
+                return obj.getValueAsString();
+            }
+        });
+
+
+        fetchSelectMap.put("vclock", new FetchSelectionMapper() {
+            @Override
+            public String getValue(IRiakObject obj) throws RiakException {
+                return obj.getVClockAsString();
+            }
+        });
+
+        fetchSelectMap.put("content_type", new FetchSelectionMapper() {
+            @Override
+            public String getValue(IRiakObject obj) throws RiakException {
+                return obj.getContentType();
+            }
+        });
+
+        fetchSelectMap.put("vtag", new FetchSelectionMapper() {
+            @Override
+            public String getValue(IRiakObject obj) throws RiakException {
+                return obj.getVtag();
+            }
+        });
+    }
+
+    private void checkMd(RuntimeContext runtimeCtx, List<String> userSelections) throws Exception {
+        if(userSelections != null) {
+            for(String s: this.params.fetchMetadataSelection) {
+                if(!fetchSelectMap.containsKey(s)) {
+                    throw new Exception("Unknown fetch metadata:" + s);
+                }
+            }
+        }
+    }
+
+    private void mapSelections(RuntimeContext runtimeCtx, List<String> md, IRiakObject obj, FetchParams.Post postParams) {
+        if(md != null) {
+            postParams.fetchMetadata = new HashMap<String, String>();
+            for(String m : md) {
+                try {
+                    String v = fetchSelectMap.get(m).getValue(obj);
+                    postParams.fetchMetadata.put(m,v);
+                } catch (Exception e) {
+                    runtimeCtx.appendError("Error fetching " + m + " metadata:" + e.getMessage());
+                }
+            }
+        }
     }
 
     @Override
@@ -103,23 +173,26 @@ public class FetchCommand extends BucketCommand<ResultSymbol, FetchParams.Pre> {
             }
             params.fetchObj = fo;
             params.ctx = runtimeCtx;
+            if(params.fetchMetadataSelection == null || params.fetchMetadataSelection.size() == 0) {
+                // always show content
+                params.fetchMetadataSelection = new ArrayList<String>();
+                params.fetchMetadataSelection.add("content");
+            }
+            checkMd(runtimeCtx, params.fetchMetadataSelection);
             runtimeCtx.getActionListener().preFetchAction(params);
-
             ResultSymbol sym = new ResultSymbol(fo.execute());
-
             FetchParams.Post postParams = new FetchParams.Post();
             postParams.bucket = this.params.bucket;
             postParams.key = params.key;
             postParams.options = this.params.options;
             postParams.object = sym.value;
             postParams.ctx = runtimeCtx;
+            mapSelections(runtimeCtx, params.fetchMetadataSelection, sym.value, postParams);
             runtimeCtx.getActionListener().postFetchAction(postParams);
             return sym;
 
-        } catch (RiakRetryFailedException e) {
-            runtimeCtx.appendError("Can't store object in bucket", e);
-        } catch (InvalidOptionValueException e) {
-            runtimeCtx.appendError(e.toString());
+        } catch (Exception e) {
+            runtimeCtx.appendError("Can't fetch object from bucket:" + e.getMessage());
         }
         return null;
     }

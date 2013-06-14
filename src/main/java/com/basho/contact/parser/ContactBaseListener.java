@@ -58,6 +58,9 @@ public class ContactBaseListener implements ContactListener {
 	@Override public void enterUseBucketOptions(ContactParser.UseBucketOptionsContext ctx) { }
 	@Override public void exitUseBucketOptions(ContactParser.UseBucketOptionsContext ctx) { }
 
+	@Override public void enterFetch_select(ContactParser.Fetch_selectContext ctx) { }
+	@Override public void exitFetch_select(ContactParser.Fetch_selectContext ctx) { }
+
 	@Override public void enterProg(ContactParser.ProgContext ctx) { }
 	@Override public void exitProg(ContactParser.ProgContext ctx) { }
 
@@ -114,6 +117,9 @@ public class ContactBaseListener implements ContactListener {
 
 	@Override public void enterStat(ContactParser.StatContext ctx) { }
 	@Override public void exitStat(ContactParser.StatContext ctx) { }
+
+	@Override public void enterId_list(ContactParser.Id_listContext ctx) { }
+	@Override public void exitId_list(ContactParser.Id_listContext ctx) { }
 
 	@Override public void enterGet_action(ContactParser.Get_actionContext ctx) { }
 	@Override public void exitGet_action(ContactParser.Get_actionContext ctx) { }

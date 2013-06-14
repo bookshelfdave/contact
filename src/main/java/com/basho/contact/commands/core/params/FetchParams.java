@@ -28,6 +28,9 @@ import com.basho.contact.actions.Binding;
 import com.basho.riak.client.IRiakObject;
 import com.basho.riak.client.operations.FetchObject;
 
+import java.util.List;
+import java.util.Map;
+
 public class FetchParams {
     public static class Pre extends ActionParams {
         @Binding(name = "key")
@@ -35,6 +38,9 @@ public class FetchParams {
 
         @Binding(name = "fetchObj")
         public FetchObject<IRiakObject> fetchObj;
+
+        @Binding(name = "fetchMetadataSelection")
+        public List<String> fetchMetadataSelection;
     }
 
     public static class Post extends ActionParams {
@@ -43,5 +49,9 @@ public class FetchParams {
 
         @Binding(name = "riak_object")
         public IRiakObject object;
+
+        @Binding(name = "fetchMetadata")
+        public Map<String, String> fetchMetadata;
+
     }
 }

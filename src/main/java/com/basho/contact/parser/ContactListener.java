@@ -55,6 +55,9 @@ public interface ContactListener extends ParseTreeListener {
 	void enterUseBucketOptions(ContactParser.UseBucketOptionsContext ctx);
 	void exitUseBucketOptions(ContactParser.UseBucketOptionsContext ctx);
 
+	void enterFetch_select(ContactParser.Fetch_selectContext ctx);
+	void exitFetch_select(ContactParser.Fetch_selectContext ctx);
+
 	void enterProg(ContactParser.ProgContext ctx);
 	void exitProg(ContactParser.ProgContext ctx);
 
@@ -111,6 +114,9 @@ public interface ContactListener extends ParseTreeListener {
 
 	void enterStat(ContactParser.StatContext ctx);
 	void exitStat(ContactParser.StatContext ctx);
+
+	void enterId_list(ContactParser.Id_listContext ctx);
+	void exitId_list(ContactParser.Id_listContext ctx);
 
 	void enterGet_action(ContactParser.Get_actionContext ctx);
 	void exitGet_action(ContactParser.Get_actionContext ctx);

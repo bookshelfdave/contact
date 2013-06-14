@@ -47,8 +47,12 @@ countkeys:     COUNT KEYS;
 
 optionslist: opts+=pair (COMMA opts+=pair)*;
 
-fetch:    FETCH key=STRING; 
-                
+fetch:    FETCH fetch_select? key=STRING;
+
+fetch_select: id_list with;
+
+id_list: ids+=ID (COMMA ids+=ID)*;
+
 store:    STORE (key=STRING | existing_obj=ID) store_indexes with content_string;
 
 update: UPDATE;
