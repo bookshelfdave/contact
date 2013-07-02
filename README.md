@@ -10,9 +10,7 @@ Contact is a language and interactive shell for [Riak](http://basho.com/riak/).
 
 ## Status
 
-This is a prototype and ***SHOULD NOT BE USED IN PRODUCTION. I'm actively working on this project, and the language is very likely to change. Many things probably don't work right now.***
-
-**Expect more updates June 2013.**
+This is a prototype and ***SHOULD NOT BE USED IN PRODUCTION.***
 
 See the TODO section below.
 
